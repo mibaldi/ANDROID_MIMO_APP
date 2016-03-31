@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 Log.e(TAG, "Invalid provider: " + authData.getProvider());
             }
             if (name != null) {
+
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("provider", authData.getProvider());
                 map.put("name",name);
