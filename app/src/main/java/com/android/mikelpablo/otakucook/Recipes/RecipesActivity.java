@@ -10,13 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.android.mikelpablo.otakucook.MainActivity;
+import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.R;
 import com.firebase.client.AuthData;
 import com.google.android.gms.plus.Plus;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class RecipesActivity extends AppCompatActivity {
 

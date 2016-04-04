@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/OtakuCook.iml" filepath="$PROJECT_DIR$/OtakuCook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ANDROID_MIMO_APP.iml" filepath="$PROJECT_DIR$/ANDROID_MIMO_APP.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.android.mikelpablo.otakucook.MainActivity;
+import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -19,7 +19,7 @@ import com.google.android.gms.plus.Plus;
 import java.io.IOException;
 
 /**
- * This is a sample GoogleOAuthActivity that has been extracted from {@link com.android.mikelpablo.otakucook.MainActivity} to
+ * This is a sample GoogleOAuthActivity that has been extracted from {@link MainActivity} to
  * allow for better visibility.
  */
 public class GoogleOAuthActivity extends Activity implements
