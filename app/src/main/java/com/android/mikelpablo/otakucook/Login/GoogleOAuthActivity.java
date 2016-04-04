@@ -1,4 +1,4 @@
-package com.android.mikelpablo.otakucook.login;
+package com.android.mikelpablo.otakucook.Login;
 
 import android.app.Activity;
 import android.content.Intent;
