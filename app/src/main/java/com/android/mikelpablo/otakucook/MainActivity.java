@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.mikelpablo.otakucook.Recipes.RecipesActivity;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -245,7 +246,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 map.put("provider", authData.getProvider());
                 map.put("name",name);
                 mFirebaseRef.child("Users").child(authData.getUid()).setValue(map);
-
+                Intent intent = new Intent(MainActivity.this, RecipesActivity.class);
+                MainActivity.this.startActivity(intent);
                 mLoggedInStatusTextView.setText("Logged in as " + name + " (" + authData.getProvider() + ")");
             }
         } else {

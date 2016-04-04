@@ -7,9 +7,10 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <!-- GET_ACCOUNTS is necessary to display email address of logged in user. This permission is optional -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
     <application
-        android:allowBackup="true"
         android:name=".login.LoginDemoApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -20,6 +21,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Recipes.RecipesActivity"
+            android:label="@string/title_activity_recipes"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.mikelpablo.otakucook.MainActivity" />
         </activity>
     </application>
 

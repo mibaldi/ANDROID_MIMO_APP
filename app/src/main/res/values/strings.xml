@@ -3,4 +3,6 @@
     <string name="action_logout">Logout</string>
     <string name="login_with_google">Login with Google+</string>
     <string name="firebase_url">https://otakucook.firebaseio.com/</string>
+    <string name="title_activity_recipes">RecipesActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
