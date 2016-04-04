@@ -8,6 +8,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -47,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ProgressDialog mAuthProgressDialog;
 
     /* A reference to the Firebase */
-    private Firebase mFirebaseRef;
+    public static Firebase mFirebaseRef;
 
     /* Data from the authenticated user */
-    private AuthData mAuthData;
+    public static AuthData mAuthData;
 
     /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public static final int RC_GOOGLE_LOGIN = 1;
 
     /* Client used to interact with Google APIs. */
-    private GoogleApiClient mGoogleApiClient;
+    public static GoogleApiClient mGoogleApiClient;
 
     /* A flag indicating that a PendingIntent is in progress and prevents us from starting further intents. */
     private boolean mGoogleIntentInProgress;
@@ -77,6 +78,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     /* The login button for Google */
     private SignInButton mGoogleLoginButton;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_DENIED){
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
