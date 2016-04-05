@@ -5,7 +5,7 @@ android {
         debug {
             keyAlias 'nuestraFirma'
             keyPassword 'android'
-            storeFile file('/Users/mikelbalducieldiaz/Documents/PABLO/firma/nuestraFirma.jks')
+            storeFile file('C:/Users/pabji/Downloads/nuestraFirma.jks')
             storePassword 'android'
         }
     }
@@ -46,7 +46,4 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.google.android.gms:play-services-plus:8.4.0'
     compile 'com.firebase:firebase-client-android:2.5.2'
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.0.1'
 }
