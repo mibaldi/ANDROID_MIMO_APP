@@ -1,6 +1,7 @@
 package com.android.mikelpablo.otakucook.Main;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,28 +11,34 @@ import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by pabji on 04/04/2016.
  */
-public class DrawerListAdapter extends ArrayAdapter {
+public class DrawerListAdapter extends RecyclerView.Adapter<DrawerItemHolder> {
 
-    public DrawerListAdapter(Context context, List objects) {
-        super(context, 0,objects);
+    private List<DrawerItem> listItem;
+
+
+    public DrawerListAdapter(List<DrawerItem> objects) {
+        listItem = objects;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.drawer_menu_item,null);
-        }
-        TextView name = (TextView) convertView.findViewById(R.id.name);
+    public DrawerItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item,parent,false);
+        return new DrawerItemHolder(view);
+    }
 
-        DrawerItem item = (DrawerItem) getItem(position);
-        name.setText(item.getName());
+    @Override
+    public void onBindViewHolder(DrawerItemHolder holder, int position) {
+        holder.bindItem(listItem.get(position));
+    }
 
-        return convertView;
+    @Override
+    public int getItemCount() {
+        return listItem.size();
     }
 }

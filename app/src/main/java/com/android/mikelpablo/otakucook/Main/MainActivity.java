@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -89,8 +90,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private SignInButton mGoogleLoginButton;
 
     private String[] menuItems;
-    private DrawerLayout drawerLayout;
-    private ListView drawerList;
+    private DrawerMenu drawerMenu;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -104,19 +104,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         menuItems = getResources().getStringArray(R.array.mainMenu);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerMenu = (DrawerMenu) findViewById(R.id.drawer_menu);
+        drawerMenu.setList(menuItems);
 
-        ArrayList<DrawerItem> items = new ArrayList<DrawerItem>();
-        items.add(new DrawerItem(menuItems[0]));
-        items.add(new DrawerItem(menuItems[1]));
-        items.add(new DrawerItem(menuItems[2]));
-        items.add(new DrawerItem(menuItems[3]));
-
-        drawerList.setAdapter(new DrawerListAdapter(this, items));
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
+        /*drawerList.setOnItemClickListener(new DrawerItemClickListener());*/
 
         if (Build.VERSION.SDK_INT >= 23){
             if (checkSelfPermission(Manifest.permission.GET_ACCOUNTS)!= PackageManager.PERMISSION_GRANTED){
@@ -428,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // ignore
     }
 
-    private class DrawerItemClickListener implements android.widget.AdapterView.OnItemClickListener {
+    /*private class DrawerItemClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
@@ -443,6 +435,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         drawerList.setItemChecked(position, true);
         setTitle(menuItems[position]);
         drawerLayout.closeDrawer(drawerList);
-    }
+    }*/
 
 }

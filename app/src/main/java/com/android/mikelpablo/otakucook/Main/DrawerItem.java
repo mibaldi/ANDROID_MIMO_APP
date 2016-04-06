@@ -5,7 +5,6 @@ package com.android.mikelpablo.otakucook.Main;
  */
 public class DrawerItem {
     private String name;
-    private int iconId;
 
     public DrawerItem(String name) {
         this.name = name;
