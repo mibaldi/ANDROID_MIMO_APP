@@ -257,8 +257,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } else {
             mAuthProgressDialog.show();
 
-                // if the provider is not twitter, we just need to pass in the oauth_token
-                mFirebaseRef.authWithOAuthToken(provider, options.get("oauth_token"), new AuthResultHandler(provider));
+            // if the provider is not twitter, we just need to pass in the oauth_token
+            mFirebaseRef.authWithOAuthToken(provider, options.get("oauth_token"), new AuthResultHandler(provider));
         }
     }
     /**
