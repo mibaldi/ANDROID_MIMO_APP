@@ -1,12 +1,16 @@
 apply plugin: 'com.android.application'
+Properties props = new Properties();
+props.load(new FileInputStream(file(rootProject.file("keystore.properties"))))
+
 
 android {
     signingConfigs {
         debug {
-            keyAlias 'nuestraFirma'
-            keyPassword 'android'
-            storeFile file('/Users/mikelbalducieldiaz/Documents/PABLO/firma/nuestraFirma.jks')
-            storePassword 'android'
+            storeFile file(props["storeFile"])
+            storePassword props["storePassword"]
+            keyAlias props["keyAlias"]
+            keyPassword props["keyPassword"]
+
         }
     }
     compileSdkVersion 23
@@ -22,10 +26,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
         }
         debug {
-            signingConfig signingConfigs.debug
         }
     }
     packagingOptions {
