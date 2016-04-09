@@ -1,16 +1,12 @@
 apply plugin: 'com.android.application'
-Properties props = new Properties();
-props.load(new FileInputStream(file(rootProject.file("keystore.properties"))))
-
 
 android {
     signingConfigs {
         debug {
-            storeFile file(props["storeFile"])
-            storePassword props["storePassword"]
-            keyAlias props["keyAlias"]
-            keyPassword props["keyPassword"]
-
+            storeFile file(myStoreFile)
+            storePassword myStorePassword
+            keyAlias myKeyAlias
+            keyPassword myKeyPassword
         }
     }
     compileSdkVersion 23
