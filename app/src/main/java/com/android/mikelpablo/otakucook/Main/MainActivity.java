@@ -33,9 +33,12 @@ import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.RecipeListActivity;
+import com.android.mikelpablo.otakucook.Recipes.RecipeListFragment;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -337,8 +340,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     }
                 });
 
-                Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
-                MainActivity.this.startActivity(intent);
+               /* Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
+                MainActivity.this.startActivity(intent);*/
                 mLoggedInStatusTextView.setText("Logged in as " + name + " (" + authData.getProvider() + ")");
             }
         } else {
@@ -375,11 +378,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             case R.id.shopping_cart:
                 System.out.println("Shopping");
                 System.out.println(R.string.shoping_cart_drawer);
+
                 selectFragment(new MainFragment(), R.string.shoping_cart_drawer);
                 break;
             case R.id.recipes:
                 System.out.println("Recipes");
-                selectFragment(new MainFragment(), R.string.recipes_drawer);
+                RecipeListFragment recipesListFragment = new RecipeListFragment();
+                /*android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.flRecipeList,recipesListFragment);
+                ft.setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.commit();*/
+                selectFragment(recipesListFragment, R.string.recipes_drawer);
                 break;
             case R.id.ingredients:
                 System.out.println("Ingredients");

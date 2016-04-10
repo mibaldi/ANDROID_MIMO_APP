@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.mikelpablo.otakucook.Main.DrawerItem;
+
 import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
@@ -42,7 +42,7 @@ public class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClic
     @Override
     public void onClick(View v) {
         Toast.makeText(v.getContext(),name.getText(),Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(v.getContext(), MainActivity.class);
+        Intent intent = new Intent(v.getContext(), RecipeListActivity.class);
         v.getContext().startActivity(intent);
     }
 }
