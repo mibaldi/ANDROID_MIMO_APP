@@ -2,7 +2,6 @@ package com.android.mikelpablo.otakucook.Main;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -11,26 +10,21 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.RecipesActivity;
+import com.android.mikelpablo.otakucook.Recipes.RecipeListActivity;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -41,7 +35,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -256,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     /**
      * Once a user is logged in, take the mAuthData provided from Firebase and "use" it.
      */
-    private void setAuthenticatedUser(AuthData authData) {
+    private void setAuthenticatedUser(final AuthData authData) {
         if (authData != null) {
             /* Hide all the login buttons */
 
@@ -268,13 +261,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 name = (String) authData.getProviderData().get("displayName");
             }
             if (name != null) {
+                final String finalName = name;
+                mFirebaseRef.child("Users").child(authData.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists()){
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("provider", authData.getProvider());
+                            map.put("name", finalName);
+                            map.put("uid",authData.getUid());
+                            mFirebaseRef.child("Users").child(authData.getUid()).setValue(map);
+                        }
+                    }
 
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("provider", authData.getProvider());
-                map.put("name",name);
-                mFirebaseRef.child("Users").child(authData.getUid()).setValue(map);
-                /*Intent intent = new Intent(MainActivity.this, RecipesActivity.class);
-                MainActivity.this.startActivity(intent);*/
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
+                Intent intent = new Intent(MainActivity.this, RecipeListActivity.class);
+                MainActivity.this.startActivity(intent);
                 mLoggedInStatusTextView.setText("Logged in as " + name + " (" + authData.getProvider() + ")");
             }
         } else {

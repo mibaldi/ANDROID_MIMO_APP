@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url">https://otakucook.firebaseio.com/</string>
+    <string name="users">https://otakucook.firebaseio.com/Users</string>
+    <string name="ingredients">https://otakucook.firebaseio.com/ingredients</string>
+    <string name="recipes">https://otakucook.firebaseio.com/recipes</string>
+    <string name="measures">https://otakucook.firebaseio.com/</string>
+</resources>

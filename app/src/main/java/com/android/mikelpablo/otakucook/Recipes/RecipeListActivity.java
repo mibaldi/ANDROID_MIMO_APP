@@ -1,38 +1,37 @@
 package com.android.mikelpablo.otakucook.Recipes;
 
+
+
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerTabStrip;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.android.mikelpablo.otakucook.Main.MainActivity;
+import com.android.mikelpablo.otakucook.Main.MainFragment;
 import com.android.mikelpablo.otakucook.R;
 import com.firebase.client.AuthData;
 import com.google.android.gms.plus.Plus;
 
-public class RecipesActivity extends AppCompatActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
+public class RecipeListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipes);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_recipe_list);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       RecipeListFragment recipesListFragment = new RecipeListFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.flRecipeList,recipesListFragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,10 +75,9 @@ public class RecipesActivity extends AppCompatActivity {
     }
     private void setAuthenticatedUser(AuthData authData) {
         if (authData == null) {
-            Intent intent = new Intent(RecipesActivity.this, MainActivity.class);
-            RecipesActivity.this.startActivity(intent);
+            Intent intent = new Intent(RecipeListActivity.this, MainActivity.class);
+            RecipeListActivity.this.startActivity(intent);
             finish();
         }
     }
-
 }

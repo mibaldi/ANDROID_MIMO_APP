@@ -5,10 +5,12 @@ package com.android.mikelpablo.otakucook.Models;
  */
 public class Ingredient {
     private long id;
+    private long idServer;
     private String name;
     private Boolean frozen;
     private String category;
     private String baseType;
+
 
 
     public Ingredient() {}
