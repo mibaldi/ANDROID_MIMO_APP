@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         if (savedInstanceState == null) {
-            // Hacemos que inicialmente comience seleccionada la pantalla "home".
             onItemClick(R.id.main);
         }
         else {
@@ -205,6 +204,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mFirebaseRef.addAuthStateListener(mAuthStateListener);
 
     }
+
+    /*@Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
+
+    }*/
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -344,30 +352,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onItemClick(int itemId) {
+        System.out.println(itemId);
         switch (itemId) {
             case R.id.main:
                 System.out.println("Main");
-                selectFragment(new MainFragment(), R.string.main);
+                selectFragment(new MainFragment(), R.string.main_drawer);
                 break;
             case R.id.shopping_cart:
                 System.out.println("Shopping");
-                selectFragment(new MainFragment(), R.string.shoping_cart);
+                System.out.println(R.string.shoping_cart_drawer);
+                selectFragment(new MainFragment(), R.string.shoping_cart_drawer);
                 break;
             case R.id.recipes:
                 System.out.println("Recipes");
-                selectFragment(new MainFragment(), R.string.recipes);
+                selectFragment(new MainFragment(), R.string.recipes_drawer);
                 break;
             case R.id.ingredients:
                 System.out.println("Ingredients");
-                selectFragment(new MainFragment(), R.string.ingredients);
+                selectFragment(new MainFragment(), R.string.ingredients_drawer);
                 break;
         }
-        //navigationDrawer.setSelectedItemId(itemId);
+        navigationDrawer.setSelectedItemId(itemId);
     }
 
     private void selectFragment(Fragment fragment, int titleResId) {
+        fragment.setRetainInstance(true);
         drawerLayout.closeDrawer(GravityCompat.START);
-        toolbar.setTitle(titleResId);
+        System.out.println(titleResId);
+        this.setTitle(titleResId);
+        //toolbar.setTitle(titleResId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_frame, fragment)
@@ -508,9 +521,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // ignore
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
+        //outState.put("AUTHDATA", mAuthData);
         super.onSaveInstanceState(outState);
-        //outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
     }
 }

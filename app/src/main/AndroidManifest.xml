@@ -15,23 +15,27 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+        <!-- Bloquear la pantalla en portrait por no poder guardar usuario logueado -->
         <activity android:name=".Main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Recipes.RecipesActivity"
-            android:label="@string/title_activity_recipes"
-            android:parentActivityName=".Main.MainActivity"
-            android:theme="@style/AppTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main.MainActivity" />
-        </activity>
-    </application>
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity
+        android:name=".Recipes.RecipesActivity"
+        android:label="@string/title_activity_recipes"
+        android:parentActivityName=".Main.MainActivity"
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".Main.MainActivity" />
+    </activity>
+</application>
 
 </manifest>
