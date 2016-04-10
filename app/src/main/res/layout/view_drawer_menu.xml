@@ -34,22 +34,22 @@
     </LinearLayout>
     <TextView
         android:id="@+id/main"
-        android:text="@string/main"
+        android:text="@string/main_drawer"
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightSmall"/>
     <TextView
         android:id="@+id/shopping_cart"
-        android:text="@string/shoping_cart"
+        android:text="@string/shoping_cart_drawer"
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightSmall"/>
     <TextView
         android:id="@+id/recipes"
-        android:text="@string/recipes"
+        android:text="@string/recipes_drawer"
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightSmall"/>
     <TextView
         android:id="@+id/ingredients"
-        android:text="@string/ingredients"
+        android:text="@string/ingredients_drawer"
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeightSmall"/>
 

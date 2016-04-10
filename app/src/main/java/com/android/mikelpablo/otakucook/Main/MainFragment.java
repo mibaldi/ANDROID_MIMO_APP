@@ -14,6 +14,7 @@ import com.android.mikelpablo.otakucook.R;
  */
 public class MainFragment extends Fragment {
 
+    private String tituloPropio;
     public MainFragment(){
 
     }
@@ -22,8 +23,18 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main,container,false);
-        String title = getResources().getStringArray(R.array.mainMenu)[0];
-        //getActivity().setTitle("Pepito");
+        if (savedInstanceState != null){
+            getActivity().setTitle(tituloPropio);
+        }else{
+            tituloPropio = getResources().getStringArray(R.array.mainMenu)[0];
+            getActivity().setTitle(tituloPropio);
+            tituloPropio = "Mikel";
+        }
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

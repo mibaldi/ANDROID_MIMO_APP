@@ -74,25 +74,20 @@ public class DrawerMenu extends LinearLayout {
     }
 
     public void setSelectedItemId(int itemId) {
-        if (m_selectedItem != null) {
+        /*if (m_selectedItem != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 m_selectedItem.getCompoundDrawables()[0].setTintList(null);
             m_selectedItem.setTypeface(null, Typeface.NORMAL);
-        }
+        }*/
 
         TextView view = (TextView) findViewById(itemId);
-
-        // Tintamos el icono del elemento seleccionado de negro, para que destaque más. Pero sólo
-        // podemos hacer esto si el dispositivo tiene Lollipop, porque esta API no existía antes.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            view.getCompoundDrawables()[0].setTint(Color.BLACK);
 
         // Ponemos en negrita el texto del elemento seleccionado para resaltarlo. Otra opción
         // hubiera sido activarlo (view.setActivated(true)) pero para que eso tenga algún efecto
         // también habría que ponerle al item como background un selector que tuviera un color
         // diferente para el estado "activated" (el background actual es "selectableItemBackground"
         // que no cumple esta condición)
-        view.setTypeface(null, Typeface.BOLD);
+        //view.setTypeface(null, Typeface.BOLD);
 
         m_selectedItem = view;
     }
