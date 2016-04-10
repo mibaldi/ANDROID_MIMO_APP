@@ -23,7 +23,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main,container,false);
         String title = getResources().getStringArray(R.array.mainMenu)[0];
-        getActivity().setTitle(title);
+        //getActivity().setTitle("Pepito");
         return rootView;
     }
 }

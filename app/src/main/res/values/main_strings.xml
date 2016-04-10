@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shoping_cart">Carrito de la compra</string>
+    <string name="main">Principal</string>
+    <string name="recipes">Recetas</string>
+    <string name="ingredients">Mis ingredientes</string>
+</resources>

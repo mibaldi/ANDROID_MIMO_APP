@@ -2,29 +2,40 @@ package com.android.mikelpablo.otakucook.Main;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.PersistableBundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.RecipeListActivity;
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -35,10 +46,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DrawerMenu.Listener{
     private static final String TAG = MainActivity.class.getSimpleName();
 
     /* *************************************
@@ -80,10 +95,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ConnectionResult mGoogleConnectionResult;
 
     /* The login button for Google */
-    private SignInButton mGoogleLoginButton;
 
-    private String[] menuItems;
-    private DrawerMenu drawerMenu;
+
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @Bind(R.id.drawer_menu) DrawerMenu navigationDrawer;
+    @Bind(R.id.login_with_google) SignInButton  mGoogleLoginButton;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -97,46 +114,70 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        menuItems = getResources().getStringArray(R.array.mainMenu);
-        drawerMenu = (DrawerMenu) findViewById(R.id.drawer_menu);
-        drawerMenu.setList(menuItems);
+        ButterKnife.bind(this);
 
-        /*drawerList.setOnItemClickListener(new DrawerItemClickListener());*/
+        toolbar.setNavigationIcon(R.drawable.ic_menu);
+        setSupportActionBar(toolbar);
+
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+        if (savedInstanceState == null) {
+            // Hacemos que inicialmente comience seleccionada la pantalla "home".
+            onItemClick(R.id.main);
+        }
+        else {
+            onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
+        }
+
 
         if (Build.VERSION.SDK_INT >= 23){
             if (checkSelfPermission(Manifest.permission.GET_ACCOUNTS)!= PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.GET_ACCOUNTS},0);
             }
         }
-         /* *************************************
-         *               GOOGLE                *
-         ***************************************/
-        /* Load the Google login button */
-        mGoogleLoginButton = (SignInButton) findViewById(R.id.login_with_google);
-        mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mGoogleLoginClicked = true;
-                if (!mGoogleApiClient.isConnecting()) {
-                    if (mGoogleConnectionResult != null) {
-                        resolveSignInError();
-                    } else if (mGoogleApiClient.isConnected()) {
-                        getGoogleOAuthTokenAndLogin();
-                    } else {
-                    /* connect API now */
-                        Log.d(TAG, "Trying to connect to Google API");
-                        mGoogleApiClient.connect();
-                    }
-                }
-            }
-        });
-        /* Setup the Google API object to allow Google+ logins */
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
+
+        if (!mGoogleApiClient.isConnecting()) {
+            connectToApiClient();
+        }
+         /* *************************************
+         *               GOOGLE                *
+         ***************************************/
+        /*mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mGoogleLoginClicked = true;
+                if (!mGoogleApiClient.isConnecting()) {
+                    connectToApiClient();
+                    /*if (mGoogleConnectionResult != null) {
+                        resolveSignInError();
+                    } else if (mGoogleApiClient.isConnected()) {
+                        getGoogleOAuthTokenAndLogin();
+                    } else {
+                    /* connect API now
+                        Log.d(TAG, "Trying to connect to Google API");
+                        mGoogleApiClient.connect();
+
+                    }
+                }
+            }
+        });*/
+        /* Setup the Google API object to allow Google+ logins
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .build();*/
+
+
+
         /* *************************************
          *               GENERAL               *
          ***************************************/
@@ -183,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (requestCode == RC_GOOGLE_LOGIN) {
             /* This was a request by the Google API */
             if (resultCode != RESULT_OK) {
-                mGoogleLoginClicked = false;
+
             }
             mGoogleIntentInProgress = false;
             if (!mGoogleApiClient.isConnecting()) {
@@ -191,25 +232,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         /* If a user is currently authenticated, display a logout menu */
         if (this.mAuthData != null) {
             getMenuInflater().inflate(R.menu.main, menu);
-            return true;
-        } else {
-            return false;
         }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_logout) {
-            logout();
-            return true;
+
+        switch (id) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     /**
@@ -230,13 +278,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
             /* Update authenticated user and show login buttons */
             setAuthenticatedUser(null);
+            finish();
         }
     }
     /**
      * This method will attempt to authenticate a user to firebase given an oauth_token (and other
      * necessary parameters depending on the provider)
      */
-    private void authWithFirebase(final String provider, Map<String, String> options) {
+    /*private void authWithFirebase(final String provider, Map<String, String> options) {
         if (options.containsKey("error")) {
             showErrorDialog(options.get("error"));
         } else {
@@ -245,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             // if the provider is not twitter, we just need to pass in the oauth_token
             mFirebaseRef.authWithOAuthToken(provider, options.get("oauth_token"), new AuthResultHandler(provider));
         }
-    }
+    }*/
     /**
      * Once a user is logged in, take the mAuthData provided from Firebase and "use" it.
      */
@@ -305,6 +354,52 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    public void onItemClick(int itemId) {
+        switch (itemId) {
+            case R.id.main:
+                System.out.println("Main");
+                selectFragment(new MainFragment(), R.string.main);
+                break;
+            case R.id.shopping_cart:
+                System.out.println("Shopping");
+                selectFragment(new MainFragment(), R.string.shoping_cart);
+                break;
+            case R.id.recipes:
+                System.out.println("Recipes");
+                selectFragment(new MainFragment(), R.string.recipes);
+                break;
+            case R.id.ingredients:
+                System.out.println("Ingredients");
+                selectFragment(new MainFragment(), R.string.ingredients);
+                break;
+        }
+        //navigationDrawer.setSelectedItemId(itemId);
+    }
+
+    private void selectFragment(Fragment fragment, int titleResId) {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        toolbar.setTitle(titleResId);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
+
+    public void connectToApiClient() {
+        mGoogleLoginClicked = false;
+        if (mGoogleConnectionResult != null) {
+            resolveSignInError();
+        } else if (mGoogleApiClient.isConnected()) {
+            getGoogleOAuthTokenAndLogin();
+        } else {
+                    /* connect API now */
+            Log.d(TAG, "Trying to connect to Google API");
+            mGoogleApiClient.connect();
+
+        }
     }
 
     /**
@@ -427,21 +522,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // ignore
     }
 
-    /*private class DrawerItemClickListener implements android.widget.AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
     }
-
-    private void selectItem(int position) {
-        MainFragment fragment = new MainFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        drawerList.setItemChecked(position, true);
-        setTitle(menuItems[position]);
-        drawerLayout.closeDrawer(drawerList);
-    }*/
-
 }
