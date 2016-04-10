@@ -511,6 +511,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
+        //outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
     }
 }
