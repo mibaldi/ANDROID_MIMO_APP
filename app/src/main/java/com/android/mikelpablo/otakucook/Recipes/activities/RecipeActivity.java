@@ -1,41 +1,38 @@
-package com.android.mikelpablo.otakucook.Recipes;
+package com.android.mikelpablo.otakucook.Recipes.activities;
 
 
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 
-import com.android.mikelpablo.otakucook.Main.MainActivity;
-import com.android.mikelpablo.otakucook.Main.MainFragment;
+import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
-import com.firebase.client.AuthData;
-import com.google.android.gms.plus.Plus;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeListFragment;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-public class RecipeListActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_list);
-
-       RecipeListFragment recipesListFragment = new RecipeListFragment();
+        setContentView(R.layout.activity_recipe);
+        Intent intent = getIntent();
+        Recipe recipe= intent.getParcelableExtra("recipe");
+        Log.d("RecipeActivity",recipe.author);
+        RecipeFragment recipesFragment = RecipeFragment.newInstance(recipe);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flRecipe,recipesFragment).commit();
+       /*RecipeFragment recipesFragment = new RecipeFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flRecipeList,recipesListFragment);
+        ft.replace(R.id.flRecipe,recipesFragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.commit();
+        ft.commit();*/
     }
+   /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /* If a user is currently authenticated, display a logout menu */
+
         if (MainActivity.mAuthData != null) {
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
@@ -53,31 +50,28 @@ public class RecipeListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    /**
-     * Unauthenticate from Firebase and from providers where necessary.
-     */
+
     private void logout() {
         if (MainActivity.mAuthData != null) {
-            /* logout of Firebase */
+
             MainActivity.mFirebaseRef.unauth();
-            /* Logout of any of the Frameworks. This step is optional, but ensures the user is not logged into
-             * Facebook/Google+ after logging out of Firebase. */
+
             if (MainActivity.mAuthData.getProvider().equals("google")) {
-                /* Logout from Google+ */
+
                 if (MainActivity.mGoogleApiClient.isConnected()) {
                     Plus.AccountApi.clearDefaultAccount(MainActivity.mGoogleApiClient);
                     MainActivity.mGoogleApiClient.disconnect();
                 }
             }
-            /* Update authenticated user and show login buttons */
+
             setAuthenticatedUser(null);
         }
     }
     private void setAuthenticatedUser(AuthData authData) {
         if (authData == null) {
-            Intent intent = new Intent(RecipeListActivity.this, MainActivity.class);
-            RecipeListActivity.this.startActivity(intent);
+            Intent intent = new Intent(RecipeActivity.this, MainActivity.class);
+            RecipeActivity.this.startActivity(intent);
             finish();
         }
-    }
+    }*/
 }

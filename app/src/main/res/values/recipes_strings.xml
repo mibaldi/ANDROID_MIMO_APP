@@ -3,4 +3,6 @@
     <string name="todas">Todas</string>
     <string name="favoritas">Favoritas</string>
     <string name="posibles">Posibles</string>
+    <string name="cocinar">Cocinar</string>
+    <string name="ver_pasos">Ver Pasos</string>
 </resources>
