@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeListFragment;
 import com.firebase.client.AuthData;
@@ -338,9 +339,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.shopping_cart:
                 System.out.println("Shopping");
-                System.out.println(R.string.shoping_cart_drawer);
-
-                selectFragment(new MainFragment(), R.string.shoping_cart_drawer);
+                selectFragment(new IngredientListFragment(), R.string.shoping_cart_drawer);
                 break;
             case R.id.recipes:
                 System.out.println("Recipes");
@@ -353,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.ingredients:
                 System.out.println("Ingredients");
-                selectFragment(new MainFragment(), R.string.ingredients_drawer);
+                selectFragment(new IngredientListFragment(), R.string.ingredients_drawer);
                 break;
         }
         navigationDrawer.setSelectedItemId(itemId);
