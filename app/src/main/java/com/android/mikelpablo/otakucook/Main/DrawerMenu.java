@@ -6,6 +6,9 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -32,7 +35,8 @@ public class DrawerMenu extends LinearLayout {
     private TextView m_selectedItem;
 
     private Context context;
-    @Bind(R.id.login_with_google) SignInButton mGoogleLoginButton;
+    @Bind(R.id.login_with_google)
+    SignInButton mGoogleLoginButton;
 
     public interface Listener {
         void onItemClick(int itemId);
@@ -58,7 +62,7 @@ public class DrawerMenu extends LinearLayout {
         mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity activity = (MainActivity)context;
+                MainActivity activity = (MainActivity) context;
                 if (!activity.mGoogleApiClient.isConnecting()) {
                     activity.connectToApiClient();
                 }
@@ -69,7 +73,7 @@ public class DrawerMenu extends LinearLayout {
     @OnClick({R.id.main, R.id.shopping_cart, R.id.recipes, R.id.ingredients})
     void onItemClick(View view) {
         if (getContext() instanceof Listener) {
-            ((Listener)getContext()).onItemClick(view.getId());
+            ((Listener) getContext()).onItemClick(view.getId());
         }
     }
 
@@ -79,7 +83,9 @@ public class DrawerMenu extends LinearLayout {
                 m_selectedItem.getCompoundDrawables()[0].setTintList(null);
             m_selectedItem.setTypeface(null, Typeface.NORMAL);
         }*/
-
+        if (m_selectedItem != null) {
+            m_selectedItem.setTypeface(null, Typeface.NORMAL);
+        }
         TextView view = (TextView) findViewById(itemId);
 
         // Ponemos en negrita el texto del elemento seleccionado para resaltarlo. Otra opción
@@ -87,7 +93,7 @@ public class DrawerMenu extends LinearLayout {
         // también habría que ponerle al item como background un selector que tuviera un color
         // diferente para el estado "activated" (el background actual es "selectableItemBackground"
         // que no cumple esta condición)
-        //view.setTypeface(null, Typeface.BOLD);
+        view.setTypeface(null, Typeface.BOLD);
 
         m_selectedItem = view;
     }
