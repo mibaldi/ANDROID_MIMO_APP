@@ -6,14 +6,14 @@ import android.os.Parcelable;
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
  */
-public class Task implements Parcelable {
+public class Task implements Parcelable,Comparable<Task> {
     public long id;
     public long idServer;
     public String name;
     public String photo;
     public int seconds;
     public long recipeId;
-    public String taskDescription;
+    public String description;
 
     @Override
     public int describeContents() {
@@ -28,7 +28,7 @@ public class Task implements Parcelable {
         dest.writeString(this.photo);
         dest.writeInt(this.seconds);
         dest.writeLong(this.recipeId);
-        dest.writeString(this.taskDescription);
+        dest.writeString(this.description);
     }
 
     public Task() {
@@ -41,7 +41,7 @@ public class Task implements Parcelable {
         this.photo = in.readString();
         this.seconds = in.readInt();
         this.recipeId = in.readLong();
-        this.taskDescription = in.readString();
+        this.description = in.readString();
     }
 
     public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
@@ -55,4 +55,9 @@ public class Task implements Parcelable {
             return new Task[size];
         }
     };
+
+    @Override
+    public int compareTo(Task another) {
+        return this.name.compareTo(another.name);
+    }
 }

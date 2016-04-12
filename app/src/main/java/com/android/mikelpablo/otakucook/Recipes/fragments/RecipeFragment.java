@@ -1,5 +1,6 @@
 package com.android.mikelpablo.otakucook.Recipes.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
+import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeIngredientsListAdapter;
 import com.firebase.client.Firebase;
 import com.squareup.picasso.Picasso;
@@ -31,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
  */
-public class RecipeFragment extends Fragment {
+public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.recipeName)
     TextView recipeName;
     @Bind(R.id.recipePhoto)
@@ -77,22 +80,14 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-       /* final RecipesListAdapter adapter = new RecipesListAdapter(getContext(), items);
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        btTodas.setOnClickListener(this);
-        btFavoritas.setOnClickListener(this);
-        btPosibles.setOnClickListener(this);
-
-        String nombre = getArguments().getString("nombreReceta");
-        nombreReceta.setText(nombre);*/
         Recipe recipe = getArguments().getParcelable("recipe");
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
+        btCook.setOnClickListener(this);
+        ib_favorite.setOnClickListener(this);
         final RecipeIngredientsListAdapter adapter = new RecipeIngredientsListAdapter(getContext(), items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -109,85 +104,20 @@ public class RecipeFragment extends Fragment {
 
     }
 
-   /* private void ServerRecipeList(Call<List<Recipe>> recipes) {
-        recipes.enqueue(new Callback<List<Recipe>>() {
-            @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                allRecipes(response);
-            }
-
-            @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void allRecipes(Response<List<Recipe>> response) {
-        List<Recipe> recipesServer = response.body();
-        for (Recipe r : recipesServer) {
-            items.add(r);
-            //System.out.println("id: " + r.id);
-        }
-        recyclerView.getAdapter().notifyDataSetChanged();
-    }
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.todas:
-                items.clear();
-                final RecipesListAdapter adapter = new RecipesListAdapter(getContext(), items);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        switch (v.getId()){
+            case R.id.bt_cook:{
+                Intent intent = new Intent(getContext(),RecipeTaskViewPageActivity.class);
+                intent.putExtra("recipe",getArguments().getParcelable("recipe"));
+                getContext().startActivity(intent);
+            }
+            case R.id.bt_tasks:{
 
-                MyAPI service = MyApiClient.createService(MyAPI.class);
-                Call<List<Recipe>> recipes = service.recipes();
-                ServerRecipeList(recipes);
+            }
+            case R.id.ib_favorite:{
 
-                recyclerView.getAdapter().notifyDataSetChanged();
-                break;
-            case R.id.favoritas:
-                Firebase refRoot = new Firebase(getResources().getString(R.string.users));
-                Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-                FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
-                        RecipeListHolder.class, ref) {
-                    @Override
-                    protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
-                        recoveryRecipesNames(recipeHolder, s);
-
-                    }
-                };
-                recyclerView.setAdapter(fbadapter);
-                Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.posibles:
-                Toast.makeText(getContext(), "posibles", Toast.LENGTH_SHORT).show();
-                break;
+            }
         }
     }
-
-    private void recoveryRecipesNames(final RecipeListHolder recipeHolder, String s) {
-        Firebase refRoot = new Firebase(getResources().getString(R.string.recipes));
-        Firebase refRecipe = refRoot.child(s);
-
-        refRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-
-                    String title = (String) dataSnapshot.child("name").getValue();
-                    long id = (long) dataSnapshot.child("idServer").getValue();
-                    Log.d(TAG,title);
-                    recipeHolder.name.setText(title);
-                    recipeHolder.id = id;
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    }*/
 }

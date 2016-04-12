@@ -1,27 +1,19 @@
 package com.android.mikelpablo.otakucook.Main;
 
 import android.content.Context;
-import android.graphics.Color;
+
 import android.graphics.Typeface;
-import android.os.Build;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
+
 import android.util.AttributeSet;
-import android.util.Log;
+
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.R;
 import com.google.android.gms.common.SignInButton;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -93,12 +85,15 @@ public class DrawerMenu extends LinearLayout {
         // también habría que ponerle al item como background un selector que tuviera un color
         // diferente para el estado "activated" (el background actual es "selectableItemBackground"
         // que no cumple esta condición)
-        view.setTypeface(null, Typeface.BOLD);
+        if (view != null)
+        {
+        view.setTypeface(null, Typeface.BOLD);}
 
         m_selectedItem = view;
     }
 
     public int getSelectedItemId() {
+
         return m_selectedItem.getId();
     }
 }

@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientListFragment;
@@ -41,6 +42,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     SignInButton mGoogleLoginButton;
     @Bind(R.id.login_status)
     TextView mLoggedInStatusTextView;
+    @Bind(R.id.user_image)
+    ImageView userImage;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -123,10 +127,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
         mAuthProgressDialog = new ProgressDialog(MainActivity.this);
-        SharedPreferences prefs =
+        /*SharedPreferences prefs =
                 getSharedPreferences("saveInstanceState", Context.MODE_PRIVATE);
 
-        onItemClick(prefs.getInt("selectedItem", 0));
+       onItemClick(prefs.getInt("selectedItem", 0));*/
         if (savedInstanceState != null) {
             Log.i("MainActivity", "Instancia guardada");
 
@@ -233,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // if user logged in with Facebook, stop tracking their token
         Log.i("MainActivity", "onDestroy");
         mAuthProgressDialog.dismiss();
-        saveNavigationDrawerItem();
+        //saveNavigationDrawerItem();
 
 
         // if changing configurations, stop tracking firebase session.
@@ -365,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                     }
                 });
-
+                Picasso.with(MainActivity.this).load(authData.getProviderData().get("profileImageURL").toString()).into(userImage);
                /* Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
                 MainActivity.this.startActivity(intent);*/
                 mLoggedInStatusTextView.setText("Logged in as " + name + " (" + authData.getProvider() + ")");
@@ -423,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
 
         navigationDrawer.setSelectedItemId(itemId);
-        saveNavigationDrawerItem();
+        //saveNavigationDrawerItem();
     }
 
 
@@ -583,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.i("MainActivity", "onSaveInstance");
-        outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
+       // outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
        /* if (mAuthData != null){
             outState.putString("LOGINTEXT",mLoggedInStatusTextView.getText().toString());
         }*/
