@@ -22,6 +22,8 @@ public interface MyAPI {
         @POST("/ingredients")
         Call<Ingredient> createIngredient(@Body Ingredient ingredient);
         @GET("/ingredients")
-        Call<List<Ingredient>> getIngredients();
+        Call<List<Ingredient>> ingredients();
+        @GET("/ingredients/{id}")
+        Call<Ingredient> getIngredient(@Path("id") long id);
 
 }
