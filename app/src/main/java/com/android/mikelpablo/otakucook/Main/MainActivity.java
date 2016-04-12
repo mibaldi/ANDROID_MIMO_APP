@@ -3,8 +3,10 @@ package com.android.mikelpablo.otakucook.Main;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -47,7 +49,7 @@ import java.util.prefs.Preferences;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DrawerMenu.Listener{
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DrawerMenu.Listener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     /* A dialog that is presented until the Firebase authentication finished. */
@@ -85,16 +87,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     /* The login button for Google */
 
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @Bind(R.id.drawer_menu) DrawerMenu navigationDrawer;
-    @Bind(R.id.login_with_google) SignInButton  mGoogleLoginButton;
-    @Bind(R.id.login_status) TextView mLoggedInStatusTextView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @Bind(R.id.drawer_menu)
+    DrawerMenu navigationDrawer;
+    @Bind(R.id.login_with_google)
+    SignInButton mGoogleLoginButton;
+    @Bind(R.id.login_status)
+    TextView mLoggedInStatusTextView;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_DENIED){
+        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
             finish();
         }
     }
@@ -115,26 +122,28 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
         mAuthProgressDialog = new ProgressDialog(MainActivity.this);
+        SharedPreferences prefs =
+                getSharedPreferences("saveInstanceState", Context.MODE_PRIVATE);
 
+        onItemClick(prefs.getInt("selectedItem", 0));
         if (savedInstanceState != null) {
-            Log.i("MainActivity","Instancia guardada");
+            Log.i("MainActivity", "Instancia guardada");
 
-            onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
-            this.mAuthData= mFirebaseRef.getAuth();
-            if(this.mAuthData != null){
+            //onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
+            this.mAuthData = mFirebaseRef.getAuth();
+            if (this.mAuthData != null) {
                 mGoogleLoginButton.setVisibility(View.GONE);
                 mLoggedInStatusTextView.setVisibility(View.VISIBLE);
                 mLoggedInStatusTextView.setText(generateLoginText());
-            }else {
+            } else {
                 mGoogleLoginButton.setVisibility(View.VISIBLE);
                 mLoggedInStatusTextView.setVisibility(View.GONE);
             }
 
-        }
-        else {
-            if (mAuthData == null){
-                Log.i("MainActivity","Sin instancia guardada");
-                onItemClick(R.id.main);
+        } else {
+            if (mAuthData == null) {
+                Log.i("MainActivity", "Sin instancia guardada");
+                //onItemClick(R.id.main);
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
                         .addConnectionCallbacks(this)
                         .addOnConnectionFailedListener(this)
@@ -172,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         /* Check if the user is authenticated with Firebase already. If this is the case we can set the authenticated
          * user and hide hide any login buttons */
                 mFirebaseRef.addAuthStateListener(mAuthStateListener);
-            }else{
+            } else {
                 mGoogleLoginButton.setVisibility(View.GONE);
                 mLoggedInStatusTextView.setVisibility(View.VISIBLE);
                 mLoggedInStatusTextView.setText(generateLoginText());
@@ -202,31 +211,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i("MainActivity","onRestart");
+        Log.i("MainActivity", "onRestart");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("MainActivity","onStart");
+        Log.i("MainActivity", "onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("MainActivity","onResume");
+        Log.i("MainActivity", "onResume");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // if user logged in with Facebook, stop tracking their token
-        Log.i("MainActivity","onDestroy");
+        Log.i("MainActivity", "onDestroy");
         mAuthProgressDialog.dismiss();
+        saveNavigationDrawerItem();
+
 
         // if changing configurations, stop tracking firebase session.
         //mFirebaseRef.removeAuthStateListener(mAuthStateListener);
     }
+
+    private void saveNavigationDrawerItem() {
+        SharedPreferences prefs =
+                getSharedPreferences("saveInstanceState", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("selectedItem", navigationDrawer.getSelectedItemId());
+        editor.commit();
+    }
+
     /**
      * This method fires when any startActivityForResult finishes. The requestCode maps to
      * the value passed into startActivityForResult.
@@ -309,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             mFirebaseRef.authWithOAuthToken(provider, options.get("oauth_token"), new AuthResultHandler(provider));
         }
     }*/
+
     /**
      * Once a user is logged in, take the mAuthData provided from Firebase and "use" it.
      */
@@ -328,11 +350,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 mFirebaseRef.child("Users").child(authData.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (!dataSnapshot.exists()){
+                        if (!dataSnapshot.exists()) {
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("provider", authData.getProvider());
                             map.put("name", finalName);
-                            map.put("uid",authData.getUid());
+                            map.put("uid", authData.getUid());
                             mFirebaseRef.child("Users").child(authData.getUid()).setValue(map);
                         }
                     }
@@ -396,7 +418,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 selectFragment(new IngredientListFragment(), R.string.ingredients_drawer);
                 break;
         }
+
         navigationDrawer.setSelectedItemId(itemId);
+        saveNavigationDrawerItem();
     }
 
     private void selectFragment(Fragment fragment, int titleResId) {
@@ -449,6 +473,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             showErrorDialog(firebaseError.toString());
         }
     }
+
     /* ************************************
      *              GOOGLE                *
      **************************************
@@ -548,12 +573,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.i("MainActivity","onRestoreInstaceState");
+        Log.i("MainActivity", "onRestoreInstaceState");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.i("MainActivity","onSaveInstance");
+        Log.i("MainActivity", "onSaveInstance");
         outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
        /* if (mAuthData != null){
             outState.putString("LOGINTEXT",mLoggedInStatusTextView.getText().toString());
