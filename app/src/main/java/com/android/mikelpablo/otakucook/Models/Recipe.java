@@ -39,6 +39,7 @@ public class Recipe implements Parcelable {
     }
 
     public Recipe() {
+        ingredients = new ArrayList<Ingredient>();
     }
 
     @Override

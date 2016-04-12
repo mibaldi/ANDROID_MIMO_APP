@@ -114,32 +114,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.GET_ACCOUNTS}, 0);
             }
         }
+        mAuthProgressDialog = new ProgressDialog(MainActivity.this);
 
         if (savedInstanceState != null) {
+            Log.i("MainActivity","Instancia guardada");
 
             onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
             this.mAuthData= mFirebaseRef.getAuth();
             if(this.mAuthData != null){
                 mGoogleLoginButton.setVisibility(View.GONE);
                 mLoggedInStatusTextView.setVisibility(View.VISIBLE);
+                mLoggedInStatusTextView.setText(generateLoginText());
             }else {
                 mGoogleLoginButton.setVisibility(View.VISIBLE);
                 mLoggedInStatusTextView.setVisibility(View.GONE);
             }
-            mLoggedInStatusTextView.setText(savedInstanceState.getString("LOGINTEXT"));
+
         }
         else {
-            onItemClick(R.id.main);
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Plus.API)
-                    .addScope(Plus.SCOPE_PLUS_LOGIN)
-                    .build();
+            if (mAuthData == null){
+                Log.i("MainActivity","Sin instancia guardada");
+                onItemClick(R.id.main);
+                mGoogleApiClient = new GoogleApiClient.Builder(this)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .addApi(Plus.API)
+                        .addScope(Plus.SCOPE_PLUS_LOGIN)
+                        .build();
 
-            if (!mGoogleApiClient.isConnecting()) {
-                connectToApiClient();
-            }
+                if (!mGoogleApiClient.isConnecting()) {
+                    connectToApiClient();
+                }
 
 
         /* *************************************
@@ -148,26 +153,41 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
         /* Create the Firebase ref that is used for all authentication with Firebase */
-            mFirebaseRef = new Firebase(getResources().getString(R.string.firebase_url));
+                mFirebaseRef = new Firebase(getResources().getString(R.string.firebase_url));
 
         /* Setup the progress dialog that is displayed later when authenticating with Firebase */
-            mAuthProgressDialog = new ProgressDialog(MainActivity.this);
-            mAuthProgressDialog.setTitle("Loading");
-            mAuthProgressDialog.setMessage("Authenticating with Firebase...");
-            mAuthProgressDialog.setCancelable(false);
-            mAuthProgressDialog.show();
 
-            mAuthStateListener = new Firebase.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(AuthData authData) {
-                    mAuthProgressDialog.hide();
-                    setAuthenticatedUser(authData);
-                }
-            };
+                mAuthProgressDialog.setTitle("Loading");
+                mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+                mAuthProgressDialog.setCancelable(false);
+                mAuthProgressDialog.show();
+
+                mAuthStateListener = new Firebase.AuthStateListener() {
+                    @Override
+                    public void onAuthStateChanged(AuthData authData) {
+                        mAuthProgressDialog.hide();
+                        setAuthenticatedUser(authData);
+                    }
+                };
         /* Check if the user is authenticated with Firebase already. If this is the case we can set the authenticated
          * user and hide hide any login buttons */
-            mFirebaseRef.addAuthStateListener(mAuthStateListener);
+                mFirebaseRef.addAuthStateListener(mAuthStateListener);
+            }else{
+                mGoogleLoginButton.setVisibility(View.GONE);
+                mLoggedInStatusTextView.setVisibility(View.VISIBLE);
+                mLoggedInStatusTextView.setText(generateLoginText());
+            }
+
         }
+    }
+
+    private String generateLoginText() {
+        String name = null;
+        if (mAuthData.getProvider().equals("google")) {
+            name = (String) mAuthData.getProviderData().get("displayName");
+        }
+        String text = "Logged in as " + name + " (" + mAuthData.getProvider() + ")";
+        return text;
     }
 
     /*@Override
@@ -178,14 +198,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     }*/
 
-   /* @Override
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i("MainActivity","onRestart");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("MainActivity","onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i("MainActivity","onResume");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         // if user logged in with Facebook, stop tracking their token
+        Log.i("MainActivity","onDestroy");
+        mAuthProgressDialog.dismiss();
 
         // if changing configurations, stop tracking firebase session.
-        mFirebaseRef.removeAuthStateListener(mAuthStateListener);
-    }*/
+        //mFirebaseRef.removeAuthStateListener(mAuthStateListener);
+    }
     /**
      * This method fires when any startActivityForResult finishes. The requestCode maps to
      * the value passed into startActivityForResult.
@@ -504,13 +545,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // ignore
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.i("MainActivity","onRestoreInstaceState");
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        Log.i("MainActivity","onSaveInstance");
         outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
-        if (mAuthData != null){
+       /* if (mAuthData != null){
             outState.putString("LOGINTEXT",mLoggedInStatusTextView.getText().toString());
-        }
+        }*/
         //outState.put("AUTHDATA", mAuthData);
         super.onSaveInstanceState(outState);
     }

@@ -18,7 +18,7 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeHolder;
+import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipesListAdapter;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -153,10 +153,10 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             case R.id.favoritas:
                 Firebase refRoot = new Firebase(getResources().getString(R.string.users));
                 Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-                FirebaseRecyclerAdapter<String, RecipeHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeHolder>(String.class, R.layout.recipelist_item,
-                        RecipeHolder.class, ref) {
+                FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
+                        RecipeListHolder.class, ref) {
                     @Override
-                    protected void populateViewHolder(final RecipeHolder recipeHolder, final String s, int i) {
+                    protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
                         recoveryRecipesNames(recipeHolder, s);
 
                     }
@@ -170,7 +170,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void recoveryRecipesNames(final RecipeHolder recipeHolder, String s) {
+    private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
         Firebase refRoot = new Firebase(getResources().getString(R.string.recipes));
         Firebase refRecipe = refRoot.child(s);
 
@@ -182,8 +182,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                     String title = (String) dataSnapshot.child("name").getValue();
                     long id = (long) dataSnapshot.child("idServer").getValue();
                     Log.d(TAG,title);
-                    recipeHolder.name.setText(title);
-                    recipeHolder.id = id;
+                    recipeListHolder.name.setText(title);
+                    recipeListHolder.id = id;
                 }
             }
 

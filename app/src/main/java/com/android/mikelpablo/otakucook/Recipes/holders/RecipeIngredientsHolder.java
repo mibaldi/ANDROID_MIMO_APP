@@ -30,10 +30,10 @@ public class RecipeIngredientsHolder extends RecyclerView.ViewHolder{
     public RecipeIngredientsHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
-       // name = (TextView) itemView.findViewById(R.id.recipeName);
+       name = (TextView) itemView.findViewById(R.id.recipeName);
 
     }
-    /*public RecipeHolder(Context context,View itemView) {
+    /*public RecipeListHolder(Context context,View itemView) {
         super(itemView);
         this.context=context;
         itemView.setOnClickListener(this);
@@ -62,7 +62,7 @@ public class RecipeIngredientsHolder extends RecyclerView.ViewHolder{
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                     Recipe recipe= response.body();
-                Log.d("RecipeHolder",recipe.author);
+                Log.d("RecipeListHolder",recipe.author);
                 Intent intent = new Intent(context,RecipeActivity.class);
                 intent.putExtra("recipe",recipe);
                 context.startActivity(intent);

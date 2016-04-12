@@ -14,21 +14,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.mikelpablo.otakucook.Main.MainActivity;
+import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Recipe;
-import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
-import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeIngredientsListAdapter;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipesListAdapter;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeHolder;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.firebase.ui.FirebaseRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -36,9 +27,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
@@ -59,7 +47,8 @@ public class RecipeFragment extends Fragment {
     @Bind(R.id.recipeIngredientsListRecyclerView)
     RecyclerView recyclerView;
     private static final String TAG = RecipeFragment.class.getName();
-   // public List<Recipe> items = new ArrayList<>();
+
+    public List<Ingredient> items = new ArrayList<>();
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
 
@@ -103,8 +92,8 @@ public class RecipeFragment extends Fragment {
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
         ratingBar.setRating(recipe.score);
-
-        final RecipeIngredientsListAdapter adapter = new RecipeIngredientsListAdapter(getContext(), recipe.ingredients);
+        items = recipe.ingredients;
+        final RecipeIngredientsListAdapter adapter = new RecipeIngredientsListAdapter(getContext(), items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -161,10 +150,10 @@ public class RecipeFragment extends Fragment {
             case R.id.favoritas:
                 Firebase refRoot = new Firebase(getResources().getString(R.string.users));
                 Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-                FirebaseRecyclerAdapter<String, RecipeHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeHolder>(String.class, R.layout.recipelist_item,
-                        RecipeHolder.class, ref) {
+                FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
+                        RecipeListHolder.class, ref) {
                     @Override
-                    protected void populateViewHolder(final RecipeHolder recipeHolder, final String s, int i) {
+                    protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
                         recoveryRecipesNames(recipeHolder, s);
 
                     }
@@ -178,7 +167,7 @@ public class RecipeFragment extends Fragment {
         }
     }
 
-    private void recoveryRecipesNames(final RecipeHolder recipeHolder, String s) {
+    private void recoveryRecipesNames(final RecipeListHolder recipeHolder, String s) {
         Firebase refRoot = new Firebase(getResources().getString(R.string.recipes));
         Firebase refRecipe = refRoot.child(s);
 

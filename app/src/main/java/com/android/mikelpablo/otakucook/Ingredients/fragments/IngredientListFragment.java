@@ -26,7 +26,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     public List<Ingredient> items = new ArrayList<>();
     private ProgressDialog mProgressDialog;
 
-    @Bind(R.id.recipeListRecyclerView)
+    @Bind(R.id.ingredientListRecyclerView)
     RecyclerView recyclerView;
 
     public IngredientListFragment() {

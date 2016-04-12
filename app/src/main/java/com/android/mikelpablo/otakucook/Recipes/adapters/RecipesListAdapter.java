@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeHolder;
+import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
 
 import java.util.List;
 
 /**
  * Created by pabji on 04/04/2016.
  */
-public class RecipesListAdapter extends RecyclerView.Adapter<RecipeHolder>{
+public class RecipesListAdapter extends RecyclerView.Adapter<RecipeListHolder>{
 
     private List<Recipe> listItem;
     private Context context;
@@ -25,15 +25,15 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipeHolder>{
     }
 
     @Override
-    public RecipeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecipeListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipelist_item,parent,false);
-        //return new RecipeHolder(view);
+        //return new RecipeListHolder(view);
 
-        return new RecipeHolder(view);
+        return new RecipeListHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecipeHolder holder, int position) {
+    public void onBindViewHolder(RecipeListHolder holder, int position) {
         holder.bindItem(listItem.get(position));
     }
 

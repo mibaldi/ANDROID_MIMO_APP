@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Models.Ingredient;
-import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeHolder;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeIngredientsHolder;
 
 import java.util.List;

@@ -3,12 +3,15 @@ package com.android.mikelpablo.otakucook.Recipes.holders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 
+import com.android.mikelpablo.otakucook.Main.MainActivity;
+import com.android.mikelpablo.otakucook.Models.Measure;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
@@ -22,19 +25,19 @@ import retrofit2.Response;
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
  */
-public class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class RecipeListHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     public TextView name;
     public long id;
     public Context context;
     //public Context context;
-    public RecipeHolder(View itemView) {
+    public RecipeListHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
         name = (TextView) itemView.findViewById(R.id.recipeName);
         itemView.setOnClickListener(this);
 
     }
-    /*public RecipeHolder(Context context,View itemView) {
+    /*public RecipeListHolder(Context context,View itemView) {
         super(itemView);
         this.context=context;
         itemView.setOnClickListener(this);
@@ -64,8 +67,14 @@ public class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClic
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                     Recipe recipe= response.body();
-
-                Log.d("RecipeHolder",recipe.author);
+                //Log.d("RecipeListHolder",String.valueOf(recipe.getMeasures().size()));
+                // Log.i("Mikel",recipe.getMeasures().get(0).measure);
+                for (Measure measure: recipe.getMeasures()){
+                   // Log.i("Mikel",measure.ingredient.name);
+                    recipe.ingredients.add(measure.ingredient);
+                }
+               // Log.d("Mikel", String.valueOf(recipe.ingredients.size()));
+                //Log.d("RecipeListHolder",recipe.author);
                 Intent intent = new Intent(context,RecipeActivity.class);
                 intent.putExtra("recipe",recipe);
                 context.startActivity(intent);
