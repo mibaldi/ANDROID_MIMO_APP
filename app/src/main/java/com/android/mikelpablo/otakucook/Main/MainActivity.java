@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeListFragment;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
@@ -380,7 +381,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.shopping_cart:
                 System.out.println("Shopping");
-                selectFragment(new IngredientListFragment(), R.string.shoping_cart_drawer);
+                IngredientListFragment shoppingFragment = IngredientListFragment.newInstance(R.string.shoping_cart_drawer);
+                selectFragment(shoppingFragment, R.string.shoping_cart_drawer);
                 break;
             case R.id.recipes:
                 System.out.println("Recipes");
@@ -393,11 +395,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 break;
             case R.id.ingredients:
                 System.out.println("Ingredients");
-                selectFragment(new IngredientListFragment(), R.string.ingredients_drawer);
+                IngredientListFragment ingredientsFragment = IngredientListFragment.newInstance(R.string.ingredients_drawer);
+                selectFragment(ingredientsFragment, R.string.ingredients_drawer);
                 break;
         }
         navigationDrawer.setSelectedItemId(itemId);
     }
+
 
     private void selectFragment(Fragment fragment, int titleResId) {
         fragment.setRetainInstance(true);
