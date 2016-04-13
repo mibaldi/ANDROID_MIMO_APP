@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by mikelbalducieldiaz on 4/4/16.
@@ -25,5 +26,7 @@ public interface MyAPI {
         Call<List<Ingredient>> ingredients();
         @GET("/ingredients/{id}")
         Call<Ingredient> getIngredient(@Path("id") long id);
+        @GET("/recipesIngredients")
+        Call<List<Recipe>> getPossiblesRecipes(@Query("ingredientes") String ingredientes);
 
 }

@@ -20,6 +20,7 @@ import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipesListAdapter;
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -52,6 +53,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public List<Recipe> items = new ArrayList<>();
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
+    public static List<String> ingredientsId = new ArrayList<>();
     private ProgressDialog mProgressDialog;
 
     public RecipeListFragment() {
@@ -133,6 +135,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        MyAPI service = MyApiClient.createService(MyAPI.class);
+        Firebase refRoot = new Firebase(getResources().getString(R.string.users));
         switch (v.getId()) {
             case R.id.todas:
 
@@ -144,7 +148,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                MyAPI service = MyApiClient.createService(MyAPI.class);
+
                 Call<List<Recipe>> recipes = service.recipes();
                 ServerRecipeList(recipes);
 
@@ -152,7 +156,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.favoritas:
                 if (MainActivity.mAuthData != null){
-                    Firebase refRoot = new Firebase(getResources().getString(R.string.users));
+
                     Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
                     FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
                             RecipeListHolder.class, ref) {
@@ -170,9 +174,51 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
                 break;
             case R.id.posibles:
+
+                getIngredientsIdStorage(refRoot);
+                String ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
+                Log.d(TAG,ingredientsIdString);
+                Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
+
+                possiblesRecipes.enqueue(new Callback<List<Recipe>>() {
+                    @Override
+                    public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+
+                        allRecipes(response);
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                        if (mProgressDialog.isShowing())
+                            mProgressDialog.dismiss();
+                    }
+                });
+                recyclerView.getAdapter().notifyDataSetChanged();
                 Toast.makeText(getContext(), "posibles", Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    private void getIngredientsIdStorage(Firebase refRoot) {
+        Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
+        ingredientsId.clear();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    String id = postSnapshot.getValue(String.class);
+                    Log.d(TAG,id);
+                    ingredientsId.add(id);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
