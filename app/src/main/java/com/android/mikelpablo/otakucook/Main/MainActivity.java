@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.R;
@@ -53,42 +54,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DrawerMenu.Listener {
-    private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     /* A dialog that is presented until the Firebase authentication finished. */
     private ProgressDialog mAuthProgressDialog;
-
     /* A reference to the Firebase */
     public static Firebase mFirebaseRef;
-
     /* Data from the authenticated user */
     public static AuthData mAuthData;
-
-    /* Listener for Firebase session changes */
     private Firebase.AuthStateListener mAuthStateListener;
-
-    /* *************************************
-     *              GOOGLE                 *
-     ***************************************/
-    /* Request code used to invoke sign in user interactions for Google+ */
     public static final int RC_GOOGLE_LOGIN = 1;
-
-    /* Client used to interact with Google APIs. */
     public static GoogleApiClient mGoogleApiClient;
-
     /* A flag indicating that a PendingIntent is in progress and prevents us from starting further intents. */
     private boolean mGoogleIntentInProgress;
-
-    /* Track whether the sign-in button has been clicked so that we know to resolve all issues preventing sign-in
-     * without waiting. */
     private boolean mGoogleLoginClicked;
-
-    /* Store the connection result from onConnectionFailed callbacks so that we can resolve them when the user clicks
-     * sign-in. */
     private ConnectionResult mGoogleConnectionResult;
-
-    /* The login button for Google */
-
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -119,79 +99,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         toolbar.setNavigationIcon(R.drawable.ic_menu);
         setSupportActionBar(toolbar);
-
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mAuthProgressDialog = new ProgressDialog(MainActivity.this);
+
+
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.GET_ACCOUNTS}, 0);
             }
         }
-        mAuthProgressDialog = new ProgressDialog(MainActivity.this);
-        /*SharedPreferences prefs =
-                getSharedPreferences("saveInstanceState", Context.MODE_PRIVATE);
-
-       onItemClick(prefs.getInt("selectedItem", 0));*/
-        if (savedInstanceState != null) {
-            Log.i("MainActivity", "Instancia guardada");
-
-            //onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
-            this.mAuthData = mFirebaseRef.getAuth();
-            if (this.mAuthData != null) {
-                mGoogleLoginButton.setVisibility(View.GONE);
-                mLoggedInStatusTextView.setVisibility(View.VISIBLE);
-                mLoggedInStatusTextView.setText(generateLoginText());
-            } else {
-                mGoogleLoginButton.setVisibility(View.VISIBLE);
-                mLoggedInStatusTextView.setVisibility(View.GONE);
-            }
-
-        } else {
-            if (mAuthData == null) {
-                Log.i("MainActivity", "Sin instancia guardada");
-                //onItemClick(R.id.main);
-                mGoogleApiClient = new GoogleApiClient.Builder(this)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(Plus.API)
-                        .addScope(Plus.SCOPE_PLUS_LOGIN)
-                        .build();
-
-                if (!mGoogleApiClient.isConnecting()) {
-                    connectToApiClient();
-                }
-
-
-        /* *************************************
-         *               GENERAL               *
-         ***************************************/
-
-
-        /* Create the Firebase ref that is used for all authentication with Firebase */
-                mFirebaseRef = new Firebase(getResources().getString(R.string.firebase_url));
-
-        /* Setup the progress dialog that is displayed later when authenticating with Firebase */
-
-                mAuthProgressDialog.setTitle("Loading");
-                mAuthProgressDialog.setMessage("Authenticating with Firebase...");
-                mAuthProgressDialog.setCancelable(false);
-                mAuthProgressDialog.show();
-
-                mAuthStateListener = new Firebase.AuthStateListener() {
-                    @Override
-                    public void onAuthStateChanged(AuthData authData) {
-                        mAuthProgressDialog.hide();
-                        setAuthenticatedUser(authData);
-                    }
-                };
-        /* Check if the user is authenticated with Firebase already. If this is the case we can set the authenticated
-         * user and hide hide any login buttons */
-                mFirebaseRef.addAuthStateListener(mAuthStateListener);
-            } else {
-                mGoogleLoginButton.setVisibility(View.GONE);
-                mLoggedInStatusTextView.setVisibility(View.VISIBLE);
-                mLoggedInStatusTextView.setText(generateLoginText());
-            }
-
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .build();
+        mFirebaseRef = new Firebase(getResources().getString(R.string.firebase_url));
+        if (mAuthData == null){
+            generateAuthData();
         }
     }
 
@@ -204,31 +129,54 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         return text;
     }
 
-    /*@Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        onItemClick(savedInstanceState.getInt("navigationDrawerSelectedItemId"));
-
-    }*/
-
-
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.i("MainActivity", "onRestart");
+    protected void onPause() {
+        super.onPause();
+        if ( mAuthProgressDialog != null){
+            mAuthProgressDialog.dismiss();
+        }
+        saveNavigationDrawerItem();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        SharedPreferences prefs = getSharedPreferences("saveInstanceState", Context.MODE_PRIVATE);
+        onItemClick(prefs.getInt("selectedItem", R.id.main));
+        this.mAuthData = mFirebaseRef.getAuth();
+        if (this.mAuthData != null) {
+            mGoogleLoginButton.setVisibility(View.GONE);
+            mLoggedInStatusTextView.setVisibility(View.VISIBLE);
+            Picasso.with(MainActivity.this).load(mAuthData.getProviderData().get("profileImageURL").toString()).into(userImage);
+            mLoggedInStatusTextView.setText(generateLoginText());
+
+        } else {
+            generateAuthData();
+        }
         Log.i("MainActivity", "onStart");
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.i("MainActivity", "onResume");
+    private void generateAuthData() {
+        if (!mGoogleApiClient.isConnecting()) {
+            connectToApiClient();
+        }
+        mGoogleLoginButton.setVisibility(View.VISIBLE);
+        mLoggedInStatusTextView.setVisibility(View.GONE);
+
+
+        mAuthProgressDialog.setTitle("Loading");
+        mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog.show();
+
+        mAuthStateListener = new Firebase.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(AuthData authData) {
+                mAuthProgressDialog.hide();
+                setAuthenticatedUser(authData);
+            }
+        };
+        mFirebaseRef.addAuthStateListener(mAuthStateListener);
     }
 
     @Override
@@ -236,9 +184,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onDestroy();
         // if user logged in with Facebook, stop tracking their token
         Log.i("MainActivity", "onDestroy");
-        mAuthProgressDialog.dismiss();
-        //saveNavigationDrawerItem();
-
 
         // if changing configurations, stop tracking firebase session.
         //mFirebaseRef.removeAuthStateListener(mAuthStateListener);
@@ -307,38 +252,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (this.mAuthData != null) {
             /* logout of Firebase */
             mFirebaseRef.unauth();
-            /* Logout of any of the Frameworks. This step is optional, but ensures the user is not logged into
-             * Facebook/Google+ after logging out of Firebase. */
             if (this.mAuthData.getProvider().equals("google")) {
                 /* Logout from Google+ */
                 if (mGoogleApiClient.isConnected()) {
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mGoogleApiClient.clearDefaultAccountAndReconnect();
                     mGoogleApiClient.disconnect();
                 }
+
             }
             /* Update authenticated user and show login buttons */
             setAuthenticatedUser(null);
-            finish();
+            //finish();
         }
     }
-    /**
-     * This method will attempt to authenticate a user to firebase given an oauth_token (and other
-     * necessary parameters depending on the provider)
-     */
-    /*private void authWithFirebase(final String provider, Map<String, String> options) {
-        if (options.containsKey("error")) {
-            showErrorDialog(options.get("error"));
-        } else {
-            mAuthProgressDialog.show();
-
-            // if the provider is not twitter, we just need to pass in the oauth_token
-            mFirebaseRef.authWithOAuthToken(provider, options.get("oauth_token"), new AuthResultHandler(provider));
-        }
-    }*/
-
-    /**
-     * Once a user is logged in, take the mAuthData provided from Firebase and "use" it.
-     */
     private void setAuthenticatedUser(final AuthData authData) {
         if (authData != null) {
             /* Hide all the login buttons */
@@ -363,15 +290,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             mFirebaseRef.child("Users").child(authData.getUid()).setValue(map);
                         }
                     }
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
-
                     }
                 });
                 Picasso.with(MainActivity.this).load(authData.getProviderData().get("profileImageURL").toString()).into(userImage);
-               /* Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
-                MainActivity.this.startActivity(intent);*/
                 mLoggedInStatusTextView.setText("Logged in as " + name + " (" + authData.getProvider() + ")");
             }
         } else {
@@ -379,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             mGoogleLoginButton.setVisibility(View.VISIBLE);
             mLoggedInStatusTextView.setVisibility(View.GONE);
+            Picasso.with(MainActivity.this).load("https://www.google.es/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwjumsn3p4rMAhVH1RQKHUvwAL8QjRwIBw&url=http%3A%2F%2Fwww.domestika.org%2Fes%2Fprojects%2F35336-fakebook-avatar-project&psig=AFQjCNHC2L_vKAetzHsOt2NQ0xuo4rUE-w&ust=1460592157859224").into(userImage);
         }
         this.mAuthData = authData;
         /* invalidate options menu to hide/show the logout button */
@@ -403,31 +327,39 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         switch (itemId) {
             case R.id.main:
                 System.out.println("Main");
-                selectFragment(new MainFragment(), R.string.main_drawer);
+                if (mAuthData != null){
+                    selectFragment(new MainFragment(), R.string.main_drawer);
+                }
+                else
+                    Toast.makeText(this,"No estas logueado",Toast.LENGTH_LONG).show();
                 break;
             case R.id.shopping_cart:
                 System.out.println("Shopping");
-                IngredientListFragment shoppingFragment = IngredientListFragment.newInstance(R.string.shoping_cart_drawer);
-                selectFragment(shoppingFragment, R.string.shoping_cart_drawer);
+                if (mAuthData != null) {
+                    IngredientListFragment shoppingFragment = IngredientListFragment.newInstance(R.string.shoping_cart_drawer);
+                    selectFragment(shoppingFragment, R.string.shoping_cart_drawer);
+                }
+                else
+                    Toast.makeText(this,"No estas logueado",Toast.LENGTH_LONG).show();
                 break;
             case R.id.recipes:
                 System.out.println("Recipes");
                 RecipeListFragment recipesListFragment = new RecipeListFragment();
-                /*android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.flRecipeList,recipesListFragment);
-                ft.setTransition(android.support.v4.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                ft.commit();*/
                 selectFragment(recipesListFragment, R.string.recipes_drawer);
                 break;
             case R.id.ingredients:
                 System.out.println("Ingredients");
-                IngredientListFragment ingredientsFragment = IngredientListFragment.newInstance(R.string.ingredients_drawer);
-                selectFragment(ingredientsFragment, R.string.ingredients_drawer);
+                if (mAuthData != null){
+                    IngredientListFragment ingredientsFragment = IngredientListFragment.newInstance(R.string.ingredients_drawer);
+                    selectFragment(ingredientsFragment, R.string.ingredients_drawer);
+                }
+                else
+                    Toast.makeText(this,"No estas logueado",Toast.LENGTH_LONG).show();
+
                 break;
         }
 
         navigationDrawer.setSelectedItemId(itemId);
-        //saveNavigationDrawerItem();
     }
 
 
@@ -482,10 +414,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    /* ************************************
-     *              GOOGLE                *
-     **************************************
-     */
     /* A helper method to resolve the current ConnectionResult error. */
     private void resolveSignInError() {
         if (mGoogleConnectionResult.hasResolution()) {
@@ -568,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                  * or they cancel. */
                 resolveSignInError();
             } else {
+                resolveSignInError();
                 Log.e(TAG, result.toString());
             }
         }
@@ -576,22 +505,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionSuspended(int i) {
         // ignore
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.i("MainActivity", "onRestoreInstaceState");
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.i("MainActivity", "onSaveInstance");
-       // outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
-       /* if (mAuthData != null){
-            outState.putString("LOGINTEXT",mLoggedInStatusTextView.getText().toString());
-        }*/
-        //outState.put("AUTHDATA", mAuthData);
-        super.onSaveInstanceState(outState);
     }
 }

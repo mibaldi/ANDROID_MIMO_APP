@@ -151,18 +151,23 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.favoritas:
-                Firebase refRoot = new Firebase(getResources().getString(R.string.users));
-                Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-                FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
-                        RecipeListHolder.class, ref) {
-                    @Override
-                    protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
-                        recoveryRecipesNames(recipeHolder, s);
+                if (MainActivity.mAuthData != null){
+                    Firebase refRoot = new Firebase(getResources().getString(R.string.users));
+                    Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
+                    FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
+                            RecipeListHolder.class, ref) {
+                        @Override
+                        protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
+                            recoveryRecipesNames(recipeHolder, s);
 
-                    }
-                };
-                recyclerView.setAdapter(fbadapter);
-                Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    recyclerView.setAdapter(fbadapter);
+                    Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(getContext(), "No estas logueado", Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.posibles:
                 Toast.makeText(getContext(), "posibles", Toast.LENGTH_SHORT).show();

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import android.graphics.Typeface;
 
+import android.os.Build;
 import android.util.AttributeSet;
 
 import android.util.TypedValue;
@@ -70,14 +71,14 @@ public class DrawerMenu extends LinearLayout {
     }
 
     public void setSelectedItemId(int itemId) {
-        /*if (m_selectedItem != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                m_selectedItem.getCompoundDrawables()[0].setTintList(null);
-            m_selectedItem.setTypeface(null, Typeface.NORMAL);
-        }*/
         if (m_selectedItem != null) {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                //m_selectedItem.getCompoundDrawables()[0].setTintList(null);
             m_selectedItem.setTypeface(null, Typeface.NORMAL);
         }
+       /* if (m_selectedItem != null) {
+            m_selectedItem.setTypeface(null, Typeface.NORMAL);
+        }*/
         TextView view = (TextView) findViewById(itemId);
 
         // Ponemos en negrita el texto del elemento seleccionado para resaltarlo. Otra opción
@@ -85,9 +86,7 @@ public class DrawerMenu extends LinearLayout {
         // también habría que ponerle al item como background un selector que tuviera un color
         // diferente para el estado "activated" (el background actual es "selectableItemBackground"
         // que no cumple esta condición)
-        if (view != null)
-        {
-        view.setTypeface(null, Typeface.BOLD);}
+        view.setTypeface(null, Typeface.BOLD);
 
         m_selectedItem = view;
     }

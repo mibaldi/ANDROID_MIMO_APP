@@ -57,7 +57,7 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             if( mPageEnd && arg0 == selectedIndex && !callHappened)
             {
-                Intent intent = new Intent(RecipeTaskViewPageActivity.this,RecipeActivity.class);
+                Intent intent = new Intent(RecipeTaskViewPageActivity.this,RecipeFinalActivity.class);
                 intent.putExtra("recipe",recipe);
                 RecipeTaskViewPageActivity.this.startActivity(intent);
                 Toast.makeText(getApplicationContext(),"Final",Toast.LENGTH_SHORT).show();

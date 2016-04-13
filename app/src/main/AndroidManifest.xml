@@ -35,7 +35,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.MainActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity"></activity>
+        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity" />
+        <activity android:name=".Recipes.activities.RecipeFinalActivity"></activity>
     </application>
 
 </manifest>
