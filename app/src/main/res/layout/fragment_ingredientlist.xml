@@ -16,5 +16,14 @@
         android:text="Download Ingredient"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_category_ingredient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

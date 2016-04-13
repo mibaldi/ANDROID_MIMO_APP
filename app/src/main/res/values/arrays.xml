@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="mainMenu">
-        <item>Principal</item>
-        <item>Carrito de la Compra</item>
-        <item>Recetas</item>
-        <item>Mis ingredientes</item>
+    <string-array name="categories">
+        <item>Aceites y Salsas</item>
+        <item>Carnes</item>
+        <item>Congelados</item>
+        <item>Derivados</item>
+        <item>Dulces</item>
+        <item>Frutas</item>
+        <item>Lácteos</item>
+        <item>Legumbres</item>
+        <item>Otros</item>
+        <item>Pescados</item>
+        <item>Tubérculos</item>
+        <item>Verduras</item>
     </string-array>
 </resources>
