@@ -14,7 +14,7 @@ import com.android.mikelpablo.otakucook.R;
 import butterknife.Bind;
 import retrofit2.Call;
 
-public class IngredientListHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class IngredientListFBHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     /*@Bind(R.id.ingredientName)
     public TextView name;*/
@@ -24,7 +24,7 @@ public class IngredientListHolder extends RecyclerView.ViewHolder implements Vie
     public long id;
     public Context context;
 
-    public IngredientListHolder(View itemView) {
+    public IngredientListFBHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
         name = (TextView) itemView.findViewById(R.id.ingredientName);
@@ -38,7 +38,6 @@ public class IngredientListHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        
         /*MyAPI service = MyApiClient.createService(MyAPI.class);
         Call<Ingredient> ingredient = service.getIngredient(id);
         ingredient.enqueue(getCallback());*/

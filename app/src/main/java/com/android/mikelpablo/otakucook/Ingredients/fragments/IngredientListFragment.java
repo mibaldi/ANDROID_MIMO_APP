@@ -16,17 +16,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
-import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
-import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListHolder;
+import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
-import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipesListAdapter;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -93,11 +88,11 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                     break;
             }
 
-            FirebaseRecyclerAdapter<String, IngredientListHolder> fbadapter = new FirebaseRecyclerAdapter<String, IngredientListHolder>(String.class, R.layout.ingredientlist_item,
-                    IngredientListHolder.class, ref) {
+            FirebaseRecyclerAdapter<String, IngredientListFBHolder> fbadapter = new FirebaseRecyclerAdapter<String, IngredientListFBHolder>(String.class, R.layout.ingredientlist_item,
+                    IngredientListFBHolder.class, ref) {
 
                 @Override
-                protected void populateViewHolder(IngredientListHolder ingredientListHolder, String s, int i) {
+                protected void populateViewHolder(IngredientListFBHolder ingredientListHolder, String s, int i) {
                     recoveryIngredientsNames(ingredientListHolder, s);
                 }
             };
@@ -108,7 +103,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     }
 
-    private void recoveryIngredientsNames(final IngredientListHolder ingredientListHolder, String s) {
+    private void recoveryIngredientsNames(final IngredientListFBHolder ingredientListHolder, String s) {
         Firebase refRoot = new Firebase(getResources().getString(R.string.ingredients));
         Firebase refIngredient = refRoot.child(s);
 
