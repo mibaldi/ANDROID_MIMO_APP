@@ -38,6 +38,7 @@ public class IngredientListHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
+        
         /*MyAPI service = MyApiClient.createService(MyAPI.class);
         Call<Ingredient> ingredient = service.getIngredient(id);
         ingredient.enqueue(getCallback());*/
