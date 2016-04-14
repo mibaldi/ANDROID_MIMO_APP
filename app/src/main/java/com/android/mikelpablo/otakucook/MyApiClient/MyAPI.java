@@ -28,5 +28,7 @@ public interface MyAPI {
         Call<Ingredient> getIngredient(@Path("id") long id);
         @GET("/recipesIngredients")
         Call<List<Recipe>> getPossiblesRecipes(@Query("ingredientes") String ingredientes);
+        @GET("/ingredients/category/{category}")
+        Call<List<Ingredient>> getCategoryIngredients(@Path("category") String category);
 
 }

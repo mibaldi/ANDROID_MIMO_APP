@@ -36,7 +36,16 @@
                 android:value=".Main.MainActivity" />
         </activity>
         <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity" />
-        <activity android:name=".Recipes.activities.RecipeFinalActivity"></activity>
+        <activity android:name=".Recipes.activities.RecipeFinalActivity" />
+        <activity
+            android:name=".Ingredients.activities.CategoriesActivity"
+            android:parentActivityName=".Main.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main.MainActivity" />
+        </activity>
+        <activity android:name=".Ingredients.activities.IngredientsServerActivity"></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,10 @@
 package com.android.mikelpablo.otakucook.Ingredients.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
 import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListHolder;
 import com.android.mikelpablo.otakucook.Main.MainActivity;
@@ -21,6 +24,7 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipesListAdapter;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
 import com.firebase.client.AuthData;
@@ -31,9 +35,7 @@ import com.firebase.client.ValueEventListener;
 import com.firebase.ui.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,6 +55,8 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     RecyclerView recyclerView;
     @Bind(R.id.addIngredientServer)
     Button mBtAddIngredientServer;
+    @Bind(R.id.add_category_ingredient)
+    FloatingActionButton mBtAddCategoryIngredients;
 
     public IngredientListFragment() {
     }
@@ -66,12 +70,6 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ingredientlist, container, false);
     }
@@ -82,6 +80,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
         mBtAddIngredientServer.setOnClickListener(this);
+        mBtAddCategoryIngredients.setOnClickListener(this);
         AuthData authData = MainActivity.mAuthData;
         if (authData != null){
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
@@ -163,15 +162,21 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.addIngredientServer){
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Loading...");
-            mProgressDialog.show();
-            items.clear();
+        switch (v.getId()){
+            case R.id.addIngredientServer:
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setMessage("Loading...");
+                mProgressDialog.show();
+                items.clear();
 
-            MyAPI service = MyApiClient.createService(MyAPI.class);
-            Call<Ingredient> ingredient = service.getIngredient(7);
-            LoadIngredientFirebase(ingredient);
+                MyAPI service = MyApiClient.createService(MyAPI.class);
+                Call<Ingredient> ingredient = service.getIngredient(7);
+                LoadIngredientFirebase(ingredient);
+
+            case R.id.add_category_ingredient:
+                Intent intent = new Intent(getContext(),CategoriesActivity.class);
+                getContext().startActivity(intent);
+
         }
     }
 }
