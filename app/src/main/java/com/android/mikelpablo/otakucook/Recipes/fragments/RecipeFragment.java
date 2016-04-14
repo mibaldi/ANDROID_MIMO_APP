@@ -15,9 +15,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
+import com.android.mikelpablo.otakucook.Models.Measure;
+import com.android.mikelpablo.otakucook.Models.MeasureFB;
 import com.android.mikelpablo.otakucook.Models.Recipe;
+import com.android.mikelpablo.otakucook.Models.RecipeFB;
+import com.android.mikelpablo.otakucook.Models.Task;
+import com.android.mikelpablo.otakucook.Models.TaskFB;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
@@ -54,6 +61,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     public List<Ingredient> items = new ArrayList<>();
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
+    private Recipe recipe;
 
     public RecipeFragment() {
     }
@@ -80,7 +88,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        Recipe recipe = getArguments().getParcelable("recipe");
+        recipe = getArguments().getParcelable("recipe");
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
@@ -116,8 +124,34 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
             }
             case R.id.ib_favorite:{
-
+                sendIngredientFirebase(recipe);
             }
         }
+    }
+    private void sendIngredientFirebase(Recipe recipe) {
+
+        Firebase refUser = new Firebase(getResources().getString(R.string.users));
+        Firebase refRecipes = new Firebase(getResources().getString(R.string.recipes));
+        Firebase refMeasures = new Firebase(getResources().getString(R.string.measures));
+        Firebase refTasks = new Firebase(getResources().getString(R.string.tasks));
+        Firebase refIngredients = new Firebase(getResources().getString(R.string.ingredients));
+
+        RecipeFB recipefb = new RecipeFB(recipe);
+        refRecipes.child(String.valueOf(recipe.id)).setValue(recipefb);
+
+        for (Task task:recipe.tasks){
+            TaskFB taskfb = new TaskFB(task,recipefb.id);
+            refTasks.child(String.valueOf(taskfb.id)).setValue(taskfb);
+        }
+        for (Measure measure:recipe.measureIngredients){
+            MeasureFB measurefb = new MeasureFB(measure,recipefb.id);
+            refMeasures.child(String.valueOf(measurefb.id)).setValue(measurefb);
+        }
+        for (Ingredient ingredient:recipe.ingredients){
+            refIngredients.child(String.valueOf(ingredient.id)).setValue(ingredient);
+        }
+        mFirebaseRef = refUser.child(MainActivity.mAuthData.getUid()).child("favorites");
+        mFirebaseRef.child(String.valueOf(recipe.id)).setValue(recipe.id);
+        Toast.makeText(getContext(),"Receta guardada en favoritos", Toast.LENGTH_SHORT).show();
     }
 }

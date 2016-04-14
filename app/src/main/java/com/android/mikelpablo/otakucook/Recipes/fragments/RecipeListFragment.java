@@ -1,8 +1,11 @@
 package com.android.mikelpablo.otakucook.Recipes.fragments;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,27 +52,29 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     @Bind(R.id.posibles)
     Button btPosibles;
 
+
     private static final String TAG = RecipeListFragment.class.getName();
     public List<Recipe> items = new ArrayList<>();
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
     public static List<String> ingredientsId = new ArrayList<>();
     private ProgressDialog mProgressDialog;
+    private Firebase refRoot;
+    private FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter;
+    public static int selected = R.id.todas;
+    private RecipesListAdapter adapter;
+    private MyAPI service;
+    private Firebase mRef;
+    private static Firebase mRefStorage;
 
     public RecipeListFragment() {
     }
 
-    public static RecipeListFragment newInstance(String nombreReceta) {
-        RecipeListFragment fragment = new RecipeListFragment();
-        Bundle args = new Bundle();
-        args.putString("nombreReceta", nombreReceta);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -82,27 +87,68 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         mProgressDialog = new ProgressDialog(getContext());
-        final RecipesListAdapter adapter = new RecipesListAdapter(getContext(), items);
+        adapter = new RecipesListAdapter(getContext(), items);
+        refRoot = new Firebase(getResources().getString(R.string.users));
+        if (MainActivity.mAuthData != null){
+            mRef = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
+            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
+            getIngredientsIdStorage(refRoot);
+        }
 
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        /*recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));*/
         btTodas.setOnClickListener(this);
         btFavoritas.setOnClickListener(this);
         btPosibles.setOnClickListener(this);
+
+
+        //getFavoritesRecipes();
+        //recyclerView.setAdapter(fbadapter);
+        /*if (savedInstanceState != null){
+
+            Log.d(TAG,"instancia creada");
+            loadRecyclerview(selected);
+
+        }else{
+            loadRecyclerview(selected);
+        }*/
+
 
         /*String nombre = getArguments().getString("nombreReceta");
         nombreReceta.setText(nombre)*/
         ;
     }
 
+    private void loadRecyclerview(int savedInstanceStateInt) {
+        switch (savedInstanceStateInt){
+            case R.id.todas:
+                getActivity().setTitle("Todas las recetas");
+                onClick(btTodas);
+                break;
+            case R.id.favoritas:
+                getActivity().setTitle("Recetas favoritas");
+                onClick(btFavoritas);
+                break;
+            case R.id.posibles:
+                getActivity().setTitle("Posibles recetas");
+                onClick(btPosibles);
+                break;
+        }
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        if (savedInstanceState !=null)
+        selected= savedInstanceState.getInt("selected");
         super.onActivityCreated(savedInstanceState);
 
         if (getView() != null) {
-            Log.i(TAG, "fragment creado");
+            loadRecyclerview(selected);
+            setRetainInstance(true);
 
         }
+
 
     }
 
@@ -126,6 +172,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     private void allRecipes(Response<List<Recipe>> response) {
         List<Recipe> recipesServer = response.body();
+
         for (Recipe r : recipesServer) {
             items.add(r);
             //System.out.println("id: " + r.id);
@@ -135,81 +182,83 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        MyAPI service = MyApiClient.createService(MyAPI.class);
-        Firebase refRoot = new Firebase(getResources().getString(R.string.users));
+        btTodas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+        btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+        btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+        selected = v.getId();
         switch (v.getId()) {
             case R.id.todas:
-
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Loading...");
-                mProgressDialog.show();
-                items.clear();
-                final RecipesListAdapter adapter = new RecipesListAdapter(getContext(), items);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+                getActivity().setTitle("Todas las recetas");
+                initOnclick(v);
 
                 Call<List<Recipe>> recipes = service.recipes();
                 ServerRecipeList(recipes);
 
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
-            case R.id.favoritas:
-                if (MainActivity.mAuthData != null){
-
-                    Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-                    FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
-                            RecipeListHolder.class, ref) {
-                        @Override
-                        protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
-                            recoveryRecipesNames(recipeHolder, s);
-
-                        }
-                    };
-                    recyclerView.setAdapter(fbadapter);
-                    Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
-                }
-                else
-                    Toast.makeText(getContext(), "No estas logueado", Toast.LENGTH_SHORT).show();
-
-                break;
             case R.id.posibles:
-
-                getIngredientsIdStorage(refRoot);
-                String ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
-                Log.d(TAG,ingredientsIdString);
+                getActivity().setTitle("Posibles recetas");
+                initOnclick(v);
+                String ingredientsIdString = "0";
+                if (!ingredientsId.isEmpty()) {
+                    ingredientsIdString  = android.text.TextUtils.join(",", ingredientsId);
+                }
                 Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
-
-                possiblesRecipes.enqueue(new Callback<List<Recipe>>() {
-                    @Override
-                    public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-
-                        allRecipes(response);
-                        if (mProgressDialog.isShowing())
-                            mProgressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Recipe>> call, Throwable t) {
-                        if (mProgressDialog.isShowing())
-                            mProgressDialog.dismiss();
-                    }
-                });
+                ServerRecipeList(possiblesRecipes);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                Toast.makeText(getContext(), "posibles", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.favoritas:
+
+                if (MainActivity.mAuthData != null){
+                    fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
+                                RecipeListHolder.class, mRef) {
+                            @Override
+                            protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
+                                recoveryRecipesNames(recipeHolder, s);
+                                Log.d(TAG,"getFavoritesRecipes");
+                            }
+
+                        };
+                        Log.d(TAG, String.valueOf(fbadapter.getItemCount()));
+                        Log.d(TAG,"fbadapter");
+                        recyclerView.setAdapter(fbadapter);
+                }
+
+                //recyclerView.setAdapter(fbadapter);
+
+                getActivity().setTitle("Recetas favoritas");
+                btFavoritas.setBackgroundColor(Color.BLUE);
+                //recyclerView.setAdapter(fbadapter);
+                //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
+    private void initOnclick(View view) {
+        view.setBackgroundColor(Color.BLUE);
+        service = MyApiClient.createService(MyAPI.class);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
+        items.clear();
+        adapter = new RecipesListAdapter(getContext(), items);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void getFavoritesRecipes() {
+        Log.d(TAG,"getFavoritesRecipesInicio");
+
+    }
+
     private void getIngredientsIdStorage(Firebase refRoot) {
-        Firebase ref = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
+
         ingredientsId.clear();
-        ref.addValueEventListener(new ValueEventListener() {
+        mRefStorage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     String id = postSnapshot.getValue(String.class);
-                    Log.d(TAG,id);
                     ingredientsId.add(id);
                 }
             }
@@ -224,17 +273,17 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
         Firebase refRoot = new Firebase(getResources().getString(R.string.recipes));
         Firebase refRecipe = refRoot.child(s);
-
+        Log.d(TAG,"dentro de recoveryRecipesNames");
         refRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
 
                     String title = (String) dataSnapshot.child("name").getValue();
-                    long id = (long) dataSnapshot.child("idServer").getValue();
-                    Log.d(TAG,title);
+                    long id = (long) dataSnapshot.child("id").getValue();
                     recipeListHolder.name.setText(title);
                     recipeListHolder.id = id;
+                    Log.d(TAG,"recoveryRecipesNames");
                 }
             }
 
@@ -243,5 +292,11 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("selected",selected);
     }
 }

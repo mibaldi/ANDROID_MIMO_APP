@@ -15,6 +15,14 @@ public class Task implements Parcelable,Comparable<Task> {
     public long recipeId;
     public String description;
 
+    public Task() {
+    }
+
+    @Override
+    public int compareTo(Task another) {
+        return this.name.compareTo(another.name);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -31,9 +39,6 @@ public class Task implements Parcelable,Comparable<Task> {
         dest.writeString(this.description);
     }
 
-    public Task() {
-    }
-
     protected Task(Parcel in) {
         this.id = in.readLong();
         this.idServer = in.readLong();
@@ -44,7 +49,7 @@ public class Task implements Parcelable,Comparable<Task> {
         this.description = in.readString();
     }
 
-    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+    public static final Creator<Task> CREATOR = new Creator<Task>() {
         @Override
         public Task createFromParcel(Parcel source) {
             return new Task(source);
@@ -55,9 +60,4 @@ public class Task implements Parcelable,Comparable<Task> {
             return new Task[size];
         }
     };
-
-    @Override
-    public int compareTo(Task another) {
-        return this.name.compareTo(another.name);
-    }
 }

@@ -69,7 +69,7 @@ public class RecipeListHolder extends RecyclerView.ViewHolder implements View.On
                     Recipe recipe= response.body();
                 //Log.d("RecipeListHolder",String.valueOf(recipe.getMeasures().size()));
                 // Log.i("Mikel",recipe.getMeasures().get(0).measure);
-                for (Measure measure: recipe.getMeasures()){
+                for (Measure measure: recipe.measureIngredients){
                    // Log.i("Mikel",measure.ingredient.name);
                     recipe.ingredients.add(measure.ingredient);
                 }

@@ -8,11 +8,14 @@ import android.os.Parcelable;
  */
 public class Measure implements Parcelable {
     public String measure;
-    public  int quantity;
+    public  float quantity;
     public long recipeId;
     public long  id;
     public Ingredient ingredient;
     public long ingredientId;
+
+    public Measure() {
+    }
 
     @Override
     public int describeContents() {
@@ -22,22 +25,23 @@ public class Measure implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.measure);
-        dest.writeInt(this.quantity);
+        dest.writeFloat(this.quantity);
         dest.writeLong(this.recipeId);
+        dest.writeLong(this.id);
+        dest.writeParcelable(this.ingredient, flags);
         dest.writeLong(this.ingredientId);
-    }
-
-    public Measure() {
     }
 
     protected Measure(Parcel in) {
         this.measure = in.readString();
-        this.quantity = in.readInt();
+        this.quantity = in.readFloat();
         this.recipeId = in.readLong();
+        this.id = in.readLong();
+        this.ingredient = in.readParcelable(Ingredient.class.getClassLoader());
         this.ingredientId = in.readLong();
     }
 
-    public static final Parcelable.Creator<Measure> CREATOR = new Parcelable.Creator<Measure>() {
+    public static final Creator<Measure> CREATOR = new Creator<Measure>() {
         @Override
         public Measure createFromParcel(Parcel source) {
             return new Measure(source);

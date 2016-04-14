@@ -8,7 +8,6 @@ import android.os.Parcelable;
  */
 public class Ingredient implements Parcelable {
     public long id;
-    public long idServer;
     public String name;
     public Boolean frozen;
     public String category;
@@ -17,7 +16,8 @@ public class Ingredient implements Parcelable {
 
 
     public Ingredient() {}
-    public Ingredient(String name, Boolean frozen,String category,String baseType) {
+    public Ingredient(Long id,String name, Boolean frozen,String category,String baseType) {
+        this.id = id;
         this.name = name;
         this.frozen = frozen;
         this.category = category;
@@ -32,7 +32,6 @@ public class Ingredient implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
-        dest.writeLong(this.idServer);
         dest.writeString(this.name);
         dest.writeValue(this.frozen);
         dest.writeString(this.category);
@@ -41,14 +40,13 @@ public class Ingredient implements Parcelable {
 
     protected Ingredient(Parcel in) {
         this.id = in.readLong();
-        this.idServer = in.readLong();
         this.name = in.readString();
         this.frozen = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.category = in.readString();
         this.baseType = in.readString();
     }
 
-    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
+    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
         @Override
         public Ingredient createFromParcel(Parcel source) {
             return new Ingredient(source);

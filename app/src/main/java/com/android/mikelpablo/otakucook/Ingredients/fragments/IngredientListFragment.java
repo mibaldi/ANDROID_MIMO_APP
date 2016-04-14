@@ -119,7 +119,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                 if (dataSnapshot.exists()){
 
                     String title = (String) dataSnapshot.child("name").getValue();
-                    long id = (long) dataSnapshot.child("idServer").getValue();
+                    long id = (long) dataSnapshot.child("id").getValue();
                     Log.d(TAG,title);
                     Log.d(TAG,"ID: "+id);
                     ingredientListHolder.name.setText(title);
