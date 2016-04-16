@@ -6,10 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,6 +27,7 @@ import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -38,7 +44,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IngredientListFragment  extends Fragment implements View.OnClickListener{
+public class IngredientListFragment  extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener{
 
     private static final String TAG = IngredientListFragment.class.getName();
     public List<Ingredient> items = new ArrayList<>();
@@ -52,6 +58,9 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     Button mBtAddIngredientServer;
     @Bind(R.id.add_category_ingredient)
     FloatingActionButton mBtAddCategoryIngredients;
+
+    private SearchView searchView;
+    private MenuItem myActionMenuItem;
 
     public IngredientListFragment() {
     }
@@ -72,7 +81,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-
+        setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
         getActivity().setTitle(ingredientType);
@@ -102,6 +111,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
             recyclerView.setAdapter(fbadapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
         }
 
     }
@@ -176,5 +186,39 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                 getContext().startActivity(intent);
 
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_search,menu);
+
+        myActionMenuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(myActionMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

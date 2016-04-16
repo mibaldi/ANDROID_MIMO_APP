@@ -4,11 +4,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,6 +25,7 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -35,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IngredientsServerFragment extends Fragment {
+public class IngredientsServerFragment extends Fragment  implements SearchView.OnQueryTextListener {
 
     private static final String TAG = IngredientsServerFragment.class.getName();
 
@@ -48,6 +54,10 @@ public class IngredientsServerFragment extends Fragment {
 
     @Bind(R.id.ingredientsServer)
     RecyclerView recyclerView;
+
+    private SearchView searchView;
+    private MenuItem myActionMenuItem;
+    private IngredientListAdapter adapter;
 
     public IngredientsServerFragment(){
 
@@ -79,6 +89,7 @@ public class IngredientsServerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
         category = getArguments().getString("category");
 
@@ -93,6 +104,32 @@ public class IngredientsServerFragment extends Fragment {
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_search,menu);
+
+       myActionMenuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(myActionMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                adapter.setFilter(items);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
 
     }
 
@@ -133,7 +170,8 @@ public class IngredientsServerFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
                 items = response.body();
-                recyclerView.setAdapter(new IngredientListAdapter(items));
+                adapter = new IngredientListAdapter(items);
+                recyclerView.setAdapter(adapter);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
             }
@@ -144,5 +182,29 @@ public class IngredientsServerFragment extends Fragment {
                     mProgressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Ingredient> filteredModelList = filter(items, newText);
+        adapter.setFilter(filteredModelList);
+        return false;
+    }
+
+    private List<Ingredient> filter(List<Ingredient> ingredients, String query){
+        query = query.toLowerCase();
+        final List<Ingredient> filteredIngredients = new ArrayList<>();
+        for(Ingredient ingredient: ingredients){
+            final String name = ingredient.name.toLowerCase();
+            if(name.contains(query)){
+                filteredIngredients.add(ingredient);
+            }
+        }
+        return filteredIngredients;
     }
 }

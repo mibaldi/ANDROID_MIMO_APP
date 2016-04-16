@@ -10,6 +10,7 @@ import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListServer
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListServerHolder>{
@@ -35,5 +36,11 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListSe
     @Override
     public int getItemCount() {
         return listItem.size();
+    }
+
+    public void setFilter(List<Ingredient> objects){
+        listItem = new ArrayList<>();
+        listItem.addAll(objects);
+        notifyDataSetChanged();
     }
 }

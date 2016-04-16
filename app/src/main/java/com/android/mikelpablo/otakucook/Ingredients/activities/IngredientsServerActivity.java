@@ -3,6 +3,7 @@ package com.android.mikelpablo.otakucook.Ingredients.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.mikelpablo.otakucook.Ingredients.fragments.CategoriesCollectionFragment;
@@ -21,6 +22,7 @@ public class IngredientsServerActivity extends AppCompatActivity {
         IngredientsServerFragment ingredientsServerFragment = IngredientsServerFragment.newInstance(category);
         getSupportFragmentManager().beginTransaction().replace(R.id.ingredientsServer_content,ingredientsServerFragment).commit();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
