@@ -95,8 +95,9 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btFinal:{
-                Intent intent = new Intent(getActivity(), RecipeActivity.class);
+                Intent intent = new Intent(getActivity(), RecipeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("recipe",recipe);
+                getActivity().finish();
                 getActivity().startActivity(intent);
             }
         }

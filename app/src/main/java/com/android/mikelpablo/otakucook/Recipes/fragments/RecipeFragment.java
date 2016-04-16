@@ -119,12 +119,14 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getContext(),RecipeTaskViewPageActivity.class);
                 intent.putExtra("recipe",getArguments().getParcelable("recipe"));
                 getContext().startActivity(intent);
+                break;
             }
             case R.id.bt_tasks:{
 
             }
             case R.id.ib_favorite:{
                 sendIngredientFirebase(recipe);
+                break;
             }
         }
     }

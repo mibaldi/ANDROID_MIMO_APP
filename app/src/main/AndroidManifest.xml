@@ -18,7 +18,7 @@
         <!-- Bloquear la pantalla en portrait por no poder guardar usuario logueado -->
         <activity
             android:name=".Main.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,8 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.MainActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity" />
-        <activity android:name=".Recipes.activities.RecipeFinalActivity" />
+        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".Recipes.activities.RecipeFinalActivity"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".Ingredients.activities.CategoriesActivity"
             android:parentActivityName=".Main.MainActivity"

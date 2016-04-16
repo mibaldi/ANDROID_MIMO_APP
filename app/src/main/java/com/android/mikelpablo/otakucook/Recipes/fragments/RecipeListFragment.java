@@ -54,7 +54,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
 
     private static final String TAG = RecipeListFragment.class.getName();
-    public List<Recipe> items = new ArrayList<>();
+    public ArrayList<Recipe> items = new ArrayList<>();
+    public ArrayList<Recipe> itemsPossibles = new ArrayList<>();
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
     public static List<String> ingredientsId = new ArrayList<>();
@@ -66,6 +67,10 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private MyAPI service;
     private Firebase mRef;
     private static Firebase mRefStorage;
+    private ValueEventListener eventListener;
+    private ValueEventListener valueEventListener;
+    private RecipesListAdapter adapterPosibles;
+    private Firebase refRecipe;
 
     public RecipeListFragment() {
     }
@@ -74,8 +79,17 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        if (savedInstanceState != null){
+            selected= savedInstanceState.getInt("selected");
+            ArrayList<Recipe> itemsTemp = savedInstanceState.getParcelableArrayList("listaTodos");
+            if (itemsTemp != null) {
+                items = itemsTemp;
+            }
+            ArrayList<Recipe> itemsTemp2 = savedInstanceState.getParcelableArrayList("listaPosibles");
+            if (itemsTemp2 != null) {
+                itemsPossibles = itemsTemp2;
+            }
+        }
     }
 
     @Override
@@ -94,8 +108,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
             getIngredientsIdStorage(refRoot);
         }
-
-
+        adapter = new RecipesListAdapter(getContext(), items);
+        adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         /*recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));*/
         btTodas.setOnClickListener(this);
@@ -139,24 +154,17 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        if (savedInstanceState !=null)
-        selected= savedInstanceState.getInt("selected");
         super.onActivityCreated(savedInstanceState);
-
         if (getView() != null) {
             loadRecyclerview(selected);
-            //setRetainInstance(true);
-
         }
-
-
     }
 
-    private void ServerRecipeList(Call<List<Recipe>> recipes) {
+    private void ServerRecipeList(Call<List<Recipe>> recipes, final ArrayList<Recipe> lista) {
         recipes.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                allRecipes(response);
+                allRecipes(response,lista);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
             }
@@ -170,12 +178,11 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         });
     }
 
-    private void allRecipes(Response<List<Recipe>> response) {
+    private void allRecipes(Response<List<Recipe>> response,ArrayList<Recipe> lista) {
         List<Recipe> recipesServer = response.body();
 
         for (Recipe r : recipesServer) {
-            items.add(r);
-            //System.out.println("id: " + r.id);
+            lista.add(r);
         }
         recyclerView.getAdapter().notifyDataSetChanged();
     }
@@ -186,42 +193,57 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
         btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
         selected = v.getId();
+
         switch (v.getId()) {
             case R.id.todas:
                 getActivity().setTitle("Todas las recetas");
-                initOnclick(v);
 
-                Call<List<Recipe>> recipes = service.recipes();
-                ServerRecipeList(recipes);
-
+                recyclerView.setAdapter(adapter);
+                v.setBackgroundColor(Color.BLUE);
+                if (items.isEmpty()){
+                    initOnclick(v);
+                    Call<List<Recipe>> recipes = service.recipes();
+                    ServerRecipeList(recipes,items);
+                }
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.posibles:
                 getActivity().setTitle("Posibles recetas");
-                initOnclick(v);
-                String ingredientsIdString = "0";
-                if (!ingredientsId.isEmpty()) {
-                    ingredientsIdString  = android.text.TextUtils.join(",", ingredientsId);
+                recyclerView.setAdapter(adapterPosibles);
+                v.setBackgroundColor(Color.BLUE);
+                if (itemsPossibles.isEmpty()) {
+                    initOnclick(v);
+                    String ingredientsIdString = "0";
+                    if (!ingredientsId.isEmpty()) {
+                        ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
+                    }
+                    Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
+                    ServerRecipeList(possiblesRecipes, itemsPossibles);
                 }
-                Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
-                ServerRecipeList(possiblesRecipes);
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.favoritas:
 
                 if (MainActivity.mAuthData != null){
-                    fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
+
+                    if (fbadapter == null){
+                        fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
                                 RecipeListHolder.class, mRef) {
                             @Override
                             protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
-                                recoveryRecipesNames(recipeHolder, s);
+
+                                    recoveryRecipesNames(recipeHolder, s);
+
                                 Log.d(TAG,"getFavoritesRecipes");
                             }
 
                         };
-                        Log.d(TAG, String.valueOf(fbadapter.getItemCount()));
                         Log.d(TAG,"fbadapter");
-                        recyclerView.setAdapter(fbadapter);
+                    }else {
+                        fbadapter.notifyDataSetChanged();
+                    }
+                    recyclerView.setAdapter(fbadapter);
+
                 }
 
                 //recyclerView.setAdapter(fbadapter);
@@ -235,15 +257,13 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     }
 
     private void initOnclick(View view) {
-        view.setBackgroundColor(Color.BLUE);
+
         service = MyApiClient.createService(MyAPI.class);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.show();
-        items.clear();
-        adapter = new RecipesListAdapter(getContext(), items);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //items.clear();
+
     }
 
     private void getFavoritesRecipes() {
@@ -254,7 +274,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private void getIngredientsIdStorage(Firebase refRoot) {
 
         ingredientsId.clear();
-        mRefStorage.addValueEventListener(new ValueEventListener() {
+         eventListener=new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
@@ -267,14 +287,15 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
+        };
+        mRefStorage.addValueEventListener(eventListener);
     }
 
     private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
-        Firebase refRoot = new Firebase(getResources().getString(R.string.recipes));
-        Firebase refRecipe = refRoot.child(s);
+        refRoot = new Firebase(getResources().getString(R.string.recipes));
+        refRecipe = refRoot.child(s);
         Log.d(TAG,"dentro de recoveryRecipesNames");
-        refRecipe.addListenerForSingleValueEvent(new ValueEventListener() {
+        valueEventListener=new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
@@ -291,12 +312,15 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
+        };
+        refRecipe.addListenerForSingleValueEvent(valueEventListener);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("selected",selected);
+        outState.putParcelableArrayList("listaTodos",items);
+        outState.putParcelableArrayList("listaPosibles",itemsPossibles);
     }
 }
