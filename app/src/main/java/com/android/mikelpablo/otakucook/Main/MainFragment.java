@@ -23,6 +23,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main,container,false);
+        getActivity().setTitle("Otaku Cook");
         /*if (savedInstanceState != null){
             getActivity().setTitle(tituloPropio);
         }else{
@@ -31,10 +32,5 @@ public class MainFragment extends Fragment {
             tituloPropio = "Mikel";
         }*/
         return rootView;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 }

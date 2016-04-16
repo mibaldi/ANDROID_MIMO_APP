@@ -77,8 +77,10 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+
         mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
+        getActivity().setTitle(ingredientType);
         mBtAddIngredientServer.setOnClickListener(this);
         mBtAddCategoryIngredients.setOnClickListener(this);
         AuthData authData = MainActivity.mAuthData;
@@ -86,6 +88,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
             switch (ingredientType){
                 case R.string.shoping_cart_drawer:
+
                     ref = refRoot.child(authData.getUid()).child("shoppingcart");
                     break;
                 case R.string.ingredients_drawer:

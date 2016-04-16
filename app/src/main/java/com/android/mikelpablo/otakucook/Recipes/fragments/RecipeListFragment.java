@@ -145,7 +145,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
         if (getView() != null) {
             loadRecyclerview(selected);
-            setRetainInstance(true);
+            //setRetainInstance(true);
 
         }
 
