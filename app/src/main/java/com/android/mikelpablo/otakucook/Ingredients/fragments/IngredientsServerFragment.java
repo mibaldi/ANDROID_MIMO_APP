@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.adapters.CategoriesCollectionAdapter;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
@@ -41,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IngredientsServerFragment extends Fragment  implements SearchView.OnQueryTextListener {
+public class IngredientsServerFragment extends Fragment  implements SearchView.OnQueryTextListener ,IngredientListAdapter.OnItemClickListener {
 
     private static final String TAG = IngredientsServerFragment.class.getName();
 
@@ -135,11 +136,11 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
 
     private void getIngredientsIdStorage(Firebase refRoot) {
 
-        ingredientsId.clear();
+
         mRefStorage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                ingredientsId.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     String id = postSnapshot.getValue(String.class);
                     ingredientsId.add(id);
@@ -170,7 +171,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
             @Override
             public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
                 items = response.body();
-                adapter = new IngredientListAdapter(items);
+                adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
                 recyclerView.setAdapter(adapter);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
@@ -206,5 +207,15 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
             }
         }
         return filteredIngredients;
+    }
+
+    @Override
+    public void onItemClick(View view, Ingredient ingredient) {
+        Firebase refUser = new Firebase(getResources().getString(R.string.users));
+        Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
+        refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
+        mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("storage");
+        mRefStorage.child(String.valueOf(ingredient.id)).setValue(ingredient.id);
+        Toast.makeText(getContext(),"Ingrediente añadido", Toast.LENGTH_SHORT).show();
     }
 }

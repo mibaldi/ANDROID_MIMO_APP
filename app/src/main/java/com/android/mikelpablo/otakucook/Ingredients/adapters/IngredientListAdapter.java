@@ -15,17 +15,23 @@ import java.util.List;
 
 public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListServerHolder>{
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, Ingredient item);
+    }
+
     private static final String TAG = IngredientListAdapter.class.getName();
 
     private List<Ingredient> listItem;
-    public IngredientListAdapter(List<Ingredient> objects) {
+    private final OnItemClickListener listener;
+    public IngredientListAdapter(List<Ingredient> objects,OnItemClickListener listener) {
         listItem = objects;
+        this.listener = listener;
     }
 
     @Override
     public IngredientListServerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredientlist_item,parent,false);
-        return new IngredientListServerHolder(view);
+        return new IngredientListServerHolder(view,listener);
     }
 
     @Override
