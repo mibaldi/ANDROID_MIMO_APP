@@ -45,7 +45,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.MainActivity" />
         </activity>
-        <activity android:name=".Ingredients.activities.IngredientsServerActivity"></activity>
+        <activity android:name=".Ingredients.activities.IngredientsServerActivity"
+            android:parentActivityName=".Ingredients.activities.CategoriesActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Ingredients.activities.CategoriesActivity" />
+        </activity>
     </application>
 
 </manifest>

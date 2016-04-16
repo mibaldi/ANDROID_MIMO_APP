@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Ingredients.Models.Category;
 import com.android.mikelpablo.otakucook.Ingredients.holders.CategoriesCollectionHolder;
-import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListHolder;
 import com.android.mikelpablo.otakucook.R;
 
 import java.util.ArrayList;
