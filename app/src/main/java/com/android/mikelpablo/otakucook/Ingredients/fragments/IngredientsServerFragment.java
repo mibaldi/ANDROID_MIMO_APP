@@ -17,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.Ingredients.Models.BaseIngredient;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
+import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientsExpandableAdapter;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
@@ -31,7 +33,9 @@ import com.firebase.client.ValueEventListener;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,12 +43,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IngredientsServerFragment extends Fragment  implements SearchView.OnQueryTextListener ,IngredientListAdapter.OnItemClickListener {
+public class IngredientsServerFragment extends Fragment  implements SearchView.OnQueryTextListener ,IngredientsExpandableAdapter.OnItemClickListener {
 
     private static final String TAG = IngredientsServerFragment.class.getName();
 
-    public List<Ingredient> items = new ArrayList<>();
-    public static List<String> ingredientsId = new ArrayList<>();
+    public  ArrayList<Ingredient> items = new ArrayList<>();
+    public static ArrayList<String> ingredientsId = new ArrayList<>();
     private ProgressDialog mProgressDialog;
     private String category;
     private Firebase refRoot;
@@ -55,7 +59,8 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
 
     private SearchView searchView;
     private MenuItem myActionMenuItem;
-    private IngredientListAdapter adapter;
+    private IngredientsExpandableAdapter adapter;
+    private ArrayList<BaseIngredient> baseIngredients = new ArrayList<>();
 
     public IngredientsServerFragment(){
 
@@ -67,6 +72,17 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
                 .replaceAll("[^\\p{ASCII}]", "")
                 .replaceAll(" y ","_");
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null){
+            ArrayList<String> itemsTemp = savedInstanceState.getStringArrayList("listaIngredientes");
+            if (itemsTemp != null) {
+                ingredientsId = itemsTemp;
+            }
+        }
     }
 
     public static IngredientsServerFragment newInstance(String category) {
@@ -96,14 +112,24 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         mProgressDialog.show();
 
         refRoot = new Firebase(getResources().getString(R.string.users));
-        if (MainActivity.mAuthData != null){
-            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
-            getIngredientsIdStorage(refRoot);
+        if (items.isEmpty()){
+            if (MainActivity.mAuthData != null) {
+                mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
+                getIngredientsIdStorage(refRoot);
+            }
+        }else {
+            mProgressDialog.dismiss();
         }
-
+        //adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
+        //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
+        adapter = new IngredientsExpandableAdapter(baseIngredients,getActivity(),IngredientsServerFragment.this);
+        recyclerView.setAdapter(adapter);
+        generateBaseIngredients();
 
+        //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsServerFragment.this);
+        //recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -119,7 +145,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         MenuItemCompat.setOnActionExpandListener(myActionMenuItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                adapter.setFilter(items);
+                //adapter.setFilter(items);
                 return true;
             }
 
@@ -133,7 +159,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
 
     private void getIngredientsIdStorage(Firebase refRoot) {
 
-
+        ingredientsId.clear();
         mRefStorage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -167,9 +193,13 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         ingredients.enqueue(new Callback<List<Ingredient>>() {
             @Override
             public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
-                items = response.body();
-                adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
-                recyclerView.setAdapter(adapter);
+                items = (ArrayList<Ingredient>) response.body();
+                generateBaseIngredients();
+
+
+                //adapter = new IngredientsExpandableAdapter(,getActivity(),IngredientsServerFragment.this);
+                //adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
+                //recyclerView.setAdapter(adapter);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
             }
@@ -190,7 +220,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
     @Override
     public boolean onQueryTextChange(String newText) {
         final List<Ingredient> filteredModelList = filter(items, newText);
-        adapter.setFilter(filteredModelList);
+        //adapter.setFilter(filteredModelList);
         return false;
     }
 
@@ -214,5 +244,30 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("storage");
         mRefStorage.child(String.valueOf(ingredient.id)).setValue(ingredient.id);
         Toast.makeText(getContext(),"Ingrediente añadido", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("listaIngredientes",items);
+    }
+
+    private void generateBaseIngredients() {
+        baseIngredients = new ArrayList<>();
+        Map<String,Integer> basetypesMap = new HashMap<>();
+        for (Ingredient ingredient : items) {
+            if(basetypesMap.containsKey(ingredient.baseType)){
+                BaseIngredient baseIngredient = baseIngredients.get(basetypesMap.get(ingredient.baseType));
+                baseIngredient.addIngredient(ingredient);
+            }else{
+                ArrayList<Ingredient> ingredientsArray = new ArrayList<>();
+                ingredientsArray.add(ingredient);
+                BaseIngredient baseIngredient = new BaseIngredient(ingredient.baseType,ingredientsArray);
+                baseIngredients.add(baseIngredient);
+                int index = baseIngredients.indexOf(baseIngredient);
+                basetypesMap.put(ingredient.baseType,index);
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 }

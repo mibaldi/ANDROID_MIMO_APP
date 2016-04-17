@@ -1,4 +1,4 @@
-package com.android.mikelpablo.otakucook.Ingredients.fragments;
+package com.android.mikelpablo.otakucook.Main.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;

@@ -1,8 +1,5 @@
 package com.android.mikelpablo.otakucook.Ingredients.Models;
 
-/**
- * Created by pabji on 13/04/2016.
- */
 public class Category {
     public final String name;
     public final int icon_id;

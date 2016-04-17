@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientListFragment;
+import com.android.mikelpablo.otakucook.Main.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.Main.DrawerMenu;
 import com.android.mikelpablo.otakucook.Main.fragments.MainFragment;
 import com.android.mikelpablo.otakucook.R;
