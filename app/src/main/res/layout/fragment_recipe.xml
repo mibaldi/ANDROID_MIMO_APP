@@ -58,6 +58,7 @@
         android:layout_marginTop="34dp" />
 
     <ImageButton
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ib_favorite"

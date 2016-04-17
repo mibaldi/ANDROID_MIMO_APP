@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListServerHolder;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
@@ -30,7 +29,7 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListSe
 
     @Override
     public IngredientListServerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ingredientlist_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredientlist,parent,false);
         return new IngredientListServerHolder(view,listener);
     }
 

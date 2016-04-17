@@ -1,47 +1,44 @@
 package com.android.mikelpablo.otakucook.Recipes.adapters;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Models.Task;
-import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeTaskFragment;
+import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.holders.RecipeTaskListHolder;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by mikelbalducieldiaz on 12/4/16.
- */
-public class RecipeTaskListAdapter extends FragmentPagerAdapter {
-    private static  List<String> TITLES = new ArrayList<>();
+public class RecipeTaskListAdapter extends RecyclerView.Adapter<RecipeTaskListHolder>{
 
-    private static  List<Task> TASKS =new ArrayList<>();
+    public interface OnItemClickListener {
+        void onItemClick(View view, Task item);
+    }
+    private List<Task> listItem;
+    private final OnItemClickListener listener;
 
-    public RecipeTaskListAdapter(FragmentActivity activity,List<Task> taskList) {
-        super(activity.getSupportFragmentManager());
-        TASKS = taskList;
-        Collections.sort(TASKS);
-        TITLES.clear();
-        for (Task t: TASKS){
-            TITLES.add("tarea "+t.name);
-        }
+    public RecipeTaskListAdapter(List<Task> objects,OnItemClickListener listener) {
+        listItem = objects;
+        Collections.sort(listItem);
+        this.listener = listener;
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return TITLES.get(position);
+    public RecipeTaskListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipelist,parent,false);
+        return new RecipeTaskListHolder(view,listener);
     }
 
     @Override
-    public Fragment getItem(int position) {
-        return RecipeTaskFragment.newInstance(TASKS.get(position));
+    public void onBindViewHolder(RecipeTaskListHolder holder, int position) {
+        holder.bindItem(listItem.get(position));
     }
 
     @Override
-    public int getCount() {
-        return TITLES.size();
+    public int getItemCount() {
+        return listItem.size();
     }
 }

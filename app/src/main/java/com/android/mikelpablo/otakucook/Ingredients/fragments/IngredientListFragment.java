@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListFBHolder;
-import com.android.mikelpablo.otakucook.Main.MainActivity;
+import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
@@ -100,7 +100,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                     break;
             }
 
-            FirebaseRecyclerAdapter<String, IngredientListFBHolder> fbadapter = new FirebaseRecyclerAdapter<String, IngredientListFBHolder>(String.class, R.layout.ingredientlist_item,
+            FirebaseRecyclerAdapter<String, IngredientListFBHolder> fbadapter = new FirebaseRecyclerAdapter<String, IngredientListFBHolder>(String.class, R.layout.item_ingredientlist,
                     IngredientListFBHolder.class, ref) {
 
                 @Override

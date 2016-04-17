@@ -1,16 +1,13 @@
-package com.android.mikelpablo.otakucook.Recipes.holders;
+package com.android.mikelpablo.otakucook.Main.holders;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 
-import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Measure;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;

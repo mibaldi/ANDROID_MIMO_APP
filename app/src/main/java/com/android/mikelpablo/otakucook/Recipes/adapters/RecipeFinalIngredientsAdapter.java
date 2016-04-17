@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeFinalIngredientsHolder;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeIngredientsHolder;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class RecipeFinalIngredientsAdapter extends RecyclerView.Adapter<RecipeFi
 
     @Override
     public RecipeFinalIngredientsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipelist_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipelist,parent,false);
 
         return new RecipeFinalIngredientsHolder(view);
     }

@@ -14,12 +14,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <!-- Bloquear la pantalla en portrait por no poder guardar usuario logueado -->
         <activity
-            android:name=".Main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".Main.activities.MainActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,34 +27,56 @@
             </intent-filter>
         </activity>
         <activity
-            android:configChanges="orientation"
             android:name=".Recipes.activities.RecipeActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_recipes"
-            android:parentActivityName=".Main.MainActivity"
-            android:theme="@style/AppTheme">
+            android:parentActivityName=".Main.activities.MainActivity"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main.MainActivity" />
+                android:value=".Main.activities.MainActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".Recipes.activities.RecipeFinalActivity"
-            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".Recipes.activities.RecipeTaskViewPageActivity"
+             >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Recipes.activities.RecipeActivity" />
+            </activity>
+        <activity
+            android:name=".Recipes.activities.RecipeFinalActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Recipes.activities.RecipeTaskViewPageActivity" />
+        </activity>
+        <activity android:name=".Recipes.activities.RecipeTaskListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Recipes.activities.RecipeActivity" />
+        </activity>
+        <activity android:name=".Recipes.activities.RecipeSingleTaskActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Recipes.activities.RecipeTaskListActivity" />
+        </activity>
         <activity
             android:name=".Ingredients.activities.CategoriesActivity"
-            android:parentActivityName=".Main.MainActivity"
-            android:theme="@style/AppTheme">
+            android:parentActivityName=".Main.activities.MainActivity"
+           >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Main.MainActivity" />
+                android:value=".Main.activities.MainActivity" />
         </activity>
-        <activity android:name=".Ingredients.activities.IngredientsServerActivity"
+        <activity
+            android:name=".Ingredients.activities.IngredientsServerActivity"
             android:parentActivityName=".Ingredients.activities.CategoriesActivity"
-            android:theme="@style/AppTheme">
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Ingredients.activities.CategoriesActivity" />
         </activity>
+
     </application>
 
 </manifest>

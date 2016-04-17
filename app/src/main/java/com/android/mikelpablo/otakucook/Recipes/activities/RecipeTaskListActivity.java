@@ -1,7 +1,5 @@
 package com.android.mikelpablo.otakucook.Recipes.activities;
 
-
-
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,38 +8,29 @@ import android.view.MenuItem;
 
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFinalFragment;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeTaskListFragment;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeTaskListActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe);
+        setContentView(R.layout.activity_recipe_task_list);
         Intent intent = getIntent();
         Recipe recipe= intent.getParcelableExtra("recipe");
         Log.d("RecipeActivity",recipe.author);
-        RecipeFragment recipesFragment = RecipeFragment.newInstance(recipe);
-        getSupportFragmentManager().beginTransaction().replace(R.id.flRecipe,recipesFragment).commit();
+        RecipeTaskListFragment recipeTaskListFragment = RecipeTaskListFragment.newInstance(recipe);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeTaskList,recipeTaskListFragment).commit();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 finish();
-                this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
-    }
-
 }

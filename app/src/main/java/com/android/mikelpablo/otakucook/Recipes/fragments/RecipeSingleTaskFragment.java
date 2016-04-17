@@ -3,18 +3,14 @@ package com.android.mikelpablo.otakucook.Recipes.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeIngredientsListAdapter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -23,16 +19,16 @@ import butterknife.ButterKnife;
 /**
  * Created by mikelbalducieldiaz on 12/4/16.
  */
-public class RecipeTaskFragment  extends Fragment {
+public class RecipeSingleTaskFragment extends Fragment {
     @Bind(R.id.taskPhoto)
     ImageView mTaskPhoto;
     @Bind(R.id.taskDescription)
     TextView mTaskDescription;
-    public RecipeTaskFragment() {
+    public RecipeSingleTaskFragment() {
     }
 
-    public static RecipeTaskFragment newInstance(Task task) {
-        RecipeTaskFragment fragment = new RecipeTaskFragment();
+    public static RecipeSingleTaskFragment newInstance(Task task) {
+        RecipeSingleTaskFragment fragment = new RecipeSingleTaskFragment();
         Bundle args = new Bundle();
         args.putParcelable("task", task);
         fragment.setArguments(args);
@@ -55,17 +51,6 @@ public class RecipeTaskFragment  extends Fragment {
         Task task = getArguments().getParcelable("task");
         Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
-
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (getView() != null) {
-
-
-        }
 
     }
 }

@@ -1,4 +1,4 @@
-package com.android.mikelpablo.otakucook.Recipes.adapters;
+package com.android.mikelpablo.otakucook.Main.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
+import com.android.mikelpablo.otakucook.Main.holders.RecipeListHolder;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipeListHolder>{
 
     @Override
     public RecipeListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipelist_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipelist,parent,false);
         //return new RecipeListHolder(view);
 
         return new RecipeListHolder(view);

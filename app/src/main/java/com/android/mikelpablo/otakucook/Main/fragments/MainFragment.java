@@ -1,4 +1,4 @@
-package com.android.mikelpablo.otakucook.Main;
+package com.android.mikelpablo.otakucook.Main.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,13 +1,3 @@
 <resources>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="colorPrimary">@color/material_deep_teal_200</item>
-        <item name="colorPrimaryDark">@color/material_deep_teal_500</item>
-        <item name="android:colorForeground">@color/abc_search_url_text</item>
-        <item name="android:navigationBarColor">@color/accent_material_dark</item>
-    </style>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
@@ -20,6 +21,16 @@ public class RecipeFinalActivity extends AppCompatActivity {
         Recipe recipe= intent.getParcelableExtra("recipe");
         Log.d("RecipeActivity",recipe.author);
         RecipeFinalFragment recipeFinalFragment = RecipeFinalFragment.newInstance(recipe);
-        getSupportFragmentManager().beginTransaction().replace(R.id.flRecipe,recipeFinalFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeFinal,recipeFinalFragment).commit();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

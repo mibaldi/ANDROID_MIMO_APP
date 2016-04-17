@@ -2,31 +2,22 @@ package com.android.mikelpablo.otakucook.Recipes.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Recipe;
-import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
-import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeFinalIngredientsAdapter;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeIngredientsListAdapter;
-import com.firebase.client.Firebase;
-import com.squareup.picasso.Picasso;
+import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +69,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         final RecipeFinalIngredientsAdapter adapter = new RecipeFinalIngredientsAdapter(getContext(), items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
     }
 
     @Override

@@ -1,16 +1,13 @@
-package com.android.mikelpablo.otakucook.Main;
+package com.android.mikelpablo.otakucook.Main.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -26,12 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientListFragment;
+import com.android.mikelpablo.otakucook.Main.DrawerMenu;
+import com.android.mikelpablo.otakucook.Main.fragments.MainFragment;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
-import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeListFragment;
+import com.android.mikelpablo.otakucook.Main.fragments.RecipeListFragment;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -50,7 +47,6 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.prefs.Preferences;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

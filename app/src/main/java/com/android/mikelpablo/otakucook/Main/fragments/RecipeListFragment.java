@@ -1,11 +1,9 @@
-package com.android.mikelpablo.otakucook.Recipes.fragments;
+package com.android.mikelpablo.otakucook.Main.fragments;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.android.mikelpablo.otakucook.Main.MainActivity;
+import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.holders.RecipeListHolder;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipesListAdapter;
-import com.firebase.client.ChildEventListener;
+import com.android.mikelpablo.otakucook.Main.holders.RecipeListHolder;
+import com.android.mikelpablo.otakucook.Main.adapters.RecipesListAdapter;
+import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -111,6 +108,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         adapter = new RecipesListAdapter(getContext(), items);
         adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
         /*recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));*/
         btTodas.setOnClickListener(this);
@@ -227,7 +225,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 if (MainActivity.mAuthData != null){
 
                     if (fbadapter == null){
-                        fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.recipelist_item,
+                        fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.item_recipelist,
                                 RecipeListHolder.class, mRef) {
                             @Override
                             protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {

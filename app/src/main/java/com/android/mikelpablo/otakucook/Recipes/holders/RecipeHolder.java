@@ -22,11 +22,11 @@ import retrofit2.Response;
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
  */
-public class RecipeIngredientsHolder extends RecyclerView.ViewHolder {
+public class RecipeHolder extends RecyclerView.ViewHolder {
     public TextView name;
     public Context context;
 
-    public RecipeIngredientsHolder(View itemView) {
+    public RecipeHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
         name = (TextView) itemView.findViewById(R.id.recipeName);

@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
-import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
-import com.firebase.client.Firebase;
 
 /**
  * Created by pabji on 15/04/2016.

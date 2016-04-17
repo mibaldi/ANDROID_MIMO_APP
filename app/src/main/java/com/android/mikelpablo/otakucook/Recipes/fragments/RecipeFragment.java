@@ -17,7 +17,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.mikelpablo.otakucook.Main.MainActivity;
+import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Measure;
 import com.android.mikelpablo.otakucook.Models.MeasureFB;
@@ -26,10 +26,14 @@ import com.android.mikelpablo.otakucook.Models.RecipeFB;
 import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.Models.TaskFB;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
+import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskListActivity;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeIngredientsListAdapter;
+import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeAdapter;
+import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -57,7 +61,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.recipeIngredientsListRecyclerView)
     RecyclerView recyclerView;
     private static final String TAG = RecipeFragment.class.getName();
-
+    Boolean favorito = false;
     public List<Ingredient> items = new ArrayList<>();
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
@@ -77,6 +81,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        recipe = getArguments().getParcelable("recipe");
+        recipeExistsReturn();
 
     }
 
@@ -88,17 +94,20 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        recipe = getArguments().getParcelable("recipe");
+
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
+        ib_favorite.setEnabled(false);
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
         btCook.setOnClickListener(this);
         ib_favorite.setOnClickListener(this);
-        final RecipeIngredientsListAdapter adapter = new RecipeIngredientsListAdapter(getContext(), items);
+        bt_tasks.setOnClickListener(this);
+        final RecipeAdapter adapter = new RecipeAdapter(getContext(), items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
     }
 
     @Override
@@ -122,7 +131,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.bt_tasks:{
-
+                Intent intent = new Intent(getContext(),RecipeTaskListActivity.class);
+                intent.putExtra("recipe",getArguments().getParcelable("recipe"));
+                getContext().startActivity(intent);
+                break;
             }
             case R.id.ib_favorite:{
                 sendIngredientFirebase(recipe);
@@ -131,7 +143,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         }
     }
     private void sendIngredientFirebase(Recipe recipe) {
-
         Firebase refUser = new Firebase(getResources().getString(R.string.users));
         Firebase refRecipes = new Firebase(getResources().getString(R.string.recipes));
         Firebase refMeasures = new Firebase(getResources().getString(R.string.measures));
@@ -140,7 +151,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
 
         RecipeFB recipefb = new RecipeFB(recipe);
         refRecipes.child(String.valueOf(recipe.id)).setValue(recipefb);
-
         for (Task task:recipe.tasks){
             TaskFB taskfb = new TaskFB(task,recipefb.id);
             refTasks.child(String.valueOf(taskfb.id)).setValue(taskfb);
@@ -154,6 +164,47 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         }
         mFirebaseRef = refUser.child(MainActivity.mAuthData.getUid()).child("favorites");
         mFirebaseRef.child(String.valueOf(recipe.id)).setValue(recipe.id);
+
         Toast.makeText(getContext(),"Receta guardada en favoritos", Toast.LENGTH_SHORT).show();
+        ib_favorite.setEnabled(false);
     }
+    /*public void recipeExists(){
+        Firebase userRef= new Firebase(getResources().getString(R.string.users));
+        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("favorites");
+        userRef.child(String.valueOf(recipe.id)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+
+                } else {
+                    sendIngredientFirebase(recipe);
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError arg0) {
+            }
+        });
+    }*/
+    public void recipeExistsReturn(){
+
+        Firebase userRef= new Firebase(getResources().getString(R.string.users));
+        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("favorites");
+        userRef.child(String.valueOf(recipe.id)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    favorito=true;
+                    ib_favorite.setEnabled(!favorito);
+                } else {
+                    favorito=false;
+                    ib_favorite.setEnabled(!favorito);
+                   // sendIngredientFirebase(recipe);
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError arg0) {
+            }
+        });
+    }
+
 }

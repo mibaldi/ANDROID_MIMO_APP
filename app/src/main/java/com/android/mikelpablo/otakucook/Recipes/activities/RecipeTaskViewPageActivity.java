@@ -1,19 +1,17 @@
 package com.android.mikelpablo.otakucook.Recipes.activities;
 
 import android.content.Intent;
-import android.os.Parcelable;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.android.mikelpablo.otakucook.Main.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
-import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeTaskListAdapter;
-import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
+import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeTaskViewPageAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,7 +21,7 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
     ViewPager viewPager;
     @Bind(R.id.pager_tab_strip)
     PagerTabStrip pagerTabStrip;
-    private RecipeTaskListAdapter adapter;
+    private RecipeTaskViewPageAdapter adapter;
     private Recipe recipe;
 
     @Override
@@ -33,9 +31,9 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         recipe= intent.getParcelableExtra("recipe");
         ButterKnife.bind(this);
-        adapter = new RecipeTaskListAdapter(this,recipe.tasks);
+        adapter = new RecipeTaskViewPageAdapter(this,recipe.tasks);
         pagerTabStrip.setDrawFullUnderline(false);
-        pagerTabStrip.setTabIndicatorColorResource(R.color.colorPrimary);
+        pagerTabStrip.setTabIndicatorColorResource(R.color.primary);
         viewPager.addOnPageChangeListener(mListener);
         viewPager.setAdapter(adapter);
 
@@ -78,4 +76,14 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
             }
         }
     };
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
