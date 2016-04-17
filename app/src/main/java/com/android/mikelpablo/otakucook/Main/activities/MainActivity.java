@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Main.fragments.IngredientListFragment;
-import com.android.mikelpablo.otakucook.Main.DrawerMenu;
 import com.android.mikelpablo.otakucook.Main.fragments.MainFragment;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Main.fragments.RecipeListFragment;
@@ -51,7 +52,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DrawerMenu.Listener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     /* A dialog that is presented until the Firebase authentication finished. */
@@ -72,16 +73,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     Toolbar toolbar;
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @Bind(R.id.drawer_menu)
-    DrawerMenu navigationDrawer;
-    @Bind(R.id.login_with_google)
-    SignInButton mGoogleLoginButton;
-    @Bind(R.id.login_status)
-    TextView mLoggedInStatusTextView;
-    @Bind(R.id.user_image)
-    ImageView userImage;
+
+
     private int titleFragment;
-    private static int itemIdPersist = R.id.main;
+    private static int itemIdPersist = R.id.item1;
+    private NavigationView navigationDrawer;
+    private SignInButton mGoogleLoginButton;
+    private TextView mLoggedInStatusTextView;
+    private ImageView userImage;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -95,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt("navigationDrawerSelectedItemId", navigationDrawer.getSelectedItemId());
-        Log.d("MIKEL", "instancia guardada" + String.valueOf(navigationDrawer.getSelectedItemId()));
+        outState.putInt("navigationDrawerSelectedItemId", itemIdPersist);
+        Log.d("MIKEL", "instancia guardada" + String.valueOf(itemIdPersist));
     }
 
     @Override
@@ -104,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onRestoreInstanceState(savedInstanceState);
         itemIdPersist = savedInstanceState.getInt("navigationDrawerSelectedItemId");
 
-        navigationDrawer.setSelectedItemId(itemIdPersist);
+        navigationDrawer.setCheckedItem(itemIdPersist);
 
-        Log.d("MIKEL", "recuperando instancia" + String.valueOf(navigationDrawer.getSelectedItemId()));
+        //Log.d("MIKEL", "recuperando instancia" + String.valueOf(navigationDrawer.getMenu()));
     }
 
     @Override
@@ -116,8 +115,33 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         return true;
     }
-
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.item1:
+                selectFragment(new MainFragment());
+                return true;
+            case R.id.item2:
+                selectFragment(IngredientListFragment.newInstance(R.string.shoping_cart_drawer));
+                return true;
+            case R.id.item3:
+                selectFragment(new RecipeListFragment());
+                return true;
+            case R.id.item4:
+                selectFragment(IngredientListFragment.newInstance(R.string.ingredients_drawer));
+                return true;
+            case R.id.action_logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -131,25 +155,49 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        navigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
+        /*View view = View.inflate(this, R.layout.navigation_header, null);
+        navigationDrawer.addHeaderView(view);*/
+        View headerLayout = navigationDrawer.getHeaderView(0);
+        mGoogleLoginButton = (SignInButton) headerLayout.findViewById(R.id.login_with_google);
+        mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mGoogleApiClient.isConnecting()){
+                    connectToApiClient();
+                }
+            }
+        });
+        mLoggedInStatusTextView =(TextView) headerLayout.findViewById(R.id.login_status);
+        userImage = (ImageView) headerLayout.findViewById(R.id.user_image);
         ButterKnife.bind(this);
-        toolbar.setNavigationIcon(R.drawable.ic_menu);
         setSupportActionBar(toolbar);
-        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(new DrawerArrowDrawable(toolbar.getContext()));
+        }
         mAuthProgressDialog = new ProgressDialog(MainActivity.this);
+
+        navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override public boolean onNavigationItemSelected(MenuItem item) {
+                return onOptionsItemSelected(item);
+            }
+        });
 
 
         if (savedInstanceState == null) {
             makeLogin();
             Log.d("MIKEL", "saveInstanceState = null");
-            navigationDrawer.setSelectedItemId(itemIdPersist);
-            onItemClick(itemIdPersist);
+
+            navigationDrawer.setCheckedItem(itemIdPersist);
+            //onItemClick(itemIdPersist);
 
         }
     }
@@ -180,9 +228,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onBackPressed() {
-        if (itemIdPersist != R.id.main){
-            itemIdPersist = R.id.main;
-            navigationDrawer.setSelectedItemId(R.id.main);
+        if (itemIdPersist != R.id.item1){
+            itemIdPersist = R.id.item1;
+            navigationDrawer.setCheckedItem(R.id.item1);
             selectFragment(new MainFragment());
         }else{
             super.onBackPressed();
@@ -194,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    @Override
+    /*@Override
     public void onItemClick(int itemId) {
         if (itemId != itemIdPersist) {
             switch (itemId) {
@@ -215,7 +263,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             itemIdPersist = itemId;
             navigationDrawer.setSelectedItemId(itemId);
         }
-    }
+    }*/
+
 
     private void selectFragment(Fragment fragment) {
         drawerLayout.closeDrawer(GravityCompat.START);

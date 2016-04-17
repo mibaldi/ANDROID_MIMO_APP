@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item1"
+            android:icon="@android:drawable/ic_popup_reminder"
+            android:title="@string/main_drawer"/>
+
+        <item
+            android:id="@+id/item2"
+            android:icon="@android:drawable/ic_dialog_dialer"
+            android:title="@string/shoping_cart_drawer"/>
+
+        <item
+            android:id="@+id/item3"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="@string/recipes_drawer"/>
+        <item
+            android:id="@+id/item4"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="@string/ingredients_drawer"/>
+    </group>
+
+</menu>
