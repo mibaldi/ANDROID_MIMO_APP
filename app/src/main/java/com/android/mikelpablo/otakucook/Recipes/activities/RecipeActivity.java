@@ -5,6 +5,8 @@ package com.android.mikelpablo.otakucook.Recipes.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.drawable.DrawerArrowDrawable;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -12,12 +14,19 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class RecipeActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        ButterKnife.bind(this);
+
         Intent intent = getIntent();
+
         Recipe recipe= intent.getParcelableExtra("recipe");
         Log.d("RecipeActivity",recipe.author);
         RecipeFragment recipesFragment = RecipeFragment.newInstance(recipe);

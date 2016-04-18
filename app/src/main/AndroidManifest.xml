@@ -14,11 +14,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme">
 
         <!-- Bloquear la pantalla en portrait por no poder guardar usuario logueado -->
         <activity
             android:name=".Main.activities.MainActivity"
+            android:theme="@style/AppTheme.TransparentStatus"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

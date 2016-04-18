@@ -1,5 +1,6 @@
 package com.android.mikelpablo.otakucook.Ingredients.fragments;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.Models.BaseIngredient;
+import com.android.mikelpablo.otakucook.Ingredients.activities.IngredientsServerActivity;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientsExpandableAdapter;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -48,12 +50,13 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
     private static final String TAG = IngredientsServerFragment.class.getName();
 
     public  ArrayList<Ingredient> items = new ArrayList<>();
-    public static ArrayList<String> ingredientsId = new ArrayList<>();
+    public  ArrayList<Ingredient> items2 = new ArrayList<>();
+    public  ArrayList<String> ingredientsId = new ArrayList<>();
     private ProgressDialog mProgressDialog;
     private String category;
     private Firebase refRoot;
     private static Firebase mRefStorage;
-
+    public Context context;
     @Bind(R.id.ingredientsServer)
     RecyclerView recyclerView;
 
@@ -95,6 +98,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+        context = container.getContext();
         return inflater.inflate(R.layout.fragment_ingredients_server, container, false);
     }
 
@@ -120,12 +124,13 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         }else {
             mProgressDialog.dismiss();
         }
+
         //adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
         //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
-        adapter = new IngredientsExpandableAdapter(baseIngredients,getActivity(),IngredientsServerFragment.this);
-        recyclerView.setAdapter(adapter);
+
+        //
         generateBaseIngredients();
 
         //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsServerFragment.this);
@@ -253,8 +258,11 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
     }
 
     private void generateBaseIngredients() {
-        baseIngredients = new ArrayList<>();
+
+        baseIngredients.clear();
         Map<String,Integer> basetypesMap = new HashMap<>();
+        Log.d("IngredientsServer","cantidad de elementos: "+baseIngredients.size());
+        Log.d("IngredientsServer","cantidad de items: "+items.size());
         for (Ingredient ingredient : items) {
             if(basetypesMap.containsKey(ingredient.baseType)){
                 BaseIngredient baseIngredient = baseIngredients.get(basetypesMap.get(ingredient.baseType));
@@ -267,7 +275,12 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
                 int index = baseIngredients.indexOf(baseIngredient);
                 basetypesMap.put(ingredient.baseType,index);
             }
+
         }
-        adapter.notifyDataSetChanged();
+
+        Log.d("IngredientsServer",String.valueOf(baseIngredients.size()));
+        Log.d("IngredientsServer","cantidad de items: "+items.size());
+        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsServerFragment.this);
+        recyclerView.setAdapter(adapter);
     }
 }

@@ -98,7 +98,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         mProgressDialog = new ProgressDialog(getContext());
-        adapter = new RecipesListAdapter(getContext(), items);
+       // adapter = new RecipesListAdapter(getContext(), items);
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (MainActivity.mAuthData != null){
             mRef = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");

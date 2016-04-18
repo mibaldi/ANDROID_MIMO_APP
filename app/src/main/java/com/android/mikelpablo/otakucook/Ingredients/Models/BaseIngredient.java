@@ -43,9 +43,6 @@ public class BaseIngredient implements ParentListItem{
         return ingredientList;
     }
 
-    public void setChildItemList(List<Ingredient> list) {
-        ingredientList = list;
-    }
 
 
 
