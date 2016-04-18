@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#cbcbcb">
-
     <TextView
         android:id="@+id/child_list_item"
         android:layout_width="wrap_content"
