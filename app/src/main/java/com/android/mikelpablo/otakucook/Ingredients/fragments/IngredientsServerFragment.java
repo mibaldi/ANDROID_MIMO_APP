@@ -64,6 +64,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
     private MenuItem myActionMenuItem;
     private IngredientsExpandableAdapter adapter;
     private ArrayList<BaseIngredient> baseIngredients = new ArrayList<>();
+    private Firebase refHistorico;
 
     public IngredientsServerFragment(){
 
@@ -248,6 +249,8 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
         mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("storage");
         mRefStorage.child(String.valueOf(ingredient.id)).setValue(ingredient.id);
+        refHistorico = refUser.child(MainActivity.mAuthData.getUid()).child("historical");
+        refHistorico.child(String.valueOf(ingredient.id)).setValue(ingredient.id);
         Toast.makeText(getContext(),"Ingrediente añadido", Toast.LENGTH_SHORT).show();
     }
 

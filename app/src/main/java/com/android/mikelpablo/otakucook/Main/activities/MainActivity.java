@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private SignInButton mGoogleLoginButton;
     private TextView mLoggedInStatusTextView;
     private ImageView userImage;
+    private FloatingActionButton mBtAddCategoryIngredients;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -120,20 +122,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        mBtAddCategoryIngredients.setVisibility(View.GONE);
         switch (item.getItemId()) {
             case android.R.id.home:
+
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.item1:
                 selectFragment(new MainFragment());
                 return true;
             case R.id.item2:
+                mBtAddCategoryIngredients.setVisibility(View.VISIBLE);
                 selectFragment(IngredientListFragment.newInstance(R.string.shoping_cart_drawer));
                 return true;
             case R.id.item3:
                 selectFragment(new RecipeListFragment());
                 return true;
             case R.id.item4:
+                mBtAddCategoryIngredients.setVisibility(View.VISIBLE);
                 selectFragment(IngredientListFragment.newInstance(R.string.ingredients_drawer));
                 return true;
             case R.id.action_logout:
@@ -165,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         navigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
+        mBtAddCategoryIngredients = (FloatingActionButton) findViewById(R.id.add_category_ingredient);
         /*View view = View.inflate(this, R.layout.navigation_header, null);
         navigationDrawer.addHeaderView(view);*/
         View headerLayout = navigationDrawer.getHeaderView(0);

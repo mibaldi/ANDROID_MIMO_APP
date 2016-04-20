@@ -19,9 +19,6 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by mikelbalducieldiaz on 12/4/16.
- */
 public class RecipeTaskViewPageFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.taskPhoto)
     ImageView mTaskPhoto;
