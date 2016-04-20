@@ -81,17 +81,11 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         tvMensaje.setText("Selecciona los ingredientes que se te han acabado durante la preparacion de la receta");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
-
-
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (MainActivity.mAuthData != null) {
             mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
             getIngredientsIdStorage(refRoot);
         }
-        //falta la parte de join entre items y los ingredientes del almacen
-
-
-
     }
 
     @Override

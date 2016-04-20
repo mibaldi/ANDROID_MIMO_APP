@@ -2,6 +2,7 @@ package com.android.mikelpablo.otakucook.Main.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -20,12 +21,14 @@ import android.os.Bundle;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.mikelpablo.otakucook.Main.fragments.DialogExitApp;
 import com.android.mikelpablo.otakucook.Main.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.Main.fragments.MainFragment;
 import com.android.mikelpablo.otakucook.R;
@@ -169,9 +172,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mGoogleApiClient.isConnecting()){
-                    connectToApiClient();
-                }
+                connectToApiClient();
             }
         });
         mLoggedInStatusTextView =(TextView) headerLayout.findViewById(R.id.login_status);
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStart() {
         super.onStart();
+
         this.mAuthData = mFirebaseRef.getAuth();
         if (this.mAuthData != null) {
             mGoogleLoginButton.setVisibility(View.GONE);
@@ -353,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } else {
             mGoogleLoginButton.setVisibility(View.VISIBLE);
             mLoggedInStatusTextView.setVisibility(View.GONE);
-            Picasso.with(MainActivity.this).load("https://www.google.es/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwjumsn3p4rMAhVH1RQKHUvwAL8QjRwIBw&url=http%3A%2F%2Fwww.domestika.org%2Fes%2Fprojects%2F35336-fakebook-avatar-project&psig=AFQjCNHC2L_vKAetzHsOt2NQ0xuo4rUE-w&ust=1460592157859224").into(userImage);
+            Picasso.with(MainActivity.this).load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6WFgc-lZ-yKcXMp-RPPpGzqtheiGY3KXqUH4qdRdocUQ_J5SDjg").into(userImage);
         }
         this.mAuthData = authData;
         supportInvalidateOptionsMenu();
@@ -519,6 +521,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 mGoogleApiClient.connect();
             }
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            FragmentManager fm = getFragmentManager();
+            DialogExitApp.newInstance(1).show(fm, "dialog");
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 

@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Main.holders.RecipeListHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,5 +42,10 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipeListHolder>{
     @Override
     public int getItemCount() {
         return listItem.size();
+    }
+    public void setFilter(List<Recipe> objects){
+        listItem = new ArrayList<>();
+        listItem.addAll(objects);
+        notifyDataSetChanged();
     }
 }

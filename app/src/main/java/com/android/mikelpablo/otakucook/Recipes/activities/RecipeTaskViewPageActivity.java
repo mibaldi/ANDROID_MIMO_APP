@@ -1,5 +1,6 @@
 package com.android.mikelpablo.otakucook.Recipes.activities;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerTabStrip;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.Main.fragments.DialogExitApp;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeTaskViewPageAdapter;
+import com.android.mikelpablo.otakucook.Recipes.fragments.DialogFinishRecipeApp;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,26 +49,28 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int arg0) {
             // TODO Auto-generated method stub
-            selectedIndex = arg0;
+          selectedIndex = arg0;
+
 
         }
         boolean callHappened;
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             // TODO Auto-generated method stub
+
             if( mPageEnd && arg0 == selectedIndex && !callHappened)
             {
-                Intent intent = new Intent(RecipeTaskViewPageActivity.this,RecipeFinalActivity.class);
-                intent.putExtra("recipe",recipe);
-                RecipeTaskViewPageActivity.this.startActivity(intent);
-                Toast.makeText(getApplicationContext(),"Final",Toast.LENGTH_SHORT).show();
-                mPageEnd = false;//To avoid multiple calls.
+                FragmentManager fm = getFragmentManager();
+                DialogFinishRecipeApp.newInstance(1,recipe).show(fm, "dialog");
+                mPageEnd = false;
                 callHappened = true;
+
             }else
             {
                 mPageEnd = false;
             }
         }
+
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
@@ -73,6 +78,7 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
             if(selectedIndex == adapter.getCount() - 1)
             {
                 mPageEnd = true;
+                callHappened = false;
             }
         }
     };

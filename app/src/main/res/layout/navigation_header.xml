@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="horizontal">
+    android:layout_height="150dp"
+    android:orientation="horizontal"
+    tools:showIn="@layout/activity_main">
 
     <ImageView
         android:id="@+id/user_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="left"
-        android:background="#666" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/login_status"
-            android:layout_width="162dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="visible"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/user_image" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/login_with_google"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_with_google" />
-    </LinearLayout>
-</LinearLayout>
+            android:text="@string/login_with_google"
+            android:layout_below="@+id/user_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+</RelativeLayout>

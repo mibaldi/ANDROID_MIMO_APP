@@ -5,15 +5,21 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
+import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
@@ -39,7 +45,7 @@ import retrofit2.Response;
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
  */
-public class RecipeListFragment extends Fragment implements View.OnClickListener {
+public class RecipeListFragment extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
     @Bind(R.id.recipeListRecyclerView)
     RecyclerView recyclerView;
     @Bind(R.id.todas)
@@ -68,6 +74,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private ValueEventListener valueEventListener;
     private RecipesListAdapter adapterPosibles;
     private Firebase refRecipe;
+    private MenuItem myActionMenuItem;
+    private SearchView searchView;
 
     public RecipeListFragment() {
     }
@@ -96,6 +104,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         ButterKnife.bind(this, view);
         mProgressDialog = new ProgressDialog(getContext());
        // adapter = new RecipesListAdapter(getContext(), items);
@@ -191,9 +200,18 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
         btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
         selected = v.getId();
+        if (searchView != null){
+            myActionMenuItem.collapseActionView();
+            searchView.setQuery("", false);
+            searchView.clearFocus();
+        }
+
 
         switch (v.getId()) {
             case R.id.todas:
+                if (myActionMenuItem != null){
+                    myActionMenuItem.setVisible(true);
+                }
                 getActivity().setTitle("Todas las recetas");
 
                 recyclerView.setAdapter(adapter);
@@ -206,6 +224,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.posibles:
+                if (myActionMenuItem != null){
+                    myActionMenuItem.setVisible(true);
+                }
                 getActivity().setTitle("Posibles recetas");
                 recyclerView.setAdapter(adapterPosibles);
                 v.setBackgroundColor(Color.BLUE);
@@ -221,6 +242,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 recyclerView.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.favoritas:
+                if (myActionMenuItem != null){
+                    myActionMenuItem.setVisible(false);
+                }
 
                 if (MainActivity.mAuthData != null){
 
@@ -264,11 +288,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void getFavoritesRecipes() {
-        Log.d(TAG,"getFavoritesRecipesInicio");
-
-    }
-
     private void getIngredientsIdStorage(Firebase refRoot) {
 
         ingredientsId.clear();
@@ -287,6 +306,64 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             }
         };
         mRefStorage.addValueEventListener(eventListener);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_search,menu);
+
+        myActionMenuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(myActionMenuItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;
+            }
+        });
+
+    }
+    private ArrayList<Recipe> filter(List<Recipe> recipes, String query){
+        query = query.toLowerCase();
+        final ArrayList<Recipe> filteredRecipes = new ArrayList<>();
+        for(Recipe recipe: recipes){
+            final String name = recipe.name.toLowerCase();
+            if(name.contains(query)){
+                filteredRecipes.add(recipe);
+            }
+        }
+        return filteredRecipes;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        switch (selected){
+            case R.id.todas:{
+                Log.d("MIKEL","todas");
+                final List<Recipe> filteredModelList = filter(items, newText);
+               adapter.setFilter(filteredModelList);
+                break;
+            }
+            case R.id.posibles:{
+                Log.d("MIKEL","possibles");
+                final List<Recipe> filteredModelList = filter(items, newText);
+                adapterPosibles.setFilter(filteredModelList);
+                break;
+            }
+        }
+        return false;
     }
 
     private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
