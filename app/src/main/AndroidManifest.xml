@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- Bloquear la pantalla en portrait por no poder guardar usuario logueado -->
         <activity
             android:name=".Main.activities.MainActivity"
             android:theme="@style/AppTheme.TransparentStatus"

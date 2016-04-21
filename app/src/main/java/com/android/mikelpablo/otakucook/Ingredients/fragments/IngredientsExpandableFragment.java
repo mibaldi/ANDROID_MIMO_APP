@@ -19,8 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.Models.BaseIngredient;
-import com.android.mikelpablo.otakucook.Ingredients.activities.IngredientsServerActivity;
-import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
+import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientsExpandableAdapter;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
@@ -45,9 +44,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IngredientsServerFragment extends Fragment  implements SearchView.OnQueryTextListener ,IngredientsExpandableAdapter.OnItemClickListener {
+public class IngredientsExpandableFragment extends Fragment  implements SearchView.OnQueryTextListener ,IngredientsExpandableAdapter.OnItemClickListener {
 
-    private static final String TAG = IngredientsServerFragment.class.getName();
+    private static final String TAG = IngredientsExpandableFragment.class.getName();
 
     public  ArrayList<Ingredient> items = new ArrayList<>();
     public  ArrayList<Ingredient> items2 = new ArrayList<>();
@@ -66,7 +65,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
     private ArrayList<BaseIngredient> baseIngredients = new ArrayList<>();
     private Firebase refHistorico;
 
-    public IngredientsServerFragment(){
+    public IngredientsExpandableFragment(){
 
     }
 
@@ -89,8 +88,8 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         }
     }
 
-    public static IngredientsServerFragment newInstance(String category) {
-        IngredientsServerFragment fragment = new IngredientsServerFragment();
+    public static IngredientsExpandableFragment newInstance(String category) {
+        IngredientsExpandableFragment fragment = new IngredientsExpandableFragment();
         Bundle args = new Bundle();
         args.putString("category",formatCategory(category));
         fragment.setArguments(args);
@@ -126,7 +125,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
             mProgressDialog.dismiss();
         }
 
-        //adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
+        //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
         //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
@@ -134,7 +133,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         //
         generateBaseIngredients();
 
-        //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsServerFragment.this);
+        //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsExpandableFragment.this);
         //recyclerView.setAdapter(adapter);
     }
 
@@ -203,8 +202,8 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
                 generateBaseIngredients();
 
 
-                //adapter = new IngredientsExpandableAdapter(,getActivity(),IngredientsServerFragment.this);
-                //adapter = new IngredientListAdapter(items,IngredientsServerFragment.this);
+                //adapter = new IngredientsExpandableAdapter(,getActivity(),IngredientsExpandableFragment.this);
+                //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
                 //recyclerView.setAdapter(adapter);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
@@ -247,10 +246,21 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
         Firebase refUser = new Firebase(getResources().getString(R.string.users));
         Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
         refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
-        mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("storage");
-        mRefStorage.child(String.valueOf(ingredient.id)).setValue(ingredient.id);
-        refHistorico = refUser.child(MainActivity.mAuthData.getUid()).child("historical");
-        refHistorico.child(String.valueOf(ingredient.id)).setValue(ingredient.id);
+        Firebase refOwnIngredient = refUser.child(MainActivity.mAuthData.getUid()).child("owningredient").child(String.valueOf(ingredient.id));
+        HashMap<String,String> ingredientMap = new HashMap<>();
+        ingredientMap.put("id",String.valueOf(ingredient.id));
+        switch (CategoriesActivity.typeStatic){
+            case R.string.shoping_cart_drawer:
+                ingredientMap.put("shoppingcart","1");
+                ingredientMap.put("storage","0");
+                break;
+            case R.string.ingredients_drawer:
+                ingredientMap.put("shoppingcart","0");
+                ingredientMap.put("storage","1");
+                break;
+        }
+        refOwnIngredient.setValue(ingredientMap);
+
         Toast.makeText(getContext(),"Ingrediente añadido", Toast.LENGTH_SHORT).show();
     }
 
@@ -283,7 +293,7 @@ public class IngredientsServerFragment extends Fragment  implements SearchView.O
 
         Log.d("IngredientsServer",String.valueOf(baseIngredients.size()));
         Log.d("IngredientsServer","cantidad de items: "+items.size());
-        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsServerFragment.this);
+        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
         recyclerView.setAdapter(adapter);
     }
 }

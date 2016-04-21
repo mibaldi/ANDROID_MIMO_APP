@@ -1,6 +1,8 @@
 package com.android.mikelpablo.otakucook.Recipes.activities;
 
 import android.app.FragmentManager;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerTabStrip;
@@ -26,10 +28,12 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
     PagerTabStrip pagerTabStrip;
     private RecipeTaskViewPageAdapter adapter;
     private Recipe recipe;
+    public static NotificationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         setContentView(R.layout.activity_recipe_task_view_page);
         Intent intent = getIntent();
         recipe= intent.getParcelableExtra("recipe");

@@ -3,11 +3,9 @@ package com.android.mikelpablo.otakucook.Ingredients.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.mikelpablo.otakucook.Ingredients.fragments.CategoriesCollectionFragment;
-import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientsServerFragment;
+import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientsExpandableFragment;
 import com.android.mikelpablo.otakucook.R;
 
 public class IngredientsServerActivity extends AppCompatActivity {
@@ -19,7 +17,7 @@ public class IngredientsServerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String category = intent.getStringExtra("category");
         this.setTitle(category);
-        IngredientsServerFragment ingredientsServerFragment = IngredientsServerFragment.newInstance(category);
+        IngredientsExpandableFragment ingredientsServerFragment = IngredientsExpandableFragment.newInstance(category);
         getSupportFragmentManager().beginTransaction().replace(R.id.ingredientsServer_content,ingredientsServerFragment).commit();
     }
 

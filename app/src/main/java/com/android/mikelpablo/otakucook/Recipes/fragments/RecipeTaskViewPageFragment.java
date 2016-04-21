@@ -1,9 +1,16 @@
 package com.android.mikelpablo.otakucook.Recipes.fragments;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +21,7 @@ import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
@@ -29,6 +37,10 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     @Bind(R.id.btTimer)
     Button mBtTimer;
     private CountDownTimer countDownTimer;
+    private PendingIntent pi;
+    private Intent emptyIntent;
+    public static int ID = 1;
+    private int taskMiliseconds;
 
     public RecipeTaskViewPageFragment() {
     }
@@ -79,10 +91,12 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+        emptyIntent = new Intent();
+        pi = PendingIntent.getActivity(getActivity(), 0, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         final Task task = getArguments().getParcelable("task");
         Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
-        final long taskMiliseconds = task.seconds*1000;
+        taskMiliseconds = task.seconds*1000;
         mCountDown.setText(transformTime(taskMiliseconds));
         activateTimer(taskMiliseconds,task);
         mBtTimer.setOnClickListener(this);
@@ -124,6 +138,26 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
             countDownTimer.start();
             mBtTimer.setEnabled(false);
             mBtTimer.setText("Wait!");
+            
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity());
+            Notification mNotification = getDefaultNotification(mBuilder);
+            sendNotification(mNotification);
         }
+    }
+    public void sendNotification(Notification notification) {
+        RecipeTaskViewPageActivity.manager.notify(++ID, notification);
+    }
+
+    private Notification getDefaultNotification(Builder builder) {
+        builder.setSmallIcon(R.drawable.ic_menu)
+                .setWhen(taskMiliseconds)
+                .setContentTitle("Hola caracola")
+                .setContentText("Este es el contenido de la notificación")
+                .setTicker("¡¡Nuevo mensaje!!")
+                .setContentInfo("MIMO")
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_facebook))
+                .setContentIntent(pi);
+
+        return builder.build();
     }
 }

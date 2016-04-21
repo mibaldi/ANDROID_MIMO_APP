@@ -1,4 +1,4 @@
-package com.android.mikelpablo.otakucook.Ingredients.adapters;
+package com.android.mikelpablo.otakucook.Main.adapters;
 
 import android.view.View;
 

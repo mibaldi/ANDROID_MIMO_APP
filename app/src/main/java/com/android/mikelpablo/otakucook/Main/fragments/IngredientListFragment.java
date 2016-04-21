@@ -9,21 +9,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
-import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListFirebaseAdapter;
+import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
-import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
-import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.AuthData;
@@ -36,9 +32,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class IngredientListFragment  extends Fragment implements View.OnClickListener,IngredientListFirebaseAdapter.OnItemClickListener{
 
@@ -89,7 +82,8 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         ingredientsMap = new HashMap<>();
         if (authData != null){
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
-            switch (ingredientType){
+            ref = refRoot.child(authData.getUid()).child("owningredient");
+            /*switch (ingredientType){
                 case R.string.shoping_cart_drawer:
 
                     ref = refRoot.child(authData.getUid()).child("shoppingcart");
@@ -97,7 +91,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                 case R.string.ingredients_drawer:
                     ref = refRoot.child(authData.getUid()).child("storage");
                     break;
-            }
+            }*/
 
             FirebaseRecyclerAdapter<String,IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(String.class, R.layout.item_ingredientlist,
                     IngredientListFBHolder.class, ref,ingredientType,this);
@@ -114,6 +108,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         switch (v.getId()){
             case R.id.add_category_ingredient:
                 Intent intent = new Intent(getContext(),CategoriesActivity.class);
+                intent.putExtra("type",ingredientType);
                 getContext().startActivity(intent);
         }
     }
