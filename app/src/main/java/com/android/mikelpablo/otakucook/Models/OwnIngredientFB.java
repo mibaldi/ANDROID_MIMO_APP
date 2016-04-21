@@ -10,7 +10,9 @@ public class OwnIngredientFB implements Parcelable {
     public String id;
     public String shoppingcart;
     public String storage;
+    public OwnIngredientFB(){
 
+    }
     public OwnIngredientFB(String id, String shoppingcart, String storage) {
         this.id = id;
         this.shoppingcart = shoppingcart;

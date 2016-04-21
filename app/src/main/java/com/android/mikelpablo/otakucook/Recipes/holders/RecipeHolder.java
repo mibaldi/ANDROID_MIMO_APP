@@ -62,24 +62,20 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
     }
     public void existFirebase(long id) {
         Firebase userRef= new Firebase(context.getResources().getString(R.string.users));
-        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("storage");
+        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("owningredient");
         userRef.child(String.valueOf(id)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-
-                    while (iterator.hasNext()){
-                        DataSnapshot next = iterator.next();
-                        if (next.getKey().equals("storage") && next.getValue(String.class).compareTo("1")==0){
+                    for(DataSnapshot data:dataSnapshot.getChildren()) {
+                        if (data.getKey().equals("storage") && data.getValue(String.class).equals("1")){
                             itemView.setBackgroundColor(Color.GREEN);
                             break;
-                        }else if(next.getKey().equals("shoppingcart") && next.getValue(String.class).compareTo("1")==0){
+                        }else if(data.getKey().equals("shoppingcart") && data.getValue(String.class).equals("1")){
                             itemView.setBackgroundColor(Color.BLUE);
                             break;
                         }else {
                             itemView.setBackgroundColor(Color.YELLOW);
-                            break;
                         }
                     }
                 } else {

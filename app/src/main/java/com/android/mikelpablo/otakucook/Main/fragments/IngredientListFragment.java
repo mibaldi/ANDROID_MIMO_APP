@@ -92,15 +92,15 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
             switch (ingredientType){
                 case R.string.shoping_cart_drawer:
 
-                    //query =ref.orderByChild("shoppingcart").equalTo("1");
+                    query =ref.orderByChild("shoppingcart").equalTo("1");
                     break;
                 case R.string.ingredients_drawer:
-                    //query = ref.orderByChild("storage").equalTo("1");
+                    query = ref.orderByChild("storage").equalTo("1");
                     break;
             }
 
             FirebaseRecyclerAdapter<OwnIngredientFB,IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredientlist,
-                    IngredientListFBHolder.class, ref,ingredientType,this);
+                    IngredientListFBHolder.class, query,ingredientType,this);
 
             recyclerView.setAdapter(fbadapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
