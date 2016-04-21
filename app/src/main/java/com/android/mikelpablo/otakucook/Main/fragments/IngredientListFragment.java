@@ -47,7 +47,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     @Bind(R.id.ingredientListRecyclerView)
     RecyclerView recyclerView;
-    FloatingActionButton mBtAddCategoryIngredients;
+    com.github.clans.fab.FloatingActionButton mBtAddCategoryIngredients;
 
     private SearchView searchView;
     private MenuItem myActionMenuItem;
@@ -76,7 +76,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-        mBtAddCategoryIngredients = (FloatingActionButton) getActivity().findViewById(R.id.add_category_ingredient);
+        mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_category_ingredient);
 
         setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
