@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientListAdapter;
-import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeTaskListAdapter;

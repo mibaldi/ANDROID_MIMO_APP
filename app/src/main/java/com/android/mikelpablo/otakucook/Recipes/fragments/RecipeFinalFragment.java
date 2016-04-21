@@ -20,6 +20,7 @@ import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeFinalIngredientsAdapter;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
+import com.android.mikelpablo.otakucook.Utils.FirebaseUtils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -84,7 +85,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (MainActivity.mAuthData != null) {
             mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
-            getIngredientsIdStorage(refRoot);
+            getIngredientsIdStorage();
         }
     }
 
@@ -98,7 +99,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         }
 
     }
-    private void getIngredientsIdStorage(Firebase refRoot) {
+    private void getIngredientsIdStorage() {
 
         ingredientsId.clear();
 
@@ -111,7 +112,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
                     String id = postSnapshot.getValue(String.class);
                     ingredientsId.add(id);
                 }
-                recipeIngredientStorage=ingredientsDelete(ingredientsId,items);
+                recipeIngredientStorage= FirebaseUtils.getIngredientsAvailablesRecipe(ingredientsId,items);
                 adapter = new RecipeFinalIngredientsAdapter(getContext(), recipeIngredientStorage);
                 recyclerView.setAdapter(adapter);
 
@@ -135,16 +136,13 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
             }
         }
     }
-    public List<Ingredient> ingredientsDelete(List<String> ids, List<Ingredient>ingredientList){
+    /*public List<Ingredient> ingredientsDelete(List<String> ids, List<Ingredient>ingredientList){
         List<Ingredient> recipeIngredientStorage = new ArrayList<>();
         for ( Ingredient ingredient: ingredientList){
             if (ids.contains(String.valueOf(ingredient.id))){
                 recipeIngredientStorage.add(ingredient);
             }
         }
-        Log.d("RecipeFinalFragment","valor devuelto: "+recipeIngredientStorage.size());
-        Log.d("RecipeFinalFragment","ids de firebase: "+ids.size());
-        Log.d("RecipeFinalFragment","ingredientes de la receta: "+ingredientList.size());
         return recipeIngredientStorage;
-    }
+    }*/
 }

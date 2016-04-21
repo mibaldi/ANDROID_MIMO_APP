@@ -45,7 +45,7 @@ import butterknife.ButterKnife;
 /**
  * Created by mikelbalducieldiaz on 9/4/16.
  */
-public class RecipeFragment extends Fragment implements View.OnClickListener {
+public class RecipeFragment extends Fragment implements View.OnClickListener, RecipeAdapter.OnItemClickListener {
     @Bind(R.id.recipeName)
     TextView recipeName;
     @Bind(R.id.recipePhoto)
@@ -66,6 +66,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
     /* A reference to the Firebase */
     public Firebase mFirebaseRef;
     private Recipe recipe;
+    private ArrayList<String> lista = new ArrayList<>();
 
     public RecipeFragment() {
     }
@@ -83,6 +84,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         recipe = getArguments().getParcelable("recipe");
         recipeExistsReturn();
+        storageIngredients();
 
     }
 
@@ -96,6 +98,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
 
         recipeName.setText(recipe.name);
+
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
         ib_favorite.setEnabled(false);
@@ -104,7 +107,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
         btCook.setOnClickListener(this);
         ib_favorite.setOnClickListener(this);
         bt_tasks.setOnClickListener(this);
-        final RecipeAdapter adapter = new RecipeAdapter(getContext(), items);
+        final RecipeAdapter adapter = new RecipeAdapter(getContext(), items,this,lista);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
@@ -206,5 +210,31 @@ public class RecipeFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+    public void storageIngredients(){
+        lista.clear();
+        Firebase ref = new Firebase(getResources().getString(R.string.users));
+        Firebase storageRef =ref.child(MainActivity.mAuthData.getUid()).child("storage");
+        storageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    String id = postSnapshot.getValue(String.class);
+                    lista.add(id);
+                    Log.d("PABLO",id);
+                }
+            }
 
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(View view, Long item) {
+        //FIREBASE
+
+        Log.d("PABLO",""+ item);
+    }
 }

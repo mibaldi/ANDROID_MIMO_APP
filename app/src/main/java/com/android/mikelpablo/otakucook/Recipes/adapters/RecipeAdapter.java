@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeHolder;
+import com.firebase.client.Firebase;
 
 import java.util.List;
 
@@ -17,23 +18,31 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeHolder>{
 
+    public interface OnItemClickListener {
+        void onItemClick(View view, Long item);
+    }
     private List<Ingredient> listItem;
+    private List<String> listItemFBStorage;
+    private OnItemClickListener listener;
     private Context context;
-    public RecipeAdapter(Context context, List<Ingredient> objects) {
+    private Firebase mref;
+    public RecipeAdapter(Context context, List<Ingredient> objects, OnItemClickListener listener,List<String>itemsID) {
         listItem = objects;
+        this.listener = listener;
         this.context = context;
+       this.listItemFBStorage=itemsID;
     }
 
     @Override
     public RecipeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe_ingredientlist,parent,false);
-
         return new RecipeHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecipeHolder holder, int position) {
-        holder.bindItem(listItem.get(position));
+
+        holder.bindItem(listItem.get(position),listener,listItemFBStorage);
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivit
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientsExpandableAdapter;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
+import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
@@ -247,19 +248,16 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
         refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
         Firebase refOwnIngredient = refUser.child(MainActivity.mAuthData.getUid()).child("owningredient").child(String.valueOf(ingredient.id));
-        HashMap<String,String> ingredientMap = new HashMap<>();
-        ingredientMap.put("id",String.valueOf(ingredient.id));
+        OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(ingredient.id),"0","0");
         switch (CategoriesActivity.typeStatic){
             case R.string.shoping_cart_drawer:
-                ingredientMap.put("shoppingcart","1");
-                ingredientMap.put("storage","0");
+                ownIngredientFB.shoppingcart="1";
                 break;
             case R.string.ingredients_drawer:
-                ingredientMap.put("shoppingcart","0");
-                ingredientMap.put("storage","1");
+                ownIngredientFB.storage="1";
                 break;
         }
-        refOwnIngredient.setValue(ingredientMap);
+        refOwnIngredient.setValue(ownIngredientFB);
 
         Toast.makeText(getContext(),"Ingrediente añadido", Toast.LENGTH_SHORT).show();
     }

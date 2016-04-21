@@ -20,14 +20,24 @@
         android:id="@+id/recipePhoto"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/recipeName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ingredientes necesarios"
+        android:id="@+id/textView2"
+        android:gravity="center"
+        android:layout_below="@+id/ratingBar"
+        android:layout_centerHorizontal="true" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recipeIngredientsListRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bt_cook"
-        android:layout_below="@+id/ib_favorite">
+        android:layout_below="@+id/textView2"
+        android:layout_above="@+id/bt_cook">
 
     </android.support.v7.widget.RecyclerView>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,5 +76,7 @@
         android:layout_alignTop="@+id/ratingBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+
 
 </RelativeLayout>

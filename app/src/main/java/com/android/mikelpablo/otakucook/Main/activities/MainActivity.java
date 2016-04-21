@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mGoogleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connectToApiClient();
+                generateAuthData();
             }
         });
         mLoggedInStatusTextView =(TextView) headerLayout.findViewById(R.id.login_status);
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null ) {
             makeLogin();
             Log.d("MIKEL", "saveInstanceState = null");
 
@@ -369,9 +369,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void generateAuthData() {
-        if (!mGoogleApiClient.isConnecting()) {
-            connectToApiClient();
-        }
+
+        connectToApiClient();
+
         mGoogleLoginButton.setVisibility(View.VISIBLE);
         mLoggedInStatusTextView.setVisibility(View.GONE);
 
@@ -401,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     /* connect API now */
             Log.d(TAG, "Trying to connect to Google API");
             mGoogleApiClient.connect();
+
 
         }
     }

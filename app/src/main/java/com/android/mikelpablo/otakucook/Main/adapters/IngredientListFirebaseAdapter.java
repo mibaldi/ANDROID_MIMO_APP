@@ -2,10 +2,9 @@ package com.android.mikelpablo.otakucook.Main.adapters;
 
 import android.view.View;
 
-import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListFBHolder;
+import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 
-import com.android.mikelpablo.otakucook.Models.Ingredient;
-
+import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -14,10 +13,7 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.firebase.ui.FirebaseRecyclerAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<String,IngredientListFBHolder>{
+public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIngredientFB,IngredientListFBHolder>{
 
     public interface OnItemClickListener {
         void onItemClick(View view, Long item);
@@ -26,21 +22,21 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<Strin
     private OnItemClickListener listener;
     private int ingredientType;
 
-    public IngredientListFirebaseAdapter(Class<String> modelClass, int modelLayout, Class<IngredientListFBHolder> viewHolderClass, Query ref, int ingredientType,OnItemClickListener listener) {
+    public IngredientListFirebaseAdapter(Class<OwnIngredientFB> modelClass, int modelLayout, Class<IngredientListFBHolder> viewHolderClass, Query ref, int ingredientType,OnItemClickListener listener) {
         super(modelClass, modelLayout, viewHolderClass,ref);
         this.listener = listener;
         this.ingredientType = ingredientType;
     }
 
     @Override
-    protected void populateViewHolder(IngredientListFBHolder ingredientListFBHolder, String s, int i) {
+    protected void populateViewHolder(IngredientListFBHolder ingredientListFBHolder, OwnIngredientFB s, int i) {
         recoveryIngredientsNames(ingredientListFBHolder,s);
     }
 
-    private void recoveryIngredientsNames(final IngredientListFBHolder ingredientListHolder, String s) {
+    private void recoveryIngredientsNames(final IngredientListFBHolder ingredientListHolder, OwnIngredientFB s) {
         Firebase refRoot = new Firebase("https://otakucook.firebaseio.com/ingredients");
 
-        Firebase refIngredient = refRoot.child(s);
+        Firebase refIngredient = refRoot.child(s.id);
 
         refIngredient.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

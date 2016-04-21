@@ -1,4 +1,4 @@
-package com.android.mikelpablo.otakucook.Ingredients.holders;
+package com.android.mikelpablo.otakucook.Main.holders;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

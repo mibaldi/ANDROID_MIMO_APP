@@ -9,21 +9,25 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
-import com.android.mikelpablo.otakucook.Ingredients.holders.IngredientListFBHolder;
+import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
+import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
+import com.firebase.client.Query;
 import com.firebase.ui.FirebaseRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -51,6 +55,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     private Firebase mRefStorage;
     private Firebase refHistorico;
     private Firebase refShopping;
+    private Query query;
 
     public IngredientListFragment() {
     }
@@ -83,17 +88,18 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         if (authData != null){
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
             ref = refRoot.child(authData.getUid()).child("owningredient");
-            /*switch (ingredientType){
+
+            switch (ingredientType){
                 case R.string.shoping_cart_drawer:
 
-                    ref = refRoot.child(authData.getUid()).child("shoppingcart");
+                    //query =ref.orderByChild("shoppingcart").equalTo("1");
                     break;
                 case R.string.ingredients_drawer:
-                    ref = refRoot.child(authData.getUid()).child("storage");
+                    //query = ref.orderByChild("storage").equalTo("1");
                     break;
-            }*/
+            }
 
-            FirebaseRecyclerAdapter<String,IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(String.class, R.layout.item_ingredientlist,
+            FirebaseRecyclerAdapter<OwnIngredientFB,IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredientlist,
                     IngredientListFBHolder.class, ref,ingredientType,this);
 
             recyclerView.setAdapter(fbadapter);
@@ -121,21 +127,18 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
                 switch (ingredientType){
                     case R.string.shoping_cart_drawer:
-                        mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("shoppingcart");
+                        ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
                         break;
                     case R.string.ingredients_drawer:
-                        mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("storage");
+                        ref.child(String.valueOf(id)).child("storage").setValue("0");
                         break;
                 }
-                mRefStorage.child(String.valueOf(id)).removeValue();
                 Toast.makeText(getContext(),"Ingrediente Eliminado", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btAddIngredient:
 
-                refShopping = refUser.child(MainActivity.mAuthData.getUid()).child("shoppingcart");
-                mRefStorage = refUser.child(MainActivity.mAuthData.getUid()).child("storage");
-                refShopping.child(String.valueOf(id)).removeValue();
-                mRefStorage.child(String.valueOf(id)).setValue(id);
+                ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
+                ref.child(String.valueOf(id)).child("storage").setValue("1");
                 Toast.makeText(getContext(),"Ingrediente comprado", Toast.LENGTH_SHORT).show();
                 break;
         }
