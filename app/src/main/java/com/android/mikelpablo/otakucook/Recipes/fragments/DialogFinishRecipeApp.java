@@ -32,9 +32,9 @@ public class DialogFinishRecipeApp extends android.app.DialogFragment  {
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getContext(),RecipeFinalActivity.class);
+                        Intent intent = new Intent(getActivity(),RecipeFinalActivity.class);
                         intent.putExtra("recipe",getArguments().getParcelable("recipe"));
-                        getContext().startActivity(intent);
+                        getActivity().startActivity(intent);
                         Toast.makeText(getContext(),"Final",Toast.LENGTH_SHORT).show();
                     }
                 })

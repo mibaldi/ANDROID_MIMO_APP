@@ -48,11 +48,17 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
     private ViewPager.OnPageChangeListener mListener = new ViewPager.OnPageChangeListener() {
 
         public boolean mPageEnd;
-        public int selectedIndex;
+        public int selectedIndex = 0;
+        public boolean izquierda = false;
 
         @Override
         public void onPageSelected(int arg0) {
             // TODO Auto-generated method stub
+            if (selectedIndex > arg0){
+                izquierda = true;
+            }else {
+                izquierda=false;
+            }
           selectedIndex = arg0;
 
 
@@ -62,7 +68,7 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             // TODO Auto-generated method stub
 
-            if( mPageEnd && arg0 == selectedIndex && !callHappened)
+            if( mPageEnd && arg0 == selectedIndex && !callHappened && !izquierda)
             {
                 FragmentManager fm = getFragmentManager();
                 DialogFinishRecipeApp.newInstance(1,recipe).show(fm, "dialog");

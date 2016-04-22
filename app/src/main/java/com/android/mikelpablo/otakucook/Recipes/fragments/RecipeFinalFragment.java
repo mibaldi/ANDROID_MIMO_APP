@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
+import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
@@ -84,7 +85,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (MainActivity.mAuthData != null) {
-            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
+            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("owningredient");
             getIngredientsIdStorage();
         }
     }
@@ -109,8 +110,12 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ingredientsId.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String id = postSnapshot.getValue(String.class);
-                    ingredientsId.add(id);
+                    OwnIngredientFB ownIngredientFB = postSnapshot.getValue(OwnIngredientFB.class);
+                    Log.d("FB",ownIngredientFB.id+"+"+ownIngredientFB.storage);
+                    if (ownIngredientFB.storage.equals("1")){
+                        ingredientsId.add(ownIngredientFB.id);
+                    }
+
                 }
                 recipeIngredientStorage= FirebaseUtils.getIngredientsAvailablesRecipe(ingredientsId,items);
                 adapter = new RecipeFinalIngredientsAdapter(getContext(), recipeIngredientStorage);
