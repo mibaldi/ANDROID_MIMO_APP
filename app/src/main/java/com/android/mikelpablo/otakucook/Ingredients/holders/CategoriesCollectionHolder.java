@@ -1,6 +1,7 @@
 package com.android.mikelpablo.otakucook.Ingredients.holders;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.android.mikelpablo.otakucook.Ingredients.Models.Category;
 import com.android.mikelpablo.otakucook.Ingredients.activities.IngredientsServerActivity;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Utils.Connectivity;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -37,8 +39,12 @@ public class CategoriesCollectionHolder  extends RecyclerView.ViewHolder impleme
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(v.getContext(), IngredientsServerActivity.class);
-        intent.putExtra("category",category_name.getText());
-        v.getContext().startActivity(intent);
+        if(Connectivity.isNetworkAvailable(v.getContext())){
+            Intent intent = new Intent(v.getContext(), IngredientsServerActivity.class);
+            intent.putExtra("category",category_name.getText());
+            v.getContext().startActivity(intent);
+        }else{
+            Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+        }
     }
 }

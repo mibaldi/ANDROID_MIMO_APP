@@ -2,6 +2,7 @@ package com.android.mikelpablo.otakucook.Ingredients.fragments;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Utils.Connectivity;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -244,22 +246,26 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
 
     @Override
     public void onItemClick(View view, Ingredient ingredient) {
-        Firebase refUser = new Firebase(getResources().getString(R.string.users));
-        Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
-        refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
-        Firebase refOwnIngredient = refUser.child(MainActivity.mAuthData.getUid()).child("owningredient").child(String.valueOf(ingredient.id));
-        OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(ingredient.id),"0","0");
-        switch (CategoriesActivity.typeStatic){
-            case R.string.shoping_cart_drawer:
-                ownIngredientFB.shoppingcart="1";
-                break;
-            case R.string.ingredients_drawer:
-                ownIngredientFB.storage="1";
-                break;
-        }
-        refOwnIngredient.setValue(ownIngredientFB);
+        if(Connectivity.isNetworkAvailable(view.getContext())) {
+            Firebase refUser = new Firebase(getResources().getString(R.string.users));
+            Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
+            refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
+            Firebase refOwnIngredient = refUser.child(MainActivity.mAuthData.getUid()).child("owningredient").child(String.valueOf(ingredient.id));
+            OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(ingredient.id), "0", "0");
+            switch (CategoriesActivity.typeStatic) {
+                case R.string.shoping_cart_drawer:
+                    ownIngredientFB.shoppingcart = "1";
+                    break;
+                case R.string.ingredients_drawer:
+                    ownIngredientFB.storage = "1";
+                    break;
+            }
+            refOwnIngredient.setValue(ownIngredientFB);
 
-        Toast.makeText(getContext(),"Ingrediente añadido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Ingrediente añadido", Toast.LENGTH_SHORT).show();
+        }else{
+            Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override

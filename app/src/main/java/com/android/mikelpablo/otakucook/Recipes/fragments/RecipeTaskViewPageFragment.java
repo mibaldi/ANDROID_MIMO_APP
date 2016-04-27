@@ -1,8 +1,10 @@
 package com.android.mikelpablo.otakucook.Recipes.fragments;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.BroadcastReceiver.AlarmReceiver;
 import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 import com.squareup.picasso.Picasso;
+
+import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,7 +46,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     private PendingIntent pi;
     private Intent emptyIntent;
     public static int ID = 1;
-    private int taskMiliseconds;
+    private Task task;
 
     public RecipeTaskViewPageFragment() {
     }
@@ -93,10 +99,10 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         ButterKnife.bind(this, view);
         emptyIntent = new Intent();
         pi = PendingIntent.getActivity(getActivity(), 0, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        final Task task = getArguments().getParcelable("task");
+        task = getArguments().getParcelable("task");
         Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
-        taskMiliseconds = task.seconds*1000;
+        long taskMiliseconds = task.seconds*1000;
         mCountDown.setText(transformTime(taskMiliseconds));
         activateTimer(taskMiliseconds,task);
         mBtTimer.setOnClickListener(this);
@@ -116,7 +122,6 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
                 mCountDown.setText(transformTime(taskMiliseconds));
                 mBtTimer.setEnabled(true);
                 mBtTimer.setText("Start");
-                Toast.makeText(getContext(),"Times'up! Task "+task.name+ " has finished", Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -135,29 +140,24 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btTimer){
+            int type = AlarmManager.RTC_WAKEUP;
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.SECOND,16);
+            long when = calendar.getTimeInMillis();
+            Intent intent = new Intent(getContext(),AlarmReceiver.class);
+            intent.putExtra("taskName",task.name);
+            intent.putExtra("taskId",task.id);
+            Log.d("TaskId",String.valueOf(task.id));
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),(int)task.id,intent,PendingIntent.FLAG_ONE_SHOT);
+
             countDownTimer.start();
             mBtTimer.setEnabled(false);
             mBtTimer.setText("Wait!");
-            
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity());
-            Notification mNotification = getDefaultNotification(mBuilder);
-            sendNotification(mNotification);
+
+            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setRepeating(type,when,0,pendingIntent);
+
         }
     }
-    public void sendNotification(Notification notification) {
-        RecipeTaskViewPageActivity.manager.notify(++ID, notification);
-    }
 
-    private Notification getDefaultNotification(Builder builder) {
-        builder.setSmallIcon(R.drawable.ic_menu)
-                .setWhen(taskMiliseconds)
-                .setContentTitle("Hola caracola")
-                .setContentText("Este es el contenido de la notificación")
-                .setTicker("¡¡Nuevo mensaje!!")
-                .setContentInfo("MIMO")
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_facebook))
-                .setContentIntent(pi);
-
-        return builder.build();
-    }
 }

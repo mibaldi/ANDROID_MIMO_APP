@@ -39,6 +39,7 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
         Firebase refIngredient = refRoot.child(s.id);
 
         refIngredient.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Utils.Connectivity;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -98,13 +100,16 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                     query = ref.orderByChild("storage").equalTo("1");
                     break;
             }
+            if(Connectivity.isNetworkAvailable(getContext())) {
+                FirebaseRecyclerAdapter<OwnIngredientFB, IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredientlist,
+                        IngredientListFBHolder.class, query, ingredientType, this);
 
-            FirebaseRecyclerAdapter<OwnIngredientFB,IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredientlist,
-                    IngredientListFBHolder.class, query,ingredientType,this);
-
-            recyclerView.setAdapter(fbadapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
+                recyclerView.setAdapter(fbadapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
+            }else{
+                Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+            }
         }
 
     }
@@ -113,35 +118,44 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.add_category_ingredient:
-                Intent intent = new Intent(getContext(),CategoriesActivity.class);
-                intent.putExtra("type",ingredientType);
-                getContext().startActivity(intent);
+                if(Connectivity.isNetworkAvailable(v.getContext())) {
+                    Intent intent = new Intent(getContext(), CategoriesActivity.class);
+                    intent.putExtra("type", ingredientType);
+                    getContext().startActivity(intent);
+                }else{
+                    Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+                }
         }
     }
 
     @Override
     public void onItemClick(View view, Long id) {
-        Firebase refUser = new Firebase(getResources().getString(R.string.users));
-        switch (view.getId()){
-            case R.id.btEliminarIngrediente:
+        if(Connectivity.isNetworkAvailable(view.getContext())) {
+            Firebase refUser = new Firebase(getResources().getString(R.string.users));
+            switch (view.getId()){
+                case R.id.btEliminarIngrediente:
 
-                switch (ingredientType){
-                    case R.string.shoping_cart_drawer:
-                        ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
-                        break;
-                    case R.string.ingredients_drawer:
-                        ref.child(String.valueOf(id)).child("storage").setValue("0");
-                        break;
-                }
-                Toast.makeText(getContext(),"Ingrediente Eliminado", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btAddIngredient:
+                    switch (ingredientType){
+                        case R.string.shoping_cart_drawer:
+                            ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
+                            break;
+                        case R.string.ingredients_drawer:
+                            ref.child(String.valueOf(id)).child("storage").setValue("0");
+                            break;
+                    }
+                    Toast.makeText(getContext(),"Ingrediente Eliminado", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.btAddIngredient:
 
-                ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
-                ref.child(String.valueOf(id)).child("storage").setValue("1");
-                Toast.makeText(getContext(),"Ingrediente comprado", Toast.LENGTH_SHORT).show();
-                break;
+                    ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
+                    ref.child(String.valueOf(id)).child("storage").setValue("1");
+                    Toast.makeText(getContext(),"Ingrediente comprado", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }else{
+            Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
         }
+
 
     }
 }

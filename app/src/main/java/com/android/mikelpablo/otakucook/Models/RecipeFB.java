@@ -6,9 +6,6 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mikelbalducieldiaz on 4/4/16.
- */
 public class RecipeFB {
     public long id;
     public  String name;
