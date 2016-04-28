@@ -1,12 +1,22 @@
 package com.android.mikelpablo.otakucook.Recipes.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +27,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.BuildConfig;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Measure;
 import com.android.mikelpablo.otakucook.Models.MeasureFB;
+import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.Models.RecipeFB;
 import com.android.mikelpablo.otakucook.Models.Task;
@@ -54,10 +66,16 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     Button btCook;
     @Bind(R.id.bt_tasks)
     Button bt_tasks;
-    @Bind(R.id.ib_favorite)
-    ImageButton ib_favorite;
+    @Bind(R.id.fab)
+    FloatingActionButton ib_favorite;
     @Bind(R.id.ratingBar)
     RatingBar ratingBar;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @Bind(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
     @Bind(R.id.recipeIngredientsListRecyclerView)
     RecyclerView recyclerView;
     private static final String TAG = RecipeFragment.class.getName();
@@ -83,6 +101,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recipe = getArguments().getParcelable("recipe");
+
         recipeExistsReturn();
         storageIngredients();
 
@@ -96,12 +115,49 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+        if(getView()!=null) {
+            if (!BuildConfig.SHOW_PREMIUM_ACTIONS){
+                ib_favorite.setVisibility(View.GONE);
+            }
+            setSizeAppBarLayout();
+            settingArguments();
+            configureView();
+            populateFragment();
+            setHasOptionsMenu(true);
+        }
 
+    }
+    public void setSizeAppBarLayout(){
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)appBarLayout.getLayoutParams();
+            params.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+            params.width = params.MATCH_PARENT;
+            appBarLayout.setLayoutParams(params);
+        }
+    }
+
+    private void settingArguments() {
+        if (getArguments() != null) {
+          recipe = getArguments().getParcelable("recipe");
+        }
+    }
+
+    private void configureView() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //collapsingToolbarLayout.setTitle("");
+        getActivity().setTitle("");
         recipeName.setText(recipe.name);
 
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
-        ib_favorite.setEnabled(false);
+        if (favorito){
+            ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
+        }else{
+            ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add));
+        }
+        //ib_favorite.setEnabled(false);
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
         btCook.setOnClickListener(this);
@@ -114,6 +170,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
     }
 
+    private void populateFragment() {
+
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -140,29 +199,34 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
                 getContext().startActivity(intent);
                 break;
             }
-            case R.id.ib_favorite:{
-                sendIngredientFirebase(recipe);
+            case R.id.fab:{
+                if (favorito){
+                    removeFavoriteFirebase(recipe);
+                    Toast.makeText(getContext(),"Receta eliminada de favoritos", Toast.LENGTH_SHORT).show();
+                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add));
+                }else {
+
+                    sendIngredientFirebase(recipe);
+                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
+                }
+                favorito = !favorito;
+
                 break;
             }
         }
     }
+    private void removeFavoriteFirebase(Recipe recipe){
+        Firebase refUser = new Firebase(getResources().getString(R.string.users));
+        mFirebaseRef = refUser.child(MainActivity.mAuthData.getUid()).child("favorites");
+        mFirebaseRef.child(String.valueOf(recipe.id)).removeValue();
+    }
     private void sendIngredientFirebase(Recipe recipe) {
         Firebase refUser = new Firebase(getResources().getString(R.string.users));
         Firebase refRecipes = new Firebase(getResources().getString(R.string.recipes));
-        Firebase refMeasures = new Firebase(getResources().getString(R.string.measures));
-        Firebase refTasks = new Firebase(getResources().getString(R.string.tasks));
         Firebase refIngredients = new Firebase(getResources().getString(R.string.ingredients));
 
         RecipeFB recipefb = new RecipeFB(recipe);
         refRecipes.child(String.valueOf(recipe.id)).setValue(recipefb);
-        for (Task task:recipe.tasks){
-            TaskFB taskfb = new TaskFB(task,recipefb.id);
-            refTasks.child(String.valueOf(taskfb.id)).setValue(taskfb);
-        }
-        for (Measure measure:recipe.measureIngredients){
-            MeasureFB measurefb = new MeasureFB(measure,recipefb.id);
-            refMeasures.child(String.valueOf(measurefb.id)).setValue(measurefb);
-        }
         for (Ingredient ingredient:recipe.ingredients){
             refIngredients.child(String.valueOf(ingredient.id)).setValue(ingredient);
         }
@@ -170,25 +234,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         mFirebaseRef.child(String.valueOf(recipe.id)).setValue(recipe.id);
 
         Toast.makeText(getContext(),"Receta guardada en favoritos", Toast.LENGTH_SHORT).show();
-        ib_favorite.setEnabled(false);
-    }
-    /*public void recipeExists(){
-        Firebase userRef= new Firebase(getResources().getString(R.string.users));
-        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("favorites");
-        userRef.child(String.valueOf(recipe.id)).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.getValue() != null) {
 
-                } else {
-                    sendIngredientFirebase(recipe);
-                }
-            }
-            @Override
-            public void onCancelled(FirebaseError arg0) {
-            }
-        });
-    }*/
+    }
     public void recipeExistsReturn(){
 
         Firebase userRef= new Firebase(getResources().getString(R.string.users));
@@ -198,10 +245,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     favorito=true;
-                    ib_favorite.setEnabled(!favorito);
+
+                   // ib_favorite.setEnabled(!favorito);
                 } else {
                     favorito=false;
-                    ib_favorite.setEnabled(!favorito);
+                   // ib_favorite.setEnabled(!favorito);
                    // sendIngredientFirebase(recipe);
                 }
             }
@@ -213,14 +261,17 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     public void storageIngredients(){
         lista.clear();
         Firebase ref = new Firebase(getResources().getString(R.string.users));
-        Firebase storageRef =ref.child(MainActivity.mAuthData.getUid()).child("storage");
+        Firebase storageRef =ref.child(MainActivity.mAuthData.getUid()).child("owningredient");
         storageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String id = postSnapshot.getValue(String.class);
-                    lista.add(id);
-                    Log.d("PABLO",id);
+                    OwnIngredientFB ownIngredientFB = postSnapshot.getValue(OwnIngredientFB.class);
+                    if (ownIngredientFB.storage.equals("1")){
+                        lista.add(ownIngredientFB.id);
+                        Log.d("PABLO",ownIngredientFB.id);
+                    }
+
                 }
             }
 

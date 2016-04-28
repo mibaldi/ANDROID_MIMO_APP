@@ -19,8 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.android.mikelpablo.otakucook.BuildConfig;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
+import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
@@ -61,8 +63,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private static final String TAG = RecipeListFragment.class.getName();
     public ArrayList<Recipe> items = new ArrayList<>();
     public ArrayList<Recipe> itemsPossibles = new ArrayList<>();
-    /* A reference to the Firebase */
-    public Firebase mFirebaseRef;
     public static List<String> ingredientsId = new ArrayList<>();
     private ProgressDialog mProgressDialog;
     private Firebase refRoot;
@@ -88,14 +88,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null){
             selected= savedInstanceState.getInt("selected");
-            ArrayList<Recipe> itemsTemp = savedInstanceState.getParcelableArrayList("listaTodos");
-            if (itemsTemp != null) {
-                items = itemsTemp;
-            }
-            ArrayList<Recipe> itemsTemp2 = savedInstanceState.getParcelableArrayList("listaPosibles");
-            if (itemsTemp2 != null) {
-                itemsPossibles = itemsTemp2;
-            }
         }
     }
 
@@ -108,40 +100,24 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         ButterKnife.bind(this, view);
+        if (BuildConfig.SHOW_PREMIUM_ACTIONS){
+            btFavoritas.setVisibility(View.VISIBLE);
+        }
         mProgressDialog = new ProgressDialog(getContext());
        // adapter = new RecipesListAdapter(getContext(), items);
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (MainActivity.mAuthData != null){
             mRef = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
-            getIngredientsIdStorage(refRoot);
+            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("owningredient");
+            getIngredientsIdStorage(mRefStorage);
         }
         adapter = new RecipesListAdapter(getContext(), items);
         adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
-        /*recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));*/
         btTodas.setOnClickListener(this);
         btFavoritas.setOnClickListener(this);
         btPosibles.setOnClickListener(this);
-
-
-        //getFavoritesRecipes();
-        //recyclerView.setAdapter(fbadapter);
-        /*if (savedInstanceState != null){
-
-            Log.d(TAG,"instancia creada");
-            loadRecyclerview(selected);
-
-        }else{
-            loadRecyclerview(selected);
-        }*/
-
-
-        /*String nombre = getArguments().getString("nombreReceta");
-        nombreReceta.setText(nombre)*/
-        ;
     }
 
     private void loadRecyclerview(int savedInstanceStateInt) {
@@ -221,6 +197,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
                     recyclerView.setAdapter(adapter);
                     v.setBackgroundColor(Color.BLUE);
+                    items.clear();
                     if (items.isEmpty()) {
                         initOnclick(v);
                         Call<List<Recipe>> recipes = service.recipes();
@@ -232,8 +209,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                     if (myActionMenuItem != null) {
                         myActionMenuItem.setVisible(true);
                     }
+                    itemsPossibles.clear();
                     getActivity().setTitle("Posibles recetas");
-                    recyclerView.setAdapter(adapterPosibles);
                     v.setBackgroundColor(Color.BLUE);
                     if (itemsPossibles.isEmpty()) {
                         initOnclick(v);
@@ -244,6 +221,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
                         ServerRecipeList(possiblesRecipes, itemsPossibles);
                     }
+                    adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+                    recyclerView.setAdapter(adapterPosibles);
                     recyclerView.getAdapter().notifyDataSetChanged();
                     break;
                 case R.id.favoritas:
@@ -296,24 +275,26 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void getIngredientsIdStorage(Firebase refRoot) {
+    private void getIngredientsIdStorage(Firebase ref) {
 
         ingredientsId.clear();
          eventListener=new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String id = postSnapshot.getValue(String.class);
-                    ingredientsId.add(id);
+                    OwnIngredientFB ownIngredientFB = postSnapshot.getValue(OwnIngredientFB.class);
+                    if (ownIngredientFB.storage.equals("1")){
+                        ingredientsId.add(ownIngredientFB.id);
+                    }
+
                 }
             }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
             }
         };
-        mRefStorage.addValueEventListener(eventListener);
+        ref.addValueEventListener(eventListener);
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -366,7 +347,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             }
             case R.id.posibles:{
                 Log.d("MIKEL","possibles");
-                final List<Recipe> filteredModelList = filter(items, newText);
+                final List<Recipe> filteredModelList = filter(itemsPossibles, newText);
                 adapterPosibles.setFilter(filteredModelList);
                 break;
             }
@@ -403,7 +384,5 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("selected",selected);
-        outState.putParcelableArrayList("listaTodos",items);
-        outState.putParcelableArrayList("listaPosibles",itemsPossibles);
     }
 }

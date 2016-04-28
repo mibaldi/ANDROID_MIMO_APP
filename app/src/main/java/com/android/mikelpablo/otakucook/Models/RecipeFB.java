@@ -14,8 +14,6 @@ public class RecipeFB {
     public String author;
     public int score;
     public String photo;
-    public List<Long> measures= new ArrayList<>();
-    public List<Long> tasks= new ArrayList<>();
 
     public RecipeFB (Recipe recipe){
         this.id = recipe.id;
@@ -25,11 +23,5 @@ public class RecipeFB {
         this.author = recipe.author;
         this.score = recipe.score;
         this.photo = recipe.photo;
-        for (Measure measure: recipe.measureIngredients){
-            measures.add(measure.id);
-        }
-        for (Task task: recipe.tasks){
-            tasks.add(task.id);
-        }
     }
 }

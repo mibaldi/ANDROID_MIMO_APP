@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.android.mikelpablo.otakucook">
+    package="com.android.mikelpablo.otakucook" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- USE_CREDENTIALS is necessary for Google+ login -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <!-- GET_ACCOUNTS is necessary to display email address of logged in user. This permission is optional -->
@@ -15,13 +15,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <receiver android:name=".BroadcastReceiver.AlarmReceiver"/>
+        android:theme="@style/AppTheme" >
+        <receiver android:name=".BroadcastReceiver.AlarmReceiver" />
 
         <activity
             android:name=".Main.activities.MainActivity"
-            android:theme="@style/AppTheme.TransparentStatus"
-            >
+            android:theme="@style/AppTheme.TransparentStatus" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,22 +31,17 @@
             android:name=".Recipes.activities.RecipeActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_recipes"
-            android:parentActivityName=".Main.activities.MainActivity"
-            >
+            android:parentActivityName=".Main.activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.activities.MainActivity" />
         </activity>
-        <activity
-            android:name=".Recipes.activities.RecipeTaskViewPageActivity"
-             >
+        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeActivity" />
-            </activity>
-        <activity
-            android:name=".Recipes.activities.RecipeFinalActivity"
-            >
+        </activity>
+        <activity android:name=".Recipes.activities.RecipeFinalActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeTaskViewPageActivity" />
@@ -57,28 +51,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeSingleTaskActivity">
+        <activity android:name=".Recipes.activities.RecipeSingleTaskActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeTaskListActivity" />
         </activity>
         <activity
             android:name=".Ingredients.activities.CategoriesActivity"
-            android:parentActivityName=".Main.activities.MainActivity"
-           >
+            android:parentActivityName=".Main.activities.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.activities.MainActivity" />
         </activity>
         <activity
             android:name=".Ingredients.activities.IngredientsServerActivity"
-            android:parentActivityName=".Ingredients.activities.CategoriesActivity"
-            >
+            android:parentActivityName=".Ingredients.activities.CategoriesActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Ingredients.activities.CategoriesActivity" />
         </activity>
-
     </application>
 
 </manifest>
