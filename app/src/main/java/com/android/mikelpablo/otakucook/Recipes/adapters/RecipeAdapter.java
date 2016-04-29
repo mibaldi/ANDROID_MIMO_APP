@@ -19,7 +19,7 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeHolder>{
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Long item);
+        void onItemClick(View view, Ingredient item);
     }
     private List<Ingredient> listItem;
     private List<String> listItemFBStorage;

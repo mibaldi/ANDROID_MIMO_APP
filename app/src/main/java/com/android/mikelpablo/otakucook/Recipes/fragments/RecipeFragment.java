@@ -2,6 +2,7 @@ package com.android.mikelpablo.otakucook.Recipes.fragments;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -10,6 +11,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -85,6 +87,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     public Firebase mFirebaseRef;
     private Recipe recipe;
     private ArrayList<String> lista = new ArrayList<>();
+    private RecipeAdapter adapter;
 
     public RecipeFragment() {
     }
@@ -163,7 +166,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         btCook.setOnClickListener(this);
         ib_favorite.setOnClickListener(this);
         bt_tasks.setOnClickListener(this);
-        final RecipeAdapter adapter = new RecipeAdapter(getContext(), items,this,lista);
+        adapter = new RecipeAdapter(getContext(), items,this,lista);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -268,6 +271,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     OwnIngredientFB ownIngredientFB = postSnapshot.getValue(OwnIngredientFB.class);
                     if (ownIngredientFB.storage.equals("1")){
+
                         lista.add(ownIngredientFB.id);
                         Log.d("PABLO",ownIngredientFB.id);
                     }
@@ -283,9 +287,17 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     }
 
     @Override
-    public void onItemClick(View view, Long item) {
-        //FIREBASE
-
+    public void onItemClick(View view, Ingredient item) {
+        Firebase ref = new Firebase(getResources().getString(R.string.users));
+        Firebase storageRef =ref.child(MainActivity.mAuthData.getUid()).child("owningredient");
+        OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(item.id),"1","0");
+        storageRef.child(String.valueOf(item.id)).setValue(ownIngredientFB);
+        Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
+        refIngredient.child(String.valueOf(item.id)).setValue(item);
+        //view.setVisibility(View.GONE);
+        adapter.notifyDataSetChanged();
+       // view.setBackgroundColor(Color.YELLOW);
+        Snackbar.make(getView(), "Ingrediente en el carrito", Snackbar.LENGTH_LONG).show();
         Log.d("PABLO",""+ item);
     }
 }

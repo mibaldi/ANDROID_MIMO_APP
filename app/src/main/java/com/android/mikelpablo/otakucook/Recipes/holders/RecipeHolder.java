@@ -56,7 +56,7 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(v,ingredient.id);
+                listener.onItemClick(v,ingredient);
             }
         });
     }
@@ -69,13 +69,15 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
                 if (dataSnapshot.getValue() != null) {
                     for(DataSnapshot data:dataSnapshot.getChildren()) {
                         if (data.getKey().equals("storage") && data.getValue(String.class).equals("1")){
+                            add.setVisibility(View.GONE);
                             itemView.setBackgroundColor(Color.GREEN);
                             break;
                         }else if(data.getKey().equals("shoppingcart") && data.getValue(String.class).equals("1")){
-                            itemView.setBackgroundColor(Color.BLUE);
+                            add.setVisibility(View.GONE);
+                            itemView.setBackgroundColor(Color.YELLOW);
                             break;
                         }else {
-                            itemView.setBackgroundColor(Color.YELLOW);
+                            itemView.setBackgroundColor(Color.RED);
                         }
                     }
                 } else {
