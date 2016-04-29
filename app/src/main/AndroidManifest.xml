@@ -70,6 +70,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Ingredients.activities.CategoriesActivity" />
         </activity>
+        <activity
+            android:name=".Ingredients.activities.HistoricalIngredientsActivity"
+            android:parentActivityName=".Main.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -61,6 +61,9 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
                         case R.string.ingredients_drawer:
                             ingredientListHolder.add.setVisibility(View.GONE);
                             break;
+                        case R.string.historical:
+                            ingredientListHolder.add.setVisibility(View.VISIBLE);
+                            ingredientListHolder.delete.setVisibility(View.GONE);
                     }
 
                     ingredientListHolder.add.setOnClickListener(new View.OnClickListener() {
