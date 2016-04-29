@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -58,6 +59,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     Button btFavoritas;
     @Bind(R.id.posibles)
     Button btPosibles;
+    @Bind(R.id.activity_main_swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     private static final String TAG = RecipeListFragment.class.getName();
@@ -67,7 +70,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private ProgressDialog mProgressDialog;
     private Firebase refRoot;
     private FirebaseRecyclerAdapter<String, RecipeListHolder> fbadapter;
-    public static int selected = R.id.todas;
+    public static int selected;
     private RecipesListAdapter adapter;
     private MyAPI service;
     private Firebase mRef;
@@ -118,6 +121,66 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         btTodas.setOnClickListener(this);
         btFavoritas.setOnClickListener(this);
         btPosibles.setOnClickListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (selected == R.id.todas){
+                    items.clear();
+                    refreshSwipe();
+                }else if (selected == R.id.posibles){
+                    itemsPossibles.clear();
+                    refreshSwipePossibles();
+                }
+
+                //ServerRecipeList(recipes, items);
+            }
+        });
+    }
+
+    private void refreshSwipePossibles() {
+        service = MyApiClient.createService(MyAPI.class);
+        String ingredientsIdString = "0";
+        if (!ingredientsId.isEmpty()) {
+            ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
+        }
+        Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
+        possiblesRecipes.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                List<Recipe> recipesServer = response.body();
+
+                for (Recipe r : recipesServer) {
+                    itemsPossibles.add(r);
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void refreshSwipe() {
+        service = MyApiClient.createService(MyAPI.class);
+        Call<List<Recipe>> recipes = service.recipes();
+        recipes.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                List<Recipe> recipesServer = response.body();
+
+                for (Recipe r : recipesServer) {
+                    items.add(r);
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+
+            }
+        });
     }
 
     private void loadRecyclerview(int savedInstanceStateInt) {
@@ -143,7 +206,13 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getView() != null) {
-            loadRecyclerview(selected);
+            if (savedInstanceState == null){
+                loadRecyclerview(R.id.todas);
+            }
+            else{
+                loadRecyclerview(selected);
+            }
+
         }
     }
 
@@ -177,95 +246,98 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(Connectivity.isNetworkAvailable(getContext())) {
-            btTodas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
-            btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
-            btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
-            selected = v.getId();
-            if (searchView != null) {
-                myActionMenuItem.collapseActionView();
-                searchView.setQuery("", false);
-                searchView.clearFocus();
-            }
+            if (selected != v.getId()) {
+                btTodas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+                btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+                btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+                selected = v.getId();
+                if (searchView != null) {
+                    myActionMenuItem.collapseActionView();
+                    searchView.setQuery("", false);
+                    searchView.clearFocus();
+                }
 
 
-            switch (v.getId()) {
-                case R.id.todas:
-                    if (myActionMenuItem != null) {
-                        myActionMenuItem.setVisible(true);
-                    }
-                    getActivity().setTitle("Todas las recetas");
-
-                    recyclerView.setAdapter(adapter);
-                    v.setBackgroundColor(Color.BLUE);
-                    items.clear();
-                    if (items.isEmpty()) {
-                        initOnclick(v);
-                        Call<List<Recipe>> recipes = service.recipes();
-                        ServerRecipeList(recipes, items);
-                    }
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                    break;
-                case R.id.posibles:
-                    if (myActionMenuItem != null) {
-                        myActionMenuItem.setVisible(true);
-                    }
-                    itemsPossibles.clear();
-                    getActivity().setTitle("Posibles recetas");
-                    v.setBackgroundColor(Color.BLUE);
-                    if (itemsPossibles.isEmpty()) {
-                        initOnclick(v);
-                        String ingredientsIdString = "0";
-                        if (!ingredientsId.isEmpty()) {
-                            ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
+                switch (v.getId()) {
+                    case R.id.todas:
+                        if (myActionMenuItem != null) {
+                            myActionMenuItem.setVisible(true);
                         }
-                        Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
-                        ServerRecipeList(possiblesRecipes, itemsPossibles);
-                    }
-                    adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
-                    recyclerView.setAdapter(adapterPosibles);
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                    break;
-                case R.id.favoritas:
-                    if (myActionMenuItem != null) {
-                        myActionMenuItem.setVisible(false);
-                    }
+                        getActivity().setTitle("Todas las recetas");
 
-                    if (MainActivity.mAuthData != null) {
-
-                        if (fbadapter == null) {
-                            fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.item_recipelist,
-                                    RecipeListHolder.class, mRef) {
-                                @Override
-                                protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
-
-                                    recoveryRecipesNames(recipeHolder, s);
-
-                                    Log.d(TAG, "getFavoritesRecipes");
-                                }
-
-                            };
-                            Log.d(TAG, "fbadapter");
-                        } else {
-                            fbadapter.notifyDataSetChanged();
+                        recyclerView.setAdapter(adapter);
+                        v.setBackgroundColor(Color.BLUE);
+                        items.clear();
+                        if (items.isEmpty()) {
+                            initOnclick();
+                            Call<List<Recipe>> recipes = service.recipes();
+                            ServerRecipeList(recipes, items);
                         }
-                        recyclerView.setAdapter(fbadapter);
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        break;
+                    case R.id.posibles:
+                        if (myActionMenuItem != null) {
+                            myActionMenuItem.setVisible(true);
+                        }
+                        itemsPossibles.clear();
+                        getActivity().setTitle("Posibles recetas");
+                        v.setBackgroundColor(Color.BLUE);
+                        if (itemsPossibles.isEmpty()) {
+                            initOnclick();
+                            String ingredientsIdString = "0";
+                            if (!ingredientsId.isEmpty()) {
+                                ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
+                            }
+                            Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
+                            ServerRecipeList(possiblesRecipes, itemsPossibles);
+                        }
+                        adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+                        recyclerView.setAdapter(adapterPosibles);
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        break;
+                    case R.id.favoritas:
+                        if (myActionMenuItem != null) {
+                            myActionMenuItem.setVisible(false);
+                        }
 
-                    }
+                        if (MainActivity.mAuthData != null) {
 
-                    //recyclerView.setAdapter(fbadapter);
+                            if (fbadapter == null) {
+                                fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.item_recipelist,
+                                        RecipeListHolder.class, mRef) {
+                                    @Override
+                                    protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
 
-                    getActivity().setTitle("Recetas favoritas");
-                    btFavoritas.setBackgroundColor(Color.BLUE);
-                    //recyclerView.setAdapter(fbadapter);
-                    //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
-                    break;
+                                        recoveryRecipesNames(recipeHolder, s);
+
+                                        Log.d(TAG, "getFavoritesRecipes");
+                                    }
+
+                                };
+                                Log.d(TAG, "fbadapter");
+                            } else {
+                                fbadapter.notifyDataSetChanged();
+                            }
+                            recyclerView.setAdapter(fbadapter);
+
+                        }
+
+                        //recyclerView.setAdapter(fbadapter);
+
+                        getActivity().setTitle("Recetas favoritas");
+                        btFavoritas.setBackgroundColor(Color.BLUE);
+                        //recyclerView.setAdapter(fbadapter);
+                        //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         }else{
             Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
         }
     }
 
-    private void initOnclick(View view) {
+
+    private void initOnclick() {
 
         service = MyApiClient.createService(MyAPI.class);
         mProgressDialog.setIndeterminate(true);
