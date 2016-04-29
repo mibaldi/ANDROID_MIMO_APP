@@ -1,5 +1,6 @@
 package com.android.mikelpablo.otakucook.Main.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -50,6 +51,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.mainRecipeAuthor)
     TextView mainRecipeAuthor;
     private Long id;
+    private ProgressDialog mProgressDialog;
 
     public MainFragment() {
 
@@ -72,34 +74,38 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
 
-        mainLayout.setOnClickListener(this);
 
-        Firebase ref = new Firebase(getResources().getString(R.string.users));
-        ref.child(MainActivity.mAuthData.getUid()).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                int numberChilds = (int) dataSnapshot.getChildrenCount();
-                int x = (int) (Math.random() * numberChilds);
-                int count = 0;
+        if (MainActivity.mAuthData != null){
+            mainLayout.setOnClickListener(this);
+            mProgressDialog = new ProgressDialog(getContext());
+            Firebase ref = new Firebase(getResources().getString(R.string.users));
+            ref.child(MainActivity.mAuthData.getUid()).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    int numberChilds = (int) dataSnapshot.getChildrenCount();
+                    int x = (int) (Math.random() * numberChilds);
+                    int count = 0;
 
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    if (x == count) {
-                        printRecipe(child.getKey());
-                        break;
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        if (x == count) {
+                            printRecipe(child.getKey());
+                            break;
+                        }
+                        count++;
                     }
-                    count++;
                 }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
 
     private void printRecipe(String key) {
-        Firebase ref = new Firebase(getResources().getString(R.string.recipes));
+        Firebase ref = new Firebase(getActivity().getResources().getString(R.string.recipes));
         ref.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -125,6 +131,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         MyAPI service = MyApiClient.createService(MyAPI.class);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
         Call<Recipe> recipe = service.getRecipe(id);
         recipe.enqueue(getCallback());
     }
@@ -137,6 +146,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 for (Measure measure : recipe.measureIngredients) {
                     recipe.ingredients.add(measure.ingredient);
                 }
+                mProgressDialog.dismiss();
                 Context context = getContext();
                 Intent intent = new Intent(context, RecipeActivity.class);
                 intent.putExtra("recipe", recipe);

@@ -142,7 +142,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         if (v.getId() == R.id.btTimer){
             int type = AlarmManager.RTC_WAKEUP;
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.SECOND,16);
+            calendar.add(Calendar.SECOND,60);
             long when = calendar.getTimeInMillis();
             Intent intent = new Intent(getContext(),AlarmReceiver.class);
             intent.putExtra("taskName",task.name);

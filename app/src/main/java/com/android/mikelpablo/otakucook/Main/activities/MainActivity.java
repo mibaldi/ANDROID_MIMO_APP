@@ -78,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
-
-    private int titleFragment;
     private static int itemIdPersist = R.id.item1;
     private NavigationView navigationDrawer;
     private SignInButton mGoogleLoginButton;
@@ -124,22 +122,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         mMnAddCategoryIngredients.setVisibility(View.GONE);
+
         switch (item.getItemId()) {
             case android.R.id.home:
-
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.item1:
+                itemIdPersist = R.id.item1;
                 selectFragment(new MainFragment());
                 return true;
             case R.id.item2:
+                itemIdPersist = R.id.item2;
                 mMnAddCategoryIngredients.setVisibility(View.VISIBLE);
                 selectFragment(IngredientListFragment.newInstance(R.string.shoping_cart_drawer));
                 return true;
             case R.id.item3:
+                itemIdPersist = R.id.item3;
                 selectFragment(new RecipeListFragment());
                 return true;
             case R.id.item4:
+                itemIdPersist = R.id.item4;
                 mMnAddCategoryIngredients.setVisibility(View.VISIBLE);
                 selectFragment(IngredientListFragment.newInstance(R.string.ingredients_drawer));
                 return true;
@@ -151,21 +153,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         }
     }
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            case R.id.action_logout:
-                logout();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,11 +190,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (savedInstanceState == null ) {
             makeLogin();
-            Log.d("MIKEL", "saveInstanceState = null");
-
             navigationDrawer.setCheckedItem(itemIdPersist);
+            Log.d("MIKEL", "saveInstanceState = null");
             //onItemClick(itemIdPersist);
-
         }
     }
 
@@ -253,29 +238,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
-    /*@Override
-    public void onItemClick(int itemId) {
-        if (itemId != itemIdPersist) {
-            switch (itemId) {
-                case R.id.main:
-                    selectFragment(new MainFragment());
-                    break;
-                case R.id.shopping_cart:
-                    selectFragment(IngredientListFragment.newInstance(R.string.shoping_cart_drawer));
-                    break;
-                case R.id.recipes:
-                    selectFragment(new RecipeListFragment());
-                    break;
-                case R.id.ingredients:
-                    selectFragment(IngredientListFragment.newInstance(R.string.ingredients_drawer));
-                    break;
-            }
-
-            itemIdPersist = itemId;
-            navigationDrawer.setSelectedItemId(itemId);
-        }
-    }*/
-
 
     private void selectFragment(Fragment fragment) {
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -319,14 +281,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private void logout() {
         if (this.mAuthData != null) {
             mFirebaseRef.unauth();
+
             if (this.mAuthData.getProvider().equals("google")) {
                 if (mGoogleApiClient.isConnected()) {
                     Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                     mGoogleApiClient.clearDefaultAccountAndReconnect();
                     mGoogleApiClient.disconnect();
+
                 }
             }
             setAuthenticatedUser(null);
+
         }
     }
 
@@ -350,7 +315,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             map.put("name", finalName);
                             map.put("uid", authData.getUid());
                             mFirebaseRef.child("Users").child(authData.getUid()).setValue(map);
+
                         }
+
                     }
 
                     @Override
@@ -367,6 +334,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Picasso.with(MainActivity.this).load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6WFgc-lZ-yKcXMp-RPPpGzqtheiGY3KXqUH4qdRdocUQ_J5SDjg").into(userImage);
         }
         this.mAuthData = authData;
+        itemIdPersist = R.id.item1;
+        selectFragment(new MainFragment());
         supportInvalidateOptionsMenu();
     }
 
