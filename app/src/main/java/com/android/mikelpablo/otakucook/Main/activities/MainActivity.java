@@ -201,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
-
         if (savedInstanceState == null ) {
             makeLogin();
             Log.d("MIKEL", "saveInstanceState = null");
@@ -225,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onStart();
 
         this.mAuthData = mFirebaseRef.getAuth();
+
         if (this.mAuthData != null) {
             mGoogleLoginButton.setVisibility(View.GONE);
             mLoggedInStatusTextView.setVisibility(View.VISIBLE);
