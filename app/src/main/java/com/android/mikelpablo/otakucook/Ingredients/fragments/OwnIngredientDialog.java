@@ -64,7 +64,7 @@ public class OwnIngredientDialog extends DialogFragment {
                                 OwnIngredientFB ownIngredientFB = new OwnIngredientFB(ingredientId, "0", "1");
                                 refOwnIngredient.setValue(ownIngredientFB);
 
-                                Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
+                                Firebase refIngredient = new Firebase("https://otakucook.firebaseio.com/ingredients");
                                 Ingredient customIngredient = new Ingredient();
                                 customIngredient.name = ingredient;
                                 refIngredient.child(ingredientId).setValue(customIngredient);
