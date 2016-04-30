@@ -70,6 +70,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Ingredients.activities.CategoriesActivity" />
         </activity>
+        <activity
+            android:name=".Preferences.PreferencesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Utils.BaseActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="ff1c2189b92aa493cd60d97569bcd6baf9715047" />
     </application>
 
 </manifest>

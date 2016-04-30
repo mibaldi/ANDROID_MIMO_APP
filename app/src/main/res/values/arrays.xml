@@ -14,4 +14,12 @@
         <item>Tubérculos</item>
         <item>Verduras</item>
     </string-array>
+    <string-array name="listArray">
+        <item>Home</item>
+        <item>Black</item>
+    </string-array>
+    <string-array name="listValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>

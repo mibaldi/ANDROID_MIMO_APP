@@ -31,8 +31,12 @@ import android.widget.TextView;
 import com.android.mikelpablo.otakucook.Main.fragments.DialogExitApp;
 import com.android.mikelpablo.otakucook.Main.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.Main.fragments.MainFragment;
+import com.android.mikelpablo.otakucook.Preferences.PreferencesActivity;
+import com.android.mikelpablo.otakucook.Preferences.PreferencesManager;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Main.fragments.RecipeListFragment;
+import com.android.mikelpablo.otakucook.Utils.ThemeType;
+import com.android.mikelpablo.otakucook.Utils.ThemeUtils;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -148,6 +152,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             case R.id.action_logout:
                 logout();
                 return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(getApplicationContext(), PreferencesActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -158,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PreferencesManager.getInstance().setContext(getApplicationContext());
+
         navigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
         mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_category_ingredient);
         mMnAddCategoryIngredients= (FloatingActionMenu) findViewById(R.id.menu_red);
@@ -207,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStart() {
         super.onStart();
-
+        applySelectedTheme();
         this.mAuthData = mFirebaseRef.getAuth();
 
         if (this.mAuthData != null) {
@@ -335,6 +346,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         this.mAuthData = authData;
         itemIdPersist = R.id.item1;
+
         selectFragment(new MainFragment());
         supportInvalidateOptionsMenu();
     }
@@ -509,6 +521,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+    private void applySelectedTheme() {
+        ThemeType theme = PreferencesManager.getInstance().getSelectedTheme();
+        ThemeUtils.applyThemeIntoStatusBar(this, theme);
+        ThemeUtils.applyThemeIntoToolbar(this, theme, toolbar);
     }
 
 

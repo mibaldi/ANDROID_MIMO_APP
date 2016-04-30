@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     signingConfigs {
@@ -13,10 +28,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
+        applicationId "com.android.mikelpablo.otakucook"
         manifestPlaceholders = [manifestApplicationId: "${applicationId}",
                                 onesignal_app_id: "eb3cd3b5-8422-4ae1-bbb1-cc1b48b00394",
                                 onesignal_google_project_number: "970413221609"]
-        applicationId "com.android.mikelpablo.otakucook"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -77,4 +92,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:+'
     compile 'com.google.android.gms:play-services-analytics:+'
     compile "com.google.android.gms:play-services-location:+"
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
 }

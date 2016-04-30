@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="UPDATE SETTINGS">
+    <ListPreference android:title="Toolbar color"
+            android:summary="When this option you can changes color toolbar. Two possibilities."
+            android:key="toolbarColor"
+            android:defaultValue="0"
+            android:entries="@array/listArray"
+            android:entryValues="@array/listValues" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
