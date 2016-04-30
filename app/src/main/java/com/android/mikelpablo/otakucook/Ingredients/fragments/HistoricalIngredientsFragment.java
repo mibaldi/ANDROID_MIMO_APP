@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
@@ -57,7 +58,7 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        AuthData authData = MainActivity.mAuthData;
+        AuthData authData = LoginActivity.mAuthData;
 
         if (authData != null) {
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));

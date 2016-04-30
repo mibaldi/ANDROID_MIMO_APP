@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
@@ -52,7 +53,7 @@ public class OwnIngredientDialog extends DialogFragment {
                         final String ingredient = newIngredient.getText().toString();
 
                         final Firebase refUser = new Firebase(getResources().getString(R.string.users));
-                        final String uid = MainActivity.mAuthData.getUid();
+                        final String uid = LoginActivity.mAuthData.getUid();
                         Log.d("llkn",uid);
                         refUser.child(uid).child("owningredient").orderByKey().startAt(uid)
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -60,7 +61,7 @@ public class OwnIngredientDialog extends DialogFragment {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 numberId = (int) dataSnapshot.getChildrenCount() + 1;
                                 String ingredientId = uid+String.valueOf(numberId);
-                                Firebase refOwnIngredient = refUser.child(MainActivity.mAuthData.getUid()).child("owningredient").child(ingredientId);
+                                Firebase refOwnIngredient = refUser.child(LoginActivity.mAuthData.getUid()).child("owningredient").child(ingredientId);
                                 OwnIngredientFB ownIngredientFB = new OwnIngredientFB(ingredientId, "0", "1");
                                 refOwnIngredient.setValue(ownIngredientFB);
 

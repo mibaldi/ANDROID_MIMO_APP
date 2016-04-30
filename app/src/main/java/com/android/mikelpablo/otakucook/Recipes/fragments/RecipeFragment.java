@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.BuildConfig;
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Measure;
@@ -220,7 +221,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     }
     private void removeFavoriteFirebase(Recipe recipe){
         Firebase refUser = new Firebase(getResources().getString(R.string.users));
-        mFirebaseRef = refUser.child(MainActivity.mAuthData.getUid()).child("favorites");
+        mFirebaseRef = refUser.child(LoginActivity.mAuthData.getUid()).child("favorites");
         mFirebaseRef.child(String.valueOf(recipe.id)).removeValue();
     }
     private void sendIngredientFirebase(Recipe recipe) {
@@ -233,7 +234,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         for (Ingredient ingredient:recipe.ingredients){
             refIngredients.child(String.valueOf(ingredient.id)).setValue(ingredient);
         }
-        mFirebaseRef = refUser.child(MainActivity.mAuthData.getUid()).child("favorites");
+        mFirebaseRef = refUser.child(LoginActivity.mAuthData.getUid()).child("favorites");
         mFirebaseRef.child(String.valueOf(recipe.id)).setValue(recipe.id);
 
         Toast.makeText(getContext(),"Receta guardada en favoritos", Toast.LENGTH_SHORT).show();
@@ -242,7 +243,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     public void recipeExistsReturn(){
 
         Firebase userRef= new Firebase(getResources().getString(R.string.users));
-        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("favorites");
+        userRef = userRef.child(LoginActivity.mAuthData.getUid()).child("favorites");
         userRef.child(String.valueOf(recipe.id)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -264,7 +265,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     public void storageIngredients(){
         lista.clear();
         Firebase ref = new Firebase(getResources().getString(R.string.users));
-        Firebase storageRef =ref.child(MainActivity.mAuthData.getUid()).child("owningredient");
+        Firebase storageRef =ref.child(LoginActivity.mAuthData.getUid()).child("owningredient");
         storageRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -289,7 +290,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     @Override
     public void onItemClick(View view, Ingredient item) {
         Firebase ref = new Firebase(getResources().getString(R.string.users));
-        Firebase storageRef =ref.child(MainActivity.mAuthData.getUid()).child("owningredient");
+        Firebase storageRef =ref.child(LoginActivity.mAuthData.getUid()).child("owningredient");
         OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(item.id),"1","0");
         storageRef.child(String.valueOf(item.id)).setValue(ownIngredientFB);
         Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));

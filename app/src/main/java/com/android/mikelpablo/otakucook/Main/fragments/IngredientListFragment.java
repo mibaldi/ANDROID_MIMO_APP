@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.activities.HistoricalIngredientsActivity;
 import com.android.mikelpablo.otakucook.Ingredients.fragments.OwnIngredientDialog;
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -95,7 +96,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         mBtAddCategoryIngredients.setOnClickListener(this);
         mBtAddHistoricalIngredients.setOnClickListener(this);
         mBtAddOwnIngredient.setOnClickListener(this);
-        AuthData authData = MainActivity.mAuthData;
+        AuthData authData = LoginActivity.mAuthData;
         ingredientsMap = new HashMap<>();
         if (authData != null){
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));

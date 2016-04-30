@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.Recipe;
@@ -62,7 +63,7 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
     }
     public void existFirebase(long id) {
         Firebase userRef= new Firebase(context.getResources().getString(R.string.users));
-        userRef = userRef.child(MainActivity.mAuthData.getUid()).child("owningredient");
+        userRef = userRef.child(LoginActivity.mAuthData.getUid()).child("owningredient");
         userRef.child(String.valueOf(id)).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

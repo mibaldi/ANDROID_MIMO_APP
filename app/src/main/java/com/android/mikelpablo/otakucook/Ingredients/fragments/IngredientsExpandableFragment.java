@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.android.mikelpablo.otakucook.Ingredients.Models.BaseIngredient;
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientsExpandableAdapter;
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
@@ -120,8 +121,8 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
 
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (items.isEmpty()){
-            if (MainActivity.mAuthData != null) {
-                mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("storage");
+            if (LoginActivity.mAuthData != null) {
+                mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("storage");
                 getIngredientsIdStorage(refRoot);
             }
         }else {
@@ -250,7 +251,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             Firebase refUser = new Firebase(getResources().getString(R.string.users));
             Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
             refIngredient.child(String.valueOf(ingredient.id)).setValue(ingredient);
-            Firebase refOwnIngredient = refUser.child(MainActivity.mAuthData.getUid()).child("owningredient").child(String.valueOf(ingredient.id));
+            Firebase refOwnIngredient = refUser.child(LoginActivity.mAuthData.getUid()).child("owningredient").child(String.valueOf(ingredient.id));
             OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(ingredient.id), "0", "0");
             switch (CategoriesActivity.typeStatic) {
                 case R.string.shoping_cart_drawer:

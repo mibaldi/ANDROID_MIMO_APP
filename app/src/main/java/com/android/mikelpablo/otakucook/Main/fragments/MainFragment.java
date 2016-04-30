@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Measure;
 import com.android.mikelpablo.otakucook.Models.Recipe;
@@ -75,11 +76,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
 
 
-        if (MainActivity.mAuthData != null){
+        if (LoginActivity.mAuthData != null){
             mainLayout.setOnClickListener(this);
             mProgressDialog = new ProgressDialog(getContext());
             Firebase ref = new Firebase(getResources().getString(R.string.users));
-            ref.child(MainActivity.mAuthData.getUid()).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
+            ref.child(LoginActivity.mAuthData.getUid()).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     int numberChilds = (int) dataSnapshot.getChildrenCount();

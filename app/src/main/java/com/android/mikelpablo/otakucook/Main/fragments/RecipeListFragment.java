@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.android.mikelpablo.otakucook.BuildConfig;
+import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
@@ -109,9 +110,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         mProgressDialog = new ProgressDialog(getContext());
        // adapter = new RecipesListAdapter(getContext(), items);
         refRoot = new Firebase(getResources().getString(R.string.users));
-        if (MainActivity.mAuthData != null){
-            mRef = refRoot.child(MainActivity.mAuthData.getUid()).child("favorites");
-            mRefStorage = refRoot.child(MainActivity.mAuthData.getUid()).child("owningredient");
+        if (LoginActivity.mAuthData != null){
+            mRef = refRoot.child(LoginActivity.mAuthData.getUid()).child("favorites");
+            mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient");
             getIngredientsIdStorage(mRefStorage);
         }
         adapter = new RecipesListAdapter(getContext(), items);
@@ -300,7 +301,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                             myActionMenuItem.setVisible(false);
                         }
 
-                        if (MainActivity.mAuthData != null) {
+                        if (LoginActivity.mAuthData != null) {
 
                             if (fbadapter == null) {
                                 fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.item_recipelist,
