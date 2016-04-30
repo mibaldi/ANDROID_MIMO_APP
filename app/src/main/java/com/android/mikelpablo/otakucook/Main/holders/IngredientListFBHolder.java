@@ -26,7 +26,7 @@ public class IngredientListFBHolder extends RecyclerView.ViewHolder{
     public TextView name;
     public Button delete;
     public Button add;
-    public long id;
+    public String id;
     public Context context;
 
     public IngredientListFBHolder(View itemView) {
@@ -39,7 +39,7 @@ public class IngredientListFBHolder extends RecyclerView.ViewHolder{
 
     public void bindItem(Ingredient ingredient) {
         name.setText(ingredient.name);
-        id = ingredient.id;
+        id = String.valueOf(ingredient.id);
     }
 
 }

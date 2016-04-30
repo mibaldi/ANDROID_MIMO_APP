@@ -77,7 +77,7 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
     }
 
     @Override
-    public void onItemClick(View view, Long id) {
+    public void onItemClick(View view, String id) {
         if(Connectivity.isNetworkAvailable(view.getContext())) {
             Firebase refUser = new Firebase(getResources().getString(R.string.users));
             ref.child(String.valueOf(id)).child("storage").setValue("1");

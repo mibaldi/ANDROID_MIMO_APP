@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.activities.HistoricalIngredientsActivity;
+import com.android.mikelpablo.otakucook.Ingredients.fragments.OwnIngredientDialog;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -53,7 +55,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     com.github.clans.fab.FloatingActionButton mBtAddCategoryIngredients;
     com.github.clans.fab.FloatingActionButton mBtAddHistoricalIngredients;
-
+    com.github.clans.fab.FloatingActionButton mBtAddOwnIngredient;
 
     private SearchView searchView;
     private MenuItem myActionMenuItem;
@@ -84,6 +86,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         ButterKnife.bind(this, view);
         mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_category_ingredient);
         mBtAddHistoricalIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_historical_ingredient);
+        mBtAddOwnIngredient = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_own_ingredient);
 
         setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
@@ -91,6 +94,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         getActivity().setTitle(ingredientType);
         mBtAddCategoryIngredients.setOnClickListener(this);
         mBtAddHistoricalIngredients.setOnClickListener(this);
+        mBtAddOwnIngredient.setOnClickListener(this);
         AuthData authData = MainActivity.mAuthData;
         ingredientsMap = new HashMap<>();
         if (authData != null){
@@ -133,6 +137,9 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                     Intent intent2 = new Intent(getContext(), HistoricalIngredientsActivity.class);
                     getContext().startActivity(intent2);
                     break;
+                case R.id.add_own_ingredient:
+                    FragmentManager fm = getFragmentManager();
+                    OwnIngredientDialog.newInstance(1).show(fm, "dialog");
             }
         }else{
             Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
@@ -140,7 +147,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     }
 
     @Override
-    public void onItemClick(View view, Long id) {
+    public void onItemClick(View view, String id) {
         if(Connectivity.isNetworkAvailable(view.getContext())) {
             Firebase refUser = new Firebase(getResources().getString(R.string.users));
             switch (view.getId()){
@@ -148,11 +155,13 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
                     switch (ingredientType){
                         case R.string.shoping_cart_drawer:
-                            ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
+                            ref.child(id).child("shoppingcart").setValue("0");
                             break;
                         case R.string.ingredients_drawer:
-                            ref.child(String.valueOf(id)).child("storage").setValue("0");
+                            ref.child(id).child("storage").setValue("0");
+                            Log.d("fgfd",id);
                             break;
+
                     }
                     Toast.makeText(getContext(),"Ingrediente Eliminado", Toast.LENGTH_SHORT).show();
                     break;

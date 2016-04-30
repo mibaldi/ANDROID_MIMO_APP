@@ -16,7 +16,7 @@ import com.firebase.ui.FirebaseRecyclerAdapter;
 public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIngredientFB,IngredientListFBHolder>{
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Long item);
+        void onItemClick(View view, String item);
     }
 
     private OnItemClickListener listener;
@@ -45,7 +45,7 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
                 if (dataSnapshot.exists()){
 
                     String title = (String) dataSnapshot.child("name").getValue();
-                    final long id = (long) dataSnapshot.child("id").getValue();
+                    final String id = dataSnapshot.child("id").getValue(String.class);
                     ingredientListHolder.name.setText(title);
                     ingredientListHolder.id = id;
                     ingredientListHolder.delete.setOnClickListener(new View.OnClickListener() {
