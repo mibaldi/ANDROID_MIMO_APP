@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
+import com.android.mikelpablo.otakucook.Ingredients.activities.HistoricalIngredientsActivity;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -49,7 +50,10 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     @Bind(R.id.ingredientListRecyclerView)
     RecyclerView recyclerView;
+
     com.github.clans.fab.FloatingActionButton mBtAddCategoryIngredients;
+    com.github.clans.fab.FloatingActionButton mBtAddHistoricalIngredients;
+
 
     private SearchView searchView;
     private MenuItem myActionMenuItem;
@@ -79,12 +83,14 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_category_ingredient);
+        mBtAddHistoricalIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_historical_ingredient);
 
         setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
         getActivity().setTitle(ingredientType);
         mBtAddCategoryIngredients.setOnClickListener(this);
+        mBtAddHistoricalIngredients.setOnClickListener(this);
         AuthData authData = MainActivity.mAuthData;
         ingredientsMap = new HashMap<>();
         if (authData != null){
@@ -116,15 +122,20 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.add_category_ingredient:
-                if(Connectivity.isNetworkAvailable(v.getContext())) {
+        if(Connectivity.isNetworkAvailable(v.getContext())) {
+            switch (v.getId()){
+                case R.id.add_category_ingredient:
                     Intent intent = new Intent(getContext(), CategoriesActivity.class);
                     intent.putExtra("type", ingredientType);
                     getContext().startActivity(intent);
-                }else{
-                    Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
-                }
+                    break;
+                case R.id.add_historical_ingredient:
+                    Intent intent2 = new Intent(getContext(), HistoricalIngredientsActivity.class);
+                    getContext().startActivity(intent2);
+                    break;
+            }
+        }else{
+            Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
         }
     }
 

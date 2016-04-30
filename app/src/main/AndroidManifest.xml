@@ -77,6 +77,13 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="ff1c2189b92aa493cd60d97569bcd6baf9715047" />
+        <activity
+            android:name=".Ingredients.activities.HistoricalIngredientsActivity"
+            android:parentActivityName=".Main.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main.activities.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

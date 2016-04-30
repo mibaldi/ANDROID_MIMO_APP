@@ -53,15 +53,15 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_twitter"
             fab:fab_size="mini"
-            fab:fab_label="Disabled" />
+            fab:fab_label="Ingrediente propio" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab2"
+            android:id="@+id/add_historical_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_facebook"
             fab:fab_size="mini"
-            fab:fab_label="Remove button" />
+            fab:fab_label="Historial de ingredientes" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_category_ingredient"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_google"
             fab:fab_size="mini"
-            fab:fab_label="Restore Button" />
+            fab:fab_label="Ingredientes nuevos" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
