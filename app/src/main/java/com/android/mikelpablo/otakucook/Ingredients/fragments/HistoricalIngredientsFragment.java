@@ -77,7 +77,7 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
 
         ingredientType = R.string.historical;
 
-        FirebaseRecyclerAdapter<OwnIngredientFB, IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredientlist,
+        FirebaseRecyclerAdapter<OwnIngredientFB, IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredient_historical_list,
                 IngredientListFBHolder.class, query, ingredientType, this);
 
         recyclerView.setAdapter(fbadapter);

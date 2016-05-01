@@ -102,10 +102,15 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         task = getArguments().getParcelable("task");
         Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
-        long taskMiliseconds = task.seconds*1000;
-        mCountDown.setText(transformTime(taskMiliseconds));
-        activateTimer(taskMiliseconds,task);
-        mBtTimer.setOnClickListener(this);
+        if(task.seconds == 0){
+            mBtTimer.setVisibility(View.GONE);
+            mCountDown.setVisibility(View.GONE);
+        }else {
+            long taskMiliseconds = task.seconds * 1000;
+            mCountDown.setText(transformTime(taskMiliseconds));
+            activateTimer(taskMiliseconds, task);
+            mBtTimer.setOnClickListener(this);
+        }
 
 
     }
@@ -139,23 +144,29 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
+
         if (v.getId() == R.id.btTimer){
-            int type = AlarmManager.RTC_WAKEUP;
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.SECOND,60);
-            long when = calendar.getTimeInMillis();
-            Intent intent = new Intent(getContext(),AlarmReceiver.class);
-            intent.putExtra("taskName",task.name);
-            intent.putExtra("taskId",task.id);
-            Log.d("TaskId",String.valueOf(task.id));
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),(int)task.id,intent,PendingIntent.FLAG_ONE_SHOT);
+            if(mBtTimer.isEnabled()) {
+                int type = AlarmManager.RTC_WAKEUP;
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.SECOND, 60);
+                long when = calendar.getTimeInMillis();
+                Intent intent = new Intent(getContext(), AlarmReceiver.class);
+                intent.putExtra("taskName", task.name);
+                intent.putExtra("taskId", task.id);
+                Log.d("TaskId", String.valueOf(task.id));
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), (int) task.id, intent, PendingIntent.FLAG_ONE_SHOT);
 
-            countDownTimer.start();
-            mBtTimer.setEnabled(false);
-            mBtTimer.setText("Wait!");
+                countDownTimer.start();
+                mBtTimer.setEnabled(false);
+                mBtTimer.setText("Wait!");
+                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+                alarmManager.setRepeating(type,when,0,pendingIntent);
+            }else{
 
-            AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setRepeating(type,when,0,pendingIntent);
+            }
+
+
 
         }
     }

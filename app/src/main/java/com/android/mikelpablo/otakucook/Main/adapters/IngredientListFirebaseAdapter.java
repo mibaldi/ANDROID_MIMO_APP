@@ -48,11 +48,7 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
                     final String id = dataSnapshot.child("id").getValue(String.class);
                     ingredientListHolder.name.setText(title);
                     ingredientListHolder.id = id;
-                    ingredientListHolder.delete.setOnClickListener(new View.OnClickListener() {
-                        @Override public void onClick(View v) {
-                            listener.onItemClick(v, id);
-                        }
-                    });
+
 
                     switch (ingredientType){
                         case R.string.shoping_cart_drawer:
@@ -61,11 +57,15 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
                         case R.string.ingredients_drawer:
                             ingredientListHolder.add.setVisibility(View.GONE);
                             break;
-                        case R.string.historical:
-                            ingredientListHolder.add.setVisibility(View.VISIBLE);
-                            ingredientListHolder.delete.setVisibility(View.GONE);
                     }
-
+                    if(ingredientType != R.string.historical) {
+                        ingredientListHolder.delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                listener.onItemClick(v, id);
+                            }
+                        });
+                    }
                     ingredientListHolder.add.setOnClickListener(new View.OnClickListener() {
                         @Override public void onClick(View v) {
                             listener.onItemClick(v, id);
