@@ -30,13 +30,7 @@ public class RecipeFinalIngredientsHolder extends RecyclerView.ViewHolder {
         name.setText(ingredient.name);
         cbSelect.setOnCheckedChangeListener(null);
         cbSelect.setChecked(ingredient.isSelected);
-        cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //set your object's last status
-                ingredient.isSelected=isChecked;
-            }
-        });
+
     }
 
 }

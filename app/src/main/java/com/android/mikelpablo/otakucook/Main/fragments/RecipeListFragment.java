@@ -131,7 +131,10 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                 }else if (selected == R.id.posibles){
                     itemsPossibles.clear();
                     refreshSwipePossibles();
+                }else {
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
+
 
                 //ServerRecipeList(recipes, items);
             }

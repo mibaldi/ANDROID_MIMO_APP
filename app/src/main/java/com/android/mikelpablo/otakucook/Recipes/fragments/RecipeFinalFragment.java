@@ -52,6 +52,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
     private List<String> ingredientsId = new ArrayList<>();
     private RecipeFinalIngredientsAdapter adapter;
     private List<Ingredient> recipeIngredientStorage = new ArrayList<>();
+    private List<IngredientSelectable> recipeIngredientSelectablesStorage = new ArrayList<>();
 
     public RecipeFinalFragment() {
     }
@@ -81,6 +82,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         ButterKnife.bind(this, view);
         recipe = getArguments().getParcelable("recipe");
         btFinal.setOnClickListener(this);
+        btBorrar.setOnClickListener(this);
         tvMensaje.setText("Selecciona los ingredientes que se te han acabado durante la preparacion de la receta");
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
@@ -119,8 +121,9 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
 
                 }
                 recipeIngredientStorage= FirebaseUtils.getIngredientsAvailablesRecipe(ingredientsId,items);
+                recipeIngredientSelectablesStorage=IngredientSelectable.convertIngredient(recipeIngredientStorage);
 
-                adapter = new RecipeFinalIngredientsAdapter(getContext(), IngredientSelectable.convertIngredient(recipeIngredientStorage));
+                adapter = new RecipeFinalIngredientsAdapter(getContext(), recipeIngredientSelectablesStorage);
                 recyclerView.setAdapter(adapter);
 
             }
@@ -140,9 +143,24 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
                 intent.putExtra("recipe",recipe);
                 getActivity().finish();
                 getActivity().startActivity(intent);
+                break;
+            }
+            case R.id.btBorrar: {
+                deleteIngredients();
+                break;
+            }
+
+        }
+    }
+
+    private void deleteIngredients() {
+        for (IngredientSelectable i:recipeIngredientSelectablesStorage){
+            if (i.isSelected){
+                mRefStorage.child(String.valueOf(i.id)).child("storage").setValue("0");
             }
         }
     }
+
     public static class IngredientSelectable{
         public long id;
         public String name;

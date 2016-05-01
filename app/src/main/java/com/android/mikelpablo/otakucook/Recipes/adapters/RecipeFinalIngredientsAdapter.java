@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
@@ -27,15 +28,21 @@ public class RecipeFinalIngredientsAdapter extends RecyclerView.Adapter<RecipeFi
 
     @Override
     public RecipeFinalIngredientsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipelist,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipelist_final,parent,false);
 
         return new RecipeFinalIngredientsHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecipeFinalIngredientsHolder holder, int position) {
+    public void onBindViewHolder(RecipeFinalIngredientsHolder holder, final int position) {
         holder.bindItem(listItem.get(position));
-
+        holder.cbSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //set your object's last status
+                listItem.get(position).isSelected=isChecked;
+            }
+        });
     }
 
     @Override
