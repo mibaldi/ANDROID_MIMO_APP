@@ -23,7 +23,6 @@ import com.android.mikelpablo.otakucook.Ingredients.Models.BaseIngredient;
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.adapters.IngredientsExpandableAdapter;
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
-import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
@@ -34,6 +33,7 @@ import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import java.text.Normalizer;
@@ -58,7 +58,6 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
     private ProgressDialog mProgressDialog;
     private String category;
     private Firebase refRoot;
-    private static Firebase mRefStorage;
     public Context context;
     @Bind(R.id.ingredientsServer)
     RecyclerView recyclerView;
@@ -68,6 +67,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
     private IngredientsExpandableAdapter adapter;
     private ArrayList<BaseIngredient> baseIngredients = new ArrayList<>();
     private Firebase refHistorico;
+    private Query mRefStorage;
 
     public IngredientsExpandableFragment(){
 
@@ -122,7 +122,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         refRoot = new Firebase(getResources().getString(R.string.users));
         if (items.isEmpty()){
             if (LoginActivity.mAuthData != null) {
-                mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("storage");
+                mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient").orderByChild("storage").equalTo("1");
                 getIngredientsIdStorage(refRoot);
             }
         }else {
@@ -174,7 +174,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ingredientsId.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String id = postSnapshot.getValue(String.class);
+                    String id = postSnapshot.child("id").getValue(String.class);
                     ingredientsId.add(id);
                 }
                 getIngredientsServer();

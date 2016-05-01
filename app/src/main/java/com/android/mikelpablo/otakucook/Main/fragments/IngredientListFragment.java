@@ -4,10 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -16,16 +14,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.activities.HistoricalIngredientsActivity;
-import com.android.mikelpablo.otakucook.Ingredients.fragments.OwnIngredientDialog;
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
-import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.R;
@@ -56,7 +51,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
     com.github.clans.fab.FloatingActionButton mBtAddCategoryIngredients;
     com.github.clans.fab.FloatingActionButton mBtAddHistoricalIngredients;
-    com.github.clans.fab.FloatingActionButton mBtAddOwnIngredient;
+    com.github.clans.fab.FloatingActionMenu mBtFloatingMenu;
 
     private SearchView searchView;
     private MenuItem myActionMenuItem;
@@ -87,7 +82,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         ButterKnife.bind(this, view);
         mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_category_ingredient);
         mBtAddHistoricalIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_historical_ingredient);
-        mBtAddOwnIngredient = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_own_ingredient);
+        mBtFloatingMenu = (com.github.clans.fab.FloatingActionMenu) getActivity().findViewById(R.id.menu_red);
 
         setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
@@ -95,7 +90,6 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         getActivity().setTitle(ingredientType);
         mBtAddCategoryIngredients.setOnClickListener(this);
         mBtAddHistoricalIngredients.setOnClickListener(this);
-        mBtAddOwnIngredient.setOnClickListener(this);
         AuthData authData = LoginActivity.mAuthData;
         ingredientsMap = new HashMap<>();
         if (authData != null){
@@ -128,6 +122,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if(Connectivity.isNetworkAvailable(v.getContext())) {
+            mBtFloatingMenu.close(true);
             switch (v.getId()){
                 case R.id.add_category_ingredient:
                     Intent intent = new Intent(getContext(), CategoriesActivity.class);
@@ -135,12 +130,10 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                     getContext().startActivity(intent);
                     break;
                 case R.id.add_historical_ingredient:
+                    mBtAddHistoricalIngredients.hide(true);
                     Intent intent2 = new Intent(getContext(), HistoricalIngredientsActivity.class);
                     getContext().startActivity(intent2);
                     break;
-                case R.id.add_own_ingredient:
-                    FragmentManager fm = getFragmentManager();
-                    OwnIngredientDialog.newInstance(1).show(fm, "dialog");
             }
         }else{
             Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();

@@ -63,7 +63,7 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
         if (authData != null) {
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
             ref = refRoot.child(authData.getUid()).child("owningredient");
-            query =ref.orderByChild("shoppingcart").equalTo("0");
+            query =ref.orderByChild("storage").equalTo("0");
         }
 
         ingredientType = R.string.historical;

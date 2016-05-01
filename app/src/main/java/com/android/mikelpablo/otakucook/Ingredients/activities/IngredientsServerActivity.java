@@ -7,8 +7,9 @@ import android.view.MenuItem;
 
 import com.android.mikelpablo.otakucook.Ingredients.fragments.IngredientsExpandableFragment;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Utils.BaseActivity;
 
-public class IngredientsServerActivity extends AppCompatActivity {
+public class IngredientsServerActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +18,9 @@ public class IngredientsServerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String category = intent.getStringExtra("category");
         this.setTitle(category);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         IngredientsExpandableFragment ingredientsServerFragment = IngredientsExpandableFragment.newInstance(category);
         getSupportFragmentManager().beginTransaction().replace(R.id.ingredientsServer_content,ingredientsServerFragment).commit();
     }

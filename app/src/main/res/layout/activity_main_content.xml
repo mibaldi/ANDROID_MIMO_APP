@@ -48,14 +48,6 @@
         fab:menu_fab_label="Menu label">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_own_ingredient"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_twitter"
-            fab:fab_size="mini"
-            fab:fab_label="Ingrediente propio" />
-
-        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_historical_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
+                if(itemIdPersist == R.id.item2 || itemIdPersist == R.id.item4){
+                    mMnAddCategoryIngredients.setVisibility(View.VISIBLE);
+                }
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.item1:
