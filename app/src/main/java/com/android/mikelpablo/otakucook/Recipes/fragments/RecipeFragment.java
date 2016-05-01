@@ -89,6 +89,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     private Recipe recipe;
     private ArrayList<String> lista = new ArrayList<>();
     private RecipeAdapter adapter;
+    private List<IngredientType> itemsType = new ArrayList<>();
+    private ArrayList<String> listaShoppingCart = new ArrayList<>();
+    private ArrayList<String> listaHistorical= new ArrayList<>();
 
     public RecipeFragment() {
     }
@@ -108,6 +111,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
 
         recipeExistsReturn();
         storageIngredients();
+
 
     }
 
@@ -164,10 +168,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         //ib_favorite.setEnabled(false);
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
+        itemsType = IngredientType.convertIngredient(items);
         btCook.setOnClickListener(this);
         ib_favorite.setOnClickListener(this);
         bt_tasks.setOnClickListener(this);
-        adapter = new RecipeAdapter(getContext(), items,this,lista);
+        adapter = new RecipeAdapter(getContext(), itemsType,this,lista,listaShoppingCart,listaHistorical);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -264,6 +269,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     }
     public void storageIngredients(){
         lista.clear();
+        listaHistorical.clear();
+        listaShoppingCart.clear();
         Firebase ref = new Firebase(getResources().getString(R.string.users));
         Firebase storageRef =ref.child(LoginActivity.mAuthData.getUid()).child("owningredient");
         storageRef.addValueEventListener(new ValueEventListener() {
@@ -275,8 +282,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
 
                         lista.add(ownIngredientFB.id);
                         Log.d("PABLO",ownIngredientFB.id);
+                    }else if (ownIngredientFB.shoppingcart.equals("1")) {
+                        listaShoppingCart.add(ownIngredientFB.id);
+                    }else if (ownIngredientFB.storage.equals("0") && ownIngredientFB.shoppingcart.equals("0")) {
+                        listaHistorical.add(ownIngredientFB.id);
                     }
-
+                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -288,7 +299,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     }
 
     @Override
-    public void onItemClick(View view, Ingredient item) {
+    public void onItemClick(View view, IngredientType item,int position) {
         Firebase ref = new Firebase(getResources().getString(R.string.users));
         Firebase storageRef =ref.child(LoginActivity.mAuthData.getUid()).child("owningredient");
         OwnIngredientFB ownIngredientFB = new OwnIngredientFB(String.valueOf(item.id),"1","0");
@@ -296,9 +307,42 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
         refIngredient.child(String.valueOf(item.id)).setValue(item);
         //view.setVisibility(View.GONE);
+        adapter.notifyItemChanged(position);
         adapter.notifyDataSetChanged();
        // view.setBackgroundColor(Color.YELLOW);
         Snackbar.make(getView(), "Ingrediente en el carrito", Snackbar.LENGTH_LONG).show();
         Log.d("PABLO",""+ item);
+    }
+    public static class IngredientType{
+        public enum typeEnum {
+            shoppingCart,storage,historical
+        }
+        public long id;
+        public String name;
+        public Boolean frozen;
+        public String category;
+        public String baseType;
+        public typeEnum type = typeEnum.historical;
+
+        public IngredientType(long id, String name, Boolean frozen, String category, String baseType, typeEnum type) {
+            this.id = id;
+            this.name = name;
+            this.frozen = frozen;
+            this.category = category;
+            this.baseType = baseType;
+            this.type = type;
+        }
+
+        public static IngredientType convert(Ingredient i){
+            IngredientType ingredientType = new IngredientType(i.id,i.name,i.frozen,i.category,i.baseType,typeEnum.historical);
+            return ingredientType;
+        }
+        public static List<IngredientType> convertIngredient(List<Ingredient> lista){
+            List<IngredientType> listaFinal = new ArrayList<>();
+            for (Ingredient i:lista){
+                listaFinal.add(convert(i));
+            }
+            return listaFinal;
+        }
     }
 }

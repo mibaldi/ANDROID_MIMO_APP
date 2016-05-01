@@ -124,8 +124,8 @@
         android:src="@android:drawable/ic_dialog_email"
         android:visibility="visible"
         app:fabSize="normal"
-        app:layout_anchor="@id/collapsing_toolbar"
-        app:layout_anchorGravity="bottom|end"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|right|end"
         tools:visibility="visible"/>
 
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeHolder;
 import com.firebase.client.Firebase;
 
@@ -19,18 +20,22 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeHolder>{
 
     public interface OnItemClickListener {
-        void onItemClick(View view, Ingredient item);
+        void onItemClick(View view, RecipeFragment.IngredientType item,int position);
     }
-    private List<Ingredient> listItem;
+    private List<RecipeFragment.IngredientType> listItem;
     private List<String> listItemFBStorage;
+    private List<String> listItemFBShoppingCart;
+    private List<String> listItemFBHistorical;
     private OnItemClickListener listener;
     private Context context;
     private Firebase mref;
-    public RecipeAdapter(Context context, List<Ingredient> objects, OnItemClickListener listener,List<String>itemsID) {
+    public RecipeAdapter(Context context, List<RecipeFragment.IngredientType> objects, OnItemClickListener listener, List<String>itemsIDStorage, List<String>itemsIDShoppingCart, List<String>itemsIDHistorical) {
         listItem = objects;
         this.listener = listener;
         this.context = context;
-       this.listItemFBStorage=itemsID;
+       this.listItemFBStorage=itemsIDStorage;
+        this.listItemFBShoppingCart=itemsIDShoppingCart;
+        this.listItemFBHistorical=itemsIDHistorical;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeHolder>{
     @Override
     public void onBindViewHolder(RecipeHolder holder, int position) {
 
-        holder.bindItem(listItem.get(position),listener,listItemFBStorage);
+        holder.bindItem(listItem.get(position),listener,listItemFBStorage,listItemFBShoppingCart,listItemFBHistorical,position);
     }
 
     @Override
