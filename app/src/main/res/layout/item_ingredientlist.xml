@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="Añadir"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+
         android:layout_toLeftOf="@+id/btEliminarIngrediente"
         android:layout_toStartOf="@+id/btEliminarIngrediente"
         android:visibility="gone"/>
