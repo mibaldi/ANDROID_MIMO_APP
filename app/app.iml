@@ -43,6 +43,12 @@
       <sourceFolder url="file://$MODULE_DIR$/src/premiumDebug/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/premiumDebug/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/premiumDebug/shaders" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/premium/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/premium/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/premium/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/premium/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/premium/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/premium/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPremiumDebug/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPremiumDebug/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPremiumDebug/assets" type="java-test-resource" />
@@ -51,12 +57,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/testPremiumDebug/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPremiumDebug/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/testPremiumDebug/shaders" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/premium/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/premium/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/premium/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/premium/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/premium/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/resValues/androidTest/premium/debug" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/premium/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/premium/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/premium/assets" type="java-resource" />

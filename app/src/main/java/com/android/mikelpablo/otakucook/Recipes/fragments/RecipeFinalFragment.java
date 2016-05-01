@@ -122,7 +122,9 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
                 }
                 recipeIngredientStorage= FirebaseUtils.getIngredientsAvailablesRecipe(ingredientsId,items);
                 recipeIngredientSelectablesStorage=IngredientSelectable.convertIngredient(recipeIngredientStorage);
-
+                if (recipeIngredientSelectablesStorage.isEmpty()){
+                   btBorrar.setVisibility(View.GONE);
+                }
                 adapter = new RecipeFinalIngredientsAdapter(getContext(), recipeIngredientSelectablesStorage);
                 recyclerView.setAdapter(adapter);
 

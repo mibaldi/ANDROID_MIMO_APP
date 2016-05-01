@@ -250,11 +250,21 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(Connectivity.isNetworkAvailable(getContext())) {
-            if (selected != v.getId()) {
+
                 btTodas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
                 btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
                 btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
                 selected = v.getId();
+               if (selected == R.id.todas){
+                   btPosibles.setEnabled(true);
+                   btFavoritas.setEnabled(true);
+               }else if (selected == R.id.posibles){
+                   btTodas.setEnabled(true);
+                   btFavoritas.setEnabled(true);
+               }else {
+                   btTodas.setEnabled(true);
+                   btPosibles.setEnabled(true);
+               }
                 if (searchView != null) {
                     myActionMenuItem.collapseActionView();
                     searchView.setQuery("", false);
@@ -267,6 +277,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         if (myActionMenuItem != null) {
                             myActionMenuItem.setVisible(true);
                         }
+                        btTodas.setEnabled(false);
                         getActivity().setTitle("Todas las recetas");
 
                         recyclerView.setAdapter(adapter);
@@ -283,6 +294,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         if (myActionMenuItem != null) {
                             myActionMenuItem.setVisible(true);
                         }
+                        btPosibles.setEnabled(false);
                         itemsPossibles.clear();
                         getActivity().setTitle("Posibles recetas");
                         v.setBackgroundColor(Color.BLUE);
@@ -303,6 +315,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         if (myActionMenuItem != null) {
                             myActionMenuItem.setVisible(false);
                         }
+                        btFavoritas.setEnabled(false);
 
                         if (LoginActivity.mAuthData != null) {
 
@@ -334,7 +347,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
                         break;
                 }
-            }
+
         }else{
             Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
         }

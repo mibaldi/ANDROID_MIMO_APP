@@ -120,7 +120,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
 
         refRoot = new Firebase(getResources().getString(R.string.users));
         adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
-        recyclerView.setAdapter(adapter);
+
         if (items.isEmpty()){
             if (LoginActivity.mAuthData != null) {
                 mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient").orderByChild("storage").equalTo("1");
@@ -129,21 +129,8 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         }else {
             mProgressDialog.dismiss();
         }
-
-
-        //recyclerView.setAdapter(adapter);
-
-        //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
-        //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
-
-        //
-        //
-        // generateBaseIngredients();
-
-        //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsExpandableFragment.this);
-        //recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -173,6 +160,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
 
     private void getIngredientsIdStorage(Firebase refRoot) {
         ingredientsId.clear();
+        recyclerView.setAdapter(adapter);
         mRefStorage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -208,11 +196,6 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
                 items = (ArrayList<Ingredient>) response.body();
                 generateBaseIngredients();
-
-
-                //adapter = new IngredientsExpandableAdapter(,getActivity(),IngredientsExpandableFragment.this);
-                //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
-                //recyclerView.setAdapter(adapter);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
             }
@@ -299,7 +282,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             }
 
         }
-
+        recyclerView.getAdapter().notifyDataSetChanged();
         Log.d("IngredientsServer",String.valueOf(baseIngredients.size()));
         Log.d("IngredientsServer","cantidad de items: "+items.size());
         adapter.notifyDataSetChanged();
