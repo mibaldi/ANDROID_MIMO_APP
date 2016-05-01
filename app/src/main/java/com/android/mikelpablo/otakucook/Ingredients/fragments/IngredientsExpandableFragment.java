@@ -78,7 +78,6 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
                 .normalize(category, Normalizer.Form.NFD)
                 .replaceAll("[^\\p{ASCII}]", "")
                 .replaceAll(" y ","_");
-
     }
 
     @Override
@@ -120,6 +119,8 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         mProgressDialog.show();
 
         refRoot = new Firebase(getResources().getString(R.string.users));
+        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
+        recyclerView.setAdapter(adapter);
         if (items.isEmpty()){
             if (LoginActivity.mAuthData != null) {
                 mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient").orderByChild("storage").equalTo("1");
@@ -129,13 +130,17 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             mProgressDialog.dismiss();
         }
 
+
+        //recyclerView.setAdapter(adapter);
+
         //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
         //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
 
         //
-        generateBaseIngredients();
+        //
+        // generateBaseIngredients();
 
         //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsExpandableFragment.this);
         //recyclerView.setAdapter(adapter);
@@ -167,7 +172,6 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
     }
 
     private void getIngredientsIdStorage(Firebase refRoot) {
-
         ingredientsId.clear();
         mRefStorage.addValueEventListener(new ValueEventListener() {
             @Override
@@ -298,7 +302,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
 
         Log.d("IngredientsServer",String.valueOf(baseIngredients.size()));
         Log.d("IngredientsServer","cantidad de items: "+items.size());
-        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
-        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
     }
 }
