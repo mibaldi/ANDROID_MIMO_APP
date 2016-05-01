@@ -6,6 +6,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
+        android:textAlignment="center"
+
         android:id="@+id/tvMensaje"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -14,9 +16,8 @@
         android:layout_alignEnd="@+id/btFinal" />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/recipeFinalListRecyclerView"
-        android:layout_above="@+id/btFinal"
         android:layout_below="@+id/tvMensaje">
     </android.support.v7.widget.RecyclerView>
     <Button
@@ -24,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Finalizar"
         android:id="@+id/btFinal"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/recipeFinalListRecyclerView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Borrar"
         android:id="@+id/btBorrar"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/recipeFinalListRecyclerView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

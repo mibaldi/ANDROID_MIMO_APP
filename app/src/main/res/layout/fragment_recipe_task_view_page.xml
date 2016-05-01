@@ -7,13 +7,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_00_00_00"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/taskDescription"
+        android:layout_alignParentLeft="true"
         android:textSize="20dp"/>
     <Button
         android:id="@+id/btTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/taskDescription"
         android:layout_alignParentRight="true"
         android:text="start"/>
 
@@ -23,12 +24,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/taskDescription"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/taskPhoto" />
+        android:layout_below="@+id/taskPhoto"
+        android:layout_alignRight="@+id/btTimer"
+        android:layout_alignEnd="@+id/btTimer" />
 
     <ImageView
         android:layout_width="wrap_content"

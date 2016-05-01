@@ -17,11 +17,12 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeTaskViewPageAdapter;
 import com.android.mikelpablo.otakucook.Recipes.fragments.DialogFinishRecipeApp;
+import com.android.mikelpablo.otakucook.Utils.BaseActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class RecipeTaskViewPageActivity extends AppCompatActivity {
+public class RecipeTaskViewPageActivity extends BaseActivity {
     @Bind(R.id.view_pager)
     ViewPager viewPager;
     @Bind(R.id.pager_tab_strip)
@@ -38,6 +39,10 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         recipe= intent.getParcelableExtra("recipe");
         ButterKnife.bind(this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        this.setTitle("Pasos de la receta");
         adapter = new RecipeTaskViewPageAdapter(this,recipe.tasks);
         pagerTabStrip.setDrawFullUnderline(false);
         pagerTabStrip.setTabIndicatorColorResource(R.color.primary);
@@ -70,7 +75,7 @@ public class RecipeTaskViewPageActivity extends AppCompatActivity {
 
             if( mPageEnd && arg0 == selectedIndex && !callHappened && !izquierda)
             {
-                FragmentManager fm = getFragmentManager();
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 DialogFinishRecipeApp.newInstance(1,recipe).show(fm, "dialog");
                 mPageEnd = false;
                 callHappened = true;

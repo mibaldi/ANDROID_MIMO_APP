@@ -6,10 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 
-public class DialogExitApp extends android.app.DialogFragment  {
+public class DialogExitApp extends DialogFragment {
 
     public static DialogExitApp newInstance(int title) {
         DialogExitApp frag = new DialogExitApp();

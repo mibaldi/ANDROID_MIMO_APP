@@ -6,13 +6,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeFinalActivity;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 
-public class DialogFinishRecipeApp extends android.app.DialogFragment  {
+public class DialogFinishRecipeApp extends DialogFragment {
 
     public static DialogFinishRecipeApp newInstance(int title,Recipe recipe) {
         DialogFinishRecipeApp frag = new DialogFinishRecipeApp();
