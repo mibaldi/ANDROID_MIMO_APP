@@ -15,8 +15,8 @@
         android:id="@+id/btAddIngredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Añadir"
         android:layout_alignParentTop="true"
+        android:text="@string/comprar"
         android:layout_toLeftOf="@+id/btEliminarIngrediente"
         android:layout_toStartOf="@+id/btEliminarIngrediente"
         android:visibility="gone"/>
@@ -28,6 +28,6 @@
         android:text="@string/eliminar"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

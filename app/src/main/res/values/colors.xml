@@ -8,4 +8,9 @@
     <color name="secondary_text">#727272</color>
     <color name="icons">#212121</color>
     <color name="divider">#B6B6B6</color>
+    <color name="exist">#a9ff98</color>
+    <color name="not_exist">#ff9d98</color>
+    <color name="in_shopping">#ffe598</color>
+    <color name="white">#ffffff</color>
+    <color name="accent2">#8003A9F4</color>
 </resources>

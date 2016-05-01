@@ -18,6 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class RecipeTaskListActivity extends BaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

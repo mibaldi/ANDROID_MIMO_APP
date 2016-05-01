@@ -15,18 +15,18 @@
         <item>Verduras</item>
     </string-array>
     <array name="iconos">
-        <item>@mipmap/ic_congelados</item>
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_congelados</item>
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_congelados</item>
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_congelados</item>
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_congelados</item>
-        <item>@mipmap/ic_launcher</item>
-        <item>@mipmap/ic_congelados</item>
-        <item>@mipmap/ic_launcher</item>
+        <item>@drawable/salsas</item>
+        <item>@drawable/carne</item>
+        <item>@drawable/congelado</item>
+        <item>@drawable/derivados</item>
+        <item>@drawable/dulces</item>
+        <item>@drawable/fruta</item>
+        <item>@drawable/lacteos</item>
+        <item>@drawable/legumbres</item>
+        <item>@drawable/otros</item>
+        <item>@drawable/pescado</item>
+        <item>@drawable/tuberculos</item>
+        <item>@drawable/verduras</item>
     </array>
     <string-array name="listArray">
         <item>Home</item>

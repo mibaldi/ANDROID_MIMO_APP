@@ -55,13 +55,13 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         name.setText(ingredient.name);
         if (itemsIDStorage.contains(String.valueOf(ingredient.id))){
             ingredient.type = RecipeFragment.IngredientType.typeEnum.storage;
-            itemView.setBackgroundColor(Color.GREEN);
+            itemView.setBackground(context.getResources().getDrawable(R.drawable.exist_item));
         }else if (itemsIDShoppingCart.contains(String.valueOf(ingredient.id))){
             ingredient.type = RecipeFragment.IngredientType.typeEnum.shoppingCart;
-            itemView.setBackgroundColor(Color.YELLOW);
+            itemView.setBackground(context.getResources().getDrawable(R.drawable.in_cart_item));
         }else {
             add.setVisibility(View.VISIBLE);
-            itemView.setBackgroundColor(Color.RED);
+            itemView.setBackground(context.getResources().getDrawable(R.drawable.not_exist_item));
             ingredient.type = RecipeFragment.IngredientType.typeEnum.historical;
         }
 

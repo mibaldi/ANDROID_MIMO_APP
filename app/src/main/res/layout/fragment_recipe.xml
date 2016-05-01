@@ -53,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
+                    android:layout_margin="5dp"
                     android:id="@+id/recipeName"
 
                     android:textStyle="bold"
@@ -63,18 +64,21 @@
                     android:layout_alignEnd="@+id/textView2" />
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/ratingBar"
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
-                    android:text="Ingredientes necesarios" />
+                    android:layout_marginBottom="10dp"
+                    android:text="Ingredientes necesarios"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recipeIngredientsListRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/textView2">
+                    android:layout_below="@+id/textView2"
+                    android:scrollbars="vertical"
+                    android:fadeScrollbars="true">
 
                 </android.support.v7.widget.RecyclerView>
 
@@ -95,26 +99,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-
-        <Button
-            android:id="@+id/bt_cook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cocinar"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/bt_tasks" />
+            android:background="@color/accent2">
+            <Button
+                android:id="@+id/bt_cook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cocinar"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/bt_tasks" />
 
-        <Button
-            android:id="@+id/bt_tasks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/ver_pasos"
-            android:layout_alignParentBottom="true" />
+            <Button
+                android:id="@+id/bt_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/ver_pasos"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+
+
+
     </RelativeLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

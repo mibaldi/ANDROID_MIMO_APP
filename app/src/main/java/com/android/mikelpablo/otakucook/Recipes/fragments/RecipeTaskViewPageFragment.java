@@ -102,6 +102,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         task = getArguments().getParcelable("task");
         Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
+        //int notif = RecipeTaskViewPageActivity.manager.getActiveNotifications().length;
         if(task.seconds == 0){
             mBtTimer.setVisibility(View.GONE);
             mCountDown.setVisibility(View.GONE);
