@@ -119,48 +119,30 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         mProgressDialog.show();
 
         refRoot = new Firebase(getResources().getString(R.string.users));
-        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
-
         if (items.isEmpty()){
             if (LoginActivity.mAuthData != null) {
-                mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient").orderByChild("storage").equalTo("1");
+                mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient");
                 getIngredientsIdStorage(refRoot);
             }
         }else {
             mProgressDialog.dismiss();
         }
+
+        //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
+        //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
-    }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
+        //
+        generateBaseIngredients();
 
-        inflater.inflate(R.menu.menu_search,menu);
-
-       myActionMenuItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) myActionMenuItem.getActionView();
-        searchView.setOnQueryTextListener(this);
-
-        MenuItemCompat.setOnActionExpandListener(myActionMenuItem, new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                //adapter.setFilter(items);
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                return true;
-            }
-        });
-
+        //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsExpandableFragment.this);
+        //recyclerView.setAdapter(adapter);
     }
 
     private void getIngredientsIdStorage(Firebase refRoot) {
+
         ingredientsId.clear();
-        recyclerView.setAdapter(adapter);
         mRefStorage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -282,10 +264,10 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             }
 
         }
-        recyclerView.getAdapter().notifyDataSetChanged();
+
         Log.d("IngredientsServer",String.valueOf(baseIngredients.size()));
         Log.d("IngredientsServer","cantidad de items: "+items.size());
-        adapter.notifyDataSetChanged();
-
+        adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
+        recyclerView.setAdapter(adapter);
     }
 }

@@ -14,15 +14,19 @@ import com.android.mikelpablo.otakucook.Utils.BaseActivity;
  * Created by pabji on 30/04/2016.
  */
 public class HistoricalIngredientsActivity extends BaseActivity {
+    private int typeStatic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historical);
+        Intent intent = getIntent();
+        typeStatic = intent.getIntExtra("type",0);
         this.setTitle(R.string.historical);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        HistoricalIngredientsFragment historicalIngredientsFragment = HistoricalIngredientsFragment.newInstance();
+        HistoricalIngredientsFragment historicalIngredientsFragment = HistoricalIngredientsFragment.newInstance(typeStatic);
         getSupportFragmentManager().beginTransaction().replace(R.id.historical_content,historicalIngredientsFragment).commit();
     }
 

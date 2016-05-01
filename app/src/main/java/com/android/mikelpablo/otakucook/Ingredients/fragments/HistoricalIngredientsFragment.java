@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,9 +42,10 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
     private Query query;
     private Firebase ref;
 
-    public static HistoricalIngredientsFragment newInstance() {
+    public static HistoricalIngredientsFragment newInstance(int type) {
         HistoricalIngredientsFragment fragment = new HistoricalIngredientsFragment();
         Bundle args = new Bundle();
+        args.putInt("TYPE",type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +65,14 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
         if (authData != null) {
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
             ref = refRoot.child(authData.getUid()).child("owningredient");
-            query =ref.orderByChild("storage").equalTo("0");
+            switch (getArguments().getInt("TYPE")) {
+                case R.string.shoping_cart_drawer:
+                    query =ref.orderByChild("shoppingcart").equalTo("0");
+                    break;
+                case R.string.ingredients_drawer:
+                    query =ref.orderByChild("storage").equalTo("0");
+                    break;
+            }
         }
 
         ingredientType = R.string.historical;
@@ -80,9 +89,19 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
     @Override
     public void onItemClick(View view, String id) {
         if(Connectivity.isNetworkAvailable(view.getContext())) {
-            Firebase refUser = new Firebase(getResources().getString(R.string.users));
-            ref.child(String.valueOf(id)).child("storage").setValue("1");
-            Toast.makeText(getContext(),"Ingrediente comprado", Toast.LENGTH_SHORT).show();
+            if(view.getId() == R.id.btAddIngredient) {
+                switch (getArguments().getInt("TYPE")) {
+                    case R.string.shoping_cart_drawer:
+                        ref.child(String.valueOf(id)).child("shoppingcart").setValue("1");
+                        Toast.makeText(getContext(), "Ingrediente añadido a la lista de compra", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.string.ingredients_drawer:
+                        ref.child(String.valueOf(id)).child("storage").setValue("1");
+                        Toast.makeText(getContext(), "Ingrediente comprado", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+            }
 
         }else{
             Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();

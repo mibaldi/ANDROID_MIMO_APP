@@ -132,6 +132,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                 case R.id.add_historical_ingredient:
                     mBtAddHistoricalIngredients.hide(true);
                     Intent intent2 = new Intent(getContext(), HistoricalIngredientsActivity.class);
+                    intent2.putExtra("type", ingredientType);
                     getContext().startActivity(intent2);
                     break;
             }
