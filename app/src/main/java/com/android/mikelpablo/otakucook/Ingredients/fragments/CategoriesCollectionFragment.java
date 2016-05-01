@@ -1,5 +1,7 @@
 package com.android.mikelpablo.otakucook.Ingredients.fragments;
 
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,9 +47,10 @@ public class CategoriesCollectionFragment extends Fragment implements View.OnCli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String[] categoriesName = getResources().getStringArray(R.array.categories);
-        for(int i= 0; i<categoriesName.length; i++){
-            categories.add(new Category(categoriesName[i],i));
+        String[] categoriesNames = getResources().getStringArray(R.array.categories);
+        TypedArray icons = getResources().obtainTypedArray(R.array.iconos);
+        for(int i= 0; i<categoriesNames.length; i++){
+            categories.add(new Category(categoriesNames[i],icons.getDrawable(i)));
         }
     }
 

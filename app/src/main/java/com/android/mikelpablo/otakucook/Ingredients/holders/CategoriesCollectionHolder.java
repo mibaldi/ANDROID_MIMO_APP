@@ -33,7 +33,7 @@ public class CategoriesCollectionHolder  extends RecyclerView.ViewHolder impleme
 
     public void bindCategory(Category category){
         category_name.setText(category.name);
-        category_icon.setImageDrawable(itemView.getResources().getDrawable(R.mipmap.ic_congelados));
+        category_icon.setImageDrawable(category.icon_id);
         //Picasso.with(itemView.getContext()).load(R.mipmap.ic_launcher).into(category_icon);
     }
 

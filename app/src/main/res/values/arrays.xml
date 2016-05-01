@@ -14,6 +14,20 @@
         <item>Tubérculos</item>
         <item>Verduras</item>
     </string-array>
+    <array name="iconos">
+        <item>@mipmap/ic_congelados</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_congelados</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_congelados</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_congelados</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_congelados</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_congelados</item>
+        <item>@mipmap/ic_launcher</item>
+    </array>
     <string-array name="listArray">
         <item>Home</item>
         <item>Black</item>
