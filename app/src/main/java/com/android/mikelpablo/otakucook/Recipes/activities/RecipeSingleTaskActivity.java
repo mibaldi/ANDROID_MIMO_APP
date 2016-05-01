@@ -11,8 +11,9 @@ import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFinalFragment;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeSingleTaskFragment;
+import com.android.mikelpablo.otakucook.Utils.BaseActivity;
 
-public class RecipeSingleTaskActivity extends AppCompatActivity {
+public class RecipeSingleTaskActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,10 @@ public class RecipeSingleTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_single_task);
         Intent intent = getIntent();
         Task task= intent.getParcelableExtra("task");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        this.setTitle("Paso "+task.name);
         RecipeSingleTaskFragment recipeSingleTaskFragment = RecipeSingleTaskFragment.newInstance(task);
         getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeSingleTask,recipeSingleTaskFragment).commit();
     }

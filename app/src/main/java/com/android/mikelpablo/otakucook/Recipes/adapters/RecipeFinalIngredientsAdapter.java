@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFinalFragment;
 import com.android.mikelpablo.otakucook.Recipes.holders.RecipeFinalIngredientsHolder;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class RecipeFinalIngredientsAdapter extends RecyclerView.Adapter<RecipeFinalIngredientsHolder>{
 
-    private List<Ingredient> listItem;
+    private List<RecipeFinalFragment.IngredientSelectable> listItem;
     private Context context;
-    public RecipeFinalIngredientsAdapter(Context context, List<Ingredient> objects) {
+    public RecipeFinalIngredientsAdapter(Context context, List<RecipeFinalFragment.IngredientSelectable> objects) {
         listItem = objects;
         this.context = context;
     }
@@ -34,6 +35,7 @@ public class RecipeFinalIngredientsAdapter extends RecyclerView.Adapter<RecipeFi
     @Override
     public void onBindViewHolder(RecipeFinalIngredientsHolder holder, int position) {
         holder.bindItem(listItem.get(position));
+
     }
 
     @Override

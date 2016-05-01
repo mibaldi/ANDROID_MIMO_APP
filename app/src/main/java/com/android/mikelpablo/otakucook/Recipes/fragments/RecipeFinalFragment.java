@@ -119,7 +119,8 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
 
                 }
                 recipeIngredientStorage= FirebaseUtils.getIngredientsAvailablesRecipe(ingredientsId,items);
-                adapter = new RecipeFinalIngredientsAdapter(getContext(), recipeIngredientStorage);
+
+                adapter = new RecipeFinalIngredientsAdapter(getContext(), IngredientSelectable.convertIngredient(recipeIngredientStorage));
                 recyclerView.setAdapter(adapter);
 
             }
@@ -142,13 +143,33 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
             }
         }
     }
-    /*public List<Ingredient> ingredientsDelete(List<String> ids, List<Ingredient>ingredientList){
-        List<Ingredient> recipeIngredientStorage = new ArrayList<>();
-        for ( Ingredient ingredient: ingredientList){
-            if (ids.contains(String.valueOf(ingredient.id))){
-                recipeIngredientStorage.add(ingredient);
-            }
+    public static class IngredientSelectable{
+        public long id;
+        public String name;
+        public Boolean frozen;
+        public String category;
+        public String baseType;
+        public boolean isSelected = false;
+
+        public IngredientSelectable(long id, String name, Boolean frozen, String category, String baseType, boolean isSelected) {
+            this.id = id;
+            this.name = name;
+            this.frozen = frozen;
+            this.category = category;
+            this.baseType = baseType;
+            this.isSelected = isSelected;
         }
-        return recipeIngredientStorage;
-    }*/
+
+        public static IngredientSelectable convert(Ingredient i){
+            IngredientSelectable ingredientSelectable = new IngredientSelectable(i.id,i.name,i.frozen,i.category,i.baseType,false);
+            return ingredientSelectable;
+        }
+        public static List<IngredientSelectable> convertIngredient(List<Ingredient> lista){
+            List<IngredientSelectable> listaFinal = new ArrayList<>();
+            for (Ingredient i:lista){
+                listaFinal.add(convert(i));
+            }
+            return listaFinal;
+        }
+    }
 }

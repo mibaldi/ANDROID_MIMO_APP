@@ -10,8 +10,9 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFinalFragment;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeFragment;
+import com.android.mikelpablo.otakucook.Utils.BaseActivity;
 
-public class RecipeFinalActivity extends AppCompatActivity {
+public class RecipeFinalActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,10 @@ public class RecipeFinalActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Recipe recipe= intent.getParcelableExtra("recipe");
         Log.d("RecipeActivity",recipe.author);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        this.setTitle("Final de la receta");
         RecipeFinalFragment recipeFinalFragment = RecipeFinalFragment.newInstance(recipe);
         getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeFinal,recipeFinalFragment).commit();
     }
