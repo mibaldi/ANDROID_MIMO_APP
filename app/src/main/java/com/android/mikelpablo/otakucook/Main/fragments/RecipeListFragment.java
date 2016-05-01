@@ -251,9 +251,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         if(Connectivity.isNetworkAvailable(getContext())) {
 
-                btTodas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
-                btFavoritas.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
-                btPosibles.setBackground(getResources().getDrawable(android.R.drawable.btn_default));
+                btTodas.setBackground(getResources().getDrawable(R.drawable.custom_tab_bar_button));
+                btFavoritas.setBackground(getResources().getDrawable(R.drawable.custom_tab_bar_button));
+                btPosibles.setBackground(getResources().getDrawable(R.drawable.custom_tab_bar_button));
                 selected = v.getId();
                if (selected == R.id.todas){
                    btPosibles.setEnabled(true);
@@ -281,7 +281,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         getActivity().setTitle("Todas las recetas");
 
                         recyclerView.setAdapter(adapter);
-                        v.setBackgroundColor(Color.BLUE);
+                        v.setBackgroundColor(getResources().getColor(R.color.accent2));
                         items.clear();
                         if (items.isEmpty()) {
                             initOnclick();
@@ -297,7 +297,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         btPosibles.setEnabled(false);
                         itemsPossibles.clear();
                         getActivity().setTitle("Posibles recetas");
-                        v.setBackgroundColor(Color.BLUE);
+                        v.setBackgroundColor(getResources().getColor(R.color.accent2));
                         if (itemsPossibles.isEmpty()) {
                             initOnclick();
                             String ingredientsIdString = "0";
@@ -342,7 +342,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         //recyclerView.setAdapter(fbadapter);
 
                         getActivity().setTitle("Recetas favoritas");
-                        btFavoritas.setBackgroundColor(Color.BLUE);
+                        btFavoritas.setBackgroundColor(getResources().getColor(R.color.accent2));
+                        //btFavoritas.setBackgroundColor(Color.BLUE);
                         //recyclerView.setAdapter(fbadapter);
                         //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
                         break;

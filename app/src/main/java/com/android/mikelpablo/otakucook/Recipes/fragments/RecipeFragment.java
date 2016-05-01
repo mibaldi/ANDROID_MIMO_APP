@@ -157,7 +157,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         //collapsingToolbarLayout.setTitle("");
         getActivity().setTitle("");
         recipeName.setText(recipe.name);
-
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
         if (favorito){
@@ -168,7 +167,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         //ib_favorite.setEnabled(false);
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
-        itemsType = IngredientType.convertIngredient(items);
+        for (Measure measure:recipe.measureIngredients){
+            IngredientType ingredientType= IngredientType.convert(measure.ingredient,measure.measure,measure.quantity);
+            itemsType.add(ingredientType);
+        }
+
         btCook.setOnClickListener(this);
         ib_favorite.setOnClickListener(this);
         bt_tasks.setOnClickListener(this);
@@ -322,6 +325,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         public Boolean frozen;
         public String category;
         public String baseType;
+        public String measure;
+        public float quantity;
         public typeEnum type = typeEnum.historical;
 
         public IngredientType(long id, String name, Boolean frozen, String category, String baseType, typeEnum type) {
@@ -333,6 +338,12 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
             this.type = type;
         }
 
+        public static IngredientType convert(Ingredient i,String measure,float quantity){
+            IngredientType ingredientType = new IngredientType(i.id,i.name,i.frozen,i.category,i.baseType,typeEnum.historical);
+            ingredientType.measure = measure;
+            ingredientType.quantity = quantity;
+            return ingredientType;
+        }
         public static IngredientType convert(Ingredient i){
             IngredientType ingredientType = new IngredientType(i.id,i.name,i.frozen,i.category,i.baseType,typeEnum.historical);
             return ingredientType;

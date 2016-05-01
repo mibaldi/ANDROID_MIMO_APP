@@ -31,7 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/todas" />
+            android:text="@string/todas"
+            android:textColor="@color/white"
+            android:background="@drawable/custom_tab_bar_button"/>
 
         <Button
             android:id="@+id/favoritas"
@@ -39,13 +41,17 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/favoritas"
-            android:visibility="gone" />
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:background="@drawable/custom_tab_bar_button"/>
 
         <Button
             android:id="@+id/posibles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/white"
             android:layout_weight="1"
-            android:text="@string/posibles" />
+            android:text="@string/posibles"
+            android:background="@drawable/custom_tab_bar_button"/>
     </LinearLayout>
 </RelativeLayout>

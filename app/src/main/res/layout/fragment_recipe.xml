@@ -110,20 +110,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cocinar"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/bt_tasks" />
+                android:layout_margin="6dp"
+                android:background="@drawable/round_button"/>
 
             <Button
                 android:id="@+id/bt_tasks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_gravity="center_horizontal"
                 android:text="@string/ver_pasos"
-                android:layout_alignParentBottom="true" />
+                android:layout_margin="6dp"
+                android:background="@drawable/round_button"/>
         </RelativeLayout>
 
 

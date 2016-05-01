@@ -38,7 +38,9 @@ import retrofit2.Response;
  */
 public class RecipeHolder extends RecyclerView.ViewHolder {
     private final Button add;
+    private final TextView status;
     public TextView name;
+    public TextView measure;
     public Context context;
     private Firebase mFirebaseRef;
 
@@ -47,18 +49,25 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         context = itemView.getContext();
         name = (TextView) itemView.findViewById(R.id.ingredientName);
         add = (Button) itemView.findViewById(R.id.btAddIngredient);
-
+        status = (TextView) itemView.findViewById(R.id.status_text);
+        measure = (TextView) itemView.findViewById(R.id.measure);
     }
 
     public void bindItem(final RecipeFragment.IngredientType ingredient, final RecipeAdapter.OnItemClickListener listener, List<String>itemsIDStorage, List<String>itemsIDShoppingCart, List<String>itemsIDHistorical, final int position) {
         add.setVisibility(View.GONE);
         name.setText(ingredient.name);
+        measure.setText(String.valueOf(ingredient.quantity)+" "+ingredient.measure);
+        status.setText("");
         if (itemsIDStorage.contains(String.valueOf(ingredient.id))){
             ingredient.type = RecipeFragment.IngredientType.typeEnum.storage;
             itemView.setBackground(context.getResources().getDrawable(R.drawable.exist_item));
+            status.setVisibility(View.VISIBLE);
+            status.setText("disponible");
         }else if (itemsIDShoppingCart.contains(String.valueOf(ingredient.id))){
             ingredient.type = RecipeFragment.IngredientType.typeEnum.shoppingCart;
             itemView.setBackground(context.getResources().getDrawable(R.drawable.in_cart_item));
+            status.setVisibility(View.VISIBLE);
+            status.setText("pendiente de compra");
         }else {
             add.setVisibility(View.VISIBLE);
             itemView.setBackground(context.getResources().getDrawable(R.drawable.not_exist_item));

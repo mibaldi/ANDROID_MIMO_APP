@@ -5,14 +5,26 @@
     android:layout_height="70dp"
     android:layout_marginBottom="1dp"
     android:padding="12dp">
-
-    <TextView
-        android:layout_gravity="left"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredientName"
-        android:layout_centerVertical="true"
-        android:textStyle="bold"/>
+        android:layout_centerVertical="true">
+        <TextView
+            android:layout_gravity="left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredientName"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/measure"
+            android:textSize="12dp"
+            android:layout_below="@+id/ingredientName"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
 
 
     <Button
@@ -22,6 +34,17 @@
         android:text="Comprar"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:textSize="10dp"
+        android:visibility="gone"
+        android:textColor="@color/divider"/>
 
 </RelativeLayout>

@@ -20,6 +20,7 @@ public class IngredientsServerActivity extends BaseActivity {
         this.setTitle(category);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setIcon(R.drawable);
         }
         IngredientsExpandableFragment ingredientsServerFragment = IngredientsExpandableFragment.newInstance(category);
         getSupportFragmentManager().beginTransaction().replace(R.id.ingredientsServer_content,ingredientsServerFragment).commit();
