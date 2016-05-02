@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.mikelpablo.otakucook.BuildConfig;
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -85,7 +86,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if (LoginActivity.mAuthData != null){
             mProgressDialog = new ProgressDialog(getContext());
-            randomRecipe();
+            if(BuildConfig.SHOW_PREMIUM_ACTIONS) {
+                randomRecipe();
+            }else{
+                Picasso.with(getContext()).load(R.drawable.default_recipe)
+                        .fit()
+                        .into(mainImage);
+                mainRecipeName.setText(R.string.free_main_fragment);
+            }
         }
 
     }
