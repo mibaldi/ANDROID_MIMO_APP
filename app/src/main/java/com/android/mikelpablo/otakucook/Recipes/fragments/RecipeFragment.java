@@ -154,7 +154,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //collapsingToolbarLayout.setTitle("");
         getActivity().setTitle("");
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);

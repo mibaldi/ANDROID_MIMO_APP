@@ -49,25 +49,27 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:layout_marginBottom="30dp">
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Large Text"
-                    android:layout_margin="5dp"
                     android:id="@+id/recipeName"
 
                     android:textStyle="bold"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignRight="@+id/textView2"
-                    android:layout_alignEnd="@+id/textView2" />
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignRight="@+id/ratingBar"
+                    android:layout_alignEnd="@+id/ratingBar" />
+
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/ratingBar"
-                    android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:layout_marginBottom="10dp"
                     android:text="Ingredientes necesarios"/>

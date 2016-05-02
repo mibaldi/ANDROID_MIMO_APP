@@ -1,6 +1,8 @@
 package com.android.mikelpablo.otakucook.Ingredients.activities;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,7 +22,6 @@ public class IngredientsServerActivity extends BaseActivity {
         this.setTitle(category);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //getSupportActionBar().setIcon(R.drawable);
         }
         IngredientsExpandableFragment ingredientsServerFragment = IngredientsExpandableFragment.newInstance(category);
         getSupportFragmentManager().beginTransaction().replace(R.id.ingredientsServer_content,ingredientsServerFragment).commit();

@@ -1,7 +1,12 @@
 package com.android.mikelpablo.otakucook.Main.adapters;
 
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.view.View;
 
+import com.android.mikelpablo.otakucook.Ingredients.Models.Category;
+import com.android.mikelpablo.otakucook.Main.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
@@ -22,7 +27,7 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
     private OnItemClickListener listener;
     private int ingredientType;
 
-    public IngredientListFirebaseAdapter(Class<OwnIngredientFB> modelClass, int modelLayout, Class<IngredientListFBHolder> viewHolderClass, Query ref, int ingredientType,OnItemClickListener listener) {
+    public IngredientListFirebaseAdapter(Class<OwnIngredientFB> modelClass, int modelLayout, Class<IngredientListFBHolder> viewHolderClass, Query ref, int ingredientType, OnItemClickListener listener) {
         super(modelClass, modelLayout, viewHolderClass,ref);
         this.listener = listener;
         this.ingredientType = ingredientType;
@@ -44,11 +49,11 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
 
-                    String title = (String) dataSnapshot.child("name").getValue();
+                    String title = dataSnapshot.child("name").getValue(String.class);
                     final String id = dataSnapshot.child("id").getValue(String.class);
+                    String baseType = dataSnapshot.child("baseType").getValue(String.class);
                     ingredientListHolder.name.setText(title);
                     ingredientListHolder.id = id;
-
 
                     switch (ingredientType){
                         case R.string.shoping_cart_drawer:
@@ -80,7 +85,5 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
             }
         });
     }
-
-
 
 }

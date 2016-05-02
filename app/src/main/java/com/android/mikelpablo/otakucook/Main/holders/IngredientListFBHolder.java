@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -26,6 +27,7 @@ public class IngredientListFBHolder extends RecyclerView.ViewHolder{
     public TextView name;
     public Button delete;
     public Button add;
+    public ImageView icon;
     public String id;
     public Context context;
 

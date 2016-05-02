@@ -1,6 +1,7 @@
 package com.android.mikelpablo.otakucook.Ingredients.fragments;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
