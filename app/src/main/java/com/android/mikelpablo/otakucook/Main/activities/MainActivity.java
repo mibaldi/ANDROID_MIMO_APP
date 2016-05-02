@@ -36,6 +36,7 @@ import com.android.mikelpablo.otakucook.Preferences.PreferencesActivity;
 import com.android.mikelpablo.otakucook.Preferences.PreferencesManager;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Main.fragments.RecipeListFragment;
+import com.android.mikelpablo.otakucook.Utils.CircleTransform;
 import com.android.mikelpablo.otakucook.Utils.ThemeType;
 import com.android.mikelpablo.otakucook.Utils.ThemeUtils;
 import com.firebase.client.AuthData;
@@ -211,7 +212,10 @@ public class MainActivity extends AppCompatActivity {
         if (authdata != null) {
 
             mLoggedInStatusTextView.setVisibility(View.VISIBLE);
-            Picasso.with(MainActivity.this).load(this.authdata.getProviderData().get("profileImageURL").toString()).into(userImage);
+            Picasso.with(MainActivity.this).load(this.authdata.getProviderData()
+                    .get("profileImageURL").toString())
+                    .transform(new CircleTransform())
+                    .into(userImage);
             mLoggedInStatusTextView.setText(LoginActivity.mLoggedInStatusString);
 
         }
