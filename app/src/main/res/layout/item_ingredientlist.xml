@@ -21,15 +21,20 @@
         android:text="@string/comprar"
         android:layout_toLeftOf="@+id/btEliminarIngrediente"
         android:layout_toStartOf="@+id/btEliminarIngrediente"
-        android:visibility="gone"/>
+        android:textColor="@color/white"
+        android:layout_marginRight="5dp"
+        android:visibility="gone"
+        android:background="@drawable/buy_button"/>
 
     <Button
         android:id="@+id/btEliminarIngrediente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/eliminar"
+        android:textColor="@color/white"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/delete_button"/>
 
 </RelativeLayout>

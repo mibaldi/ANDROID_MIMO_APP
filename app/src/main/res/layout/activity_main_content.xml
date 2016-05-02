@@ -50,7 +50,9 @@
         android:visibility="gone"
         fab:menu_labels_ellipsize="end"
         fab:menu_labels_singleLine="true"
-        fab:menu_backgroundColor="#ccffffff">
+        fab:menu_colorNormal="@color/accent"
+        fab:menu_colorPressed="@color/accent"
+        fab:menu_backgroundColor="@color/white_transparent">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_historical_ingredient"
@@ -58,7 +60,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_facebook"
             fab:fab_size="mini"
-            fab:fab_label="@string/fab_ingredienteHistorico" />
+            fab:fab_label="@string/fab_ingredienteHistorico"
+            app:fab_colorNormal="@color/accent"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_category_ingredient"
@@ -66,7 +69,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_google"
             fab:fab_size="mini"
-            fab:fab_label="@string/fab_ingredienteServer" />
+            fab:fab_label="@string/fab_ingredienteServer"
+            app:fab_colorNormal="@color/accent"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 

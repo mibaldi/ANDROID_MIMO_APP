@@ -13,4 +13,6 @@
     <color name="in_shopping">#ffe598</color>
     <color name="white">#ffffff</color>
     <color name="accent2">#8003A9F4</color>
+    <color name="delete">#80e75c54</color>
+    <color name="white_transparent">#ccffffff</color>
 </resources>

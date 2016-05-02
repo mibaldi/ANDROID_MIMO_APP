@@ -47,6 +47,8 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     private Intent emptyIntent;
     public static int ID = 1;
     private Task task;
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
 
     public RecipeTaskViewPageFragment() {
     }
@@ -98,10 +100,12 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         emptyIntent = new Intent();
+
         pi = PendingIntent.getActivity(getActivity(), 0, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         task = getArguments().getParcelable("task");
-        Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
+        Picasso.with(getContext()).load(task.photo).placeholder(R.drawable.default_recipe).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         //int notif = RecipeTaskViewPageActivity.manager.getActiveNotifications().length;
         if(task.seconds == 0){
             mBtTimer.setVisibility(View.GONE);
@@ -145,30 +149,37 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-
+        Intent intent = new Intent(getContext(), AlarmReceiver.class);
+        intent.putExtra("taskName", task.name);
+        intent.putExtra("taskId", task.id);
+        pendingIntent = PendingIntent.getBroadcast(getContext(), (int) task.id, intent, PendingIntent.FLAG_ONE_SHOT);
         if (v.getId() == R.id.btTimer){
-            if(mBtTimer.isEnabled()) {
+
+            if(RecipeTaskViewPageActivity.clicked == false) {
+                RecipeTaskViewPageActivity.clicked = true;
                 int type = AlarmManager.RTC_WAKEUP;
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.SECOND, 60);
                 long when = calendar.getTimeInMillis();
-                Intent intent = new Intent(getContext(), AlarmReceiver.class);
-                intent.putExtra("taskName", task.name);
-                intent.putExtra("taskId", task.id);
+                
                 Log.d("TaskId", String.valueOf(task.id));
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), (int) task.id, intent, PendingIntent.FLAG_ONE_SHOT);
+                
 
                 countDownTimer.start();
-                mBtTimer.setEnabled(false);
+                //mBtTimer.setEnabled(false);
+                mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
                 mBtTimer.setText(R.string.btalarmWait);
-                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setRepeating(type,when,0,pendingIntent);
-            }else{
+            } else {
+                alarmManager.cancel(pendingIntent);
+                RecipeTaskViewPageActivity.clicked = false;
+                countDownTimer.cancel();
+                long taskMiliseconds = task.seconds * 1000;
+                mCountDown.setText(transformTime(taskMiliseconds));
+                mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+                mBtTimer.setText("Empezar");
 
             }
-
-
-
         }
     }
 
