@@ -3,8 +3,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:id="@+id/mainLayout"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_view"
+    android:layout_margin="20dp">
     <ImageView
         android:id="@+id/mainImage"
         android:layout_width="match_parent"
@@ -12,22 +13,33 @@
         android:layout_weight="1"
         android:cropToPadding="true">
     </ImageView>
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:isIndicator="true"
-        android:layout_above="@+id/mainLinearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:orientation="horizontal">
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:isIndicator="true" />
+        <Button
+            android:id="@+id/random"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Random"
+            android:textColor="@color/white"
+            android:background="@drawable/round_button"
+            android:layout_margin="3dp"
+            />
+    </LinearLayout>
+
     <LinearLayout
         android:background="#80000000"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:layout_alignParentBottom="true"
         android:id="@+id/mainLinearLayout">
         <TextView
             android:layout_height="wrap_content"
@@ -41,7 +53,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textColor="#FFFFFFFF"/>
+            android:textColor="#FFFFFFFF" />
+
 
     </LinearLayout>
 

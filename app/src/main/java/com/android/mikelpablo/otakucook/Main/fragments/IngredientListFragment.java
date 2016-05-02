@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
 import com.android.mikelpablo.otakucook.Ingredients.activities.HistoricalIngredientsActivity;
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
+import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
 import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdapter;
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
@@ -88,6 +89,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
         getActivity().setTitle(ingredientType);
+        MainActivity.main_title.setVisibility(View.GONE);
         mBtAddCategoryIngredients.setOnClickListener(this);
         mBtAddHistoricalIngredients.setOnClickListener(this);
         AuthData authData = LoginActivity.mAuthData;

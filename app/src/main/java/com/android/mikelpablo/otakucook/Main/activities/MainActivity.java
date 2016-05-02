@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
+    public static ImageView main_title;
+
     private static int itemIdPersist = R.id.item1;
     private NavigationView navigationDrawer;
     private TextView mLoggedInStatusTextView;
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        main_title = (ImageView) findViewById(R.id.main_title);
         authdata = LoginActivity.mAuthData;
         navigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
         mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_category_ingredient);

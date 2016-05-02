@@ -117,6 +117,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         }
         adapter = new RecipesListAdapter(getContext(), items);
         adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+        MainActivity.main_title.setVisibility(View.GONE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
         btTodas.setOnClickListener(this);

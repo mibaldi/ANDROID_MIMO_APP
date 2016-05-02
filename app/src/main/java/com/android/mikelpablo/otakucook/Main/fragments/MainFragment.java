@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Ingredients.activities.CategoriesActivity;
@@ -43,14 +45,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Bind(R.id.mainLayout)
     LinearLayout mainLayout;
-    @Bind(R.id.mainLinearLayout)
-    LinearLayout textLayout;
     @Bind(R.id.mainImage)
     ImageView mainImage;
     @Bind(R.id.mainRecipeName)
     TextView mainRecipeName;
     @Bind(R.id.mainRecipeAuthor)
     TextView mainRecipeAuthor;
+    @Bind(R.id.random)
+    Button randomButton;
+    @Bind(R.id.ratingBar)
+    RatingBar ratingBar;
     private Long id;
     private ProgressDialog mProgressDialog;
 
@@ -74,16 +78,24 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
-
+        MainActivity.main_title.setVisibility(View.VISIBLE);
+        randomButton.setOnClickListener(this);
 
         if (LoginActivity.mAuthData != null){
             mainLayout.setOnClickListener(this);
             mProgressDialog = new ProgressDialog(getContext());
-            Firebase ref = new Firebase(getResources().getString(R.string.users));
-            ref.child(LoginActivity.mAuthData.getUid()).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    int numberChilds = (int) dataSnapshot.getChildrenCount();
+            randomRecipe();
+        }
+
+    }
+
+    private void randomRecipe() {
+        Firebase ref = new Firebase(getResources().getString(R.string.users));
+        ref.child(LoginActivity.mAuthData.getUid()).child("favorites").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int numberChilds = (int) dataSnapshot.getChildrenCount();
+                if(numberChilds != 0) {
                     int x = (int) (Math.random() * numberChilds);
                     int count = 0;
 
@@ -94,15 +106,20 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         }
                         count++;
                     }
+                }else{
+                    Picasso.with(getContext()).load(R.drawable.default_recipe)
+                            .fit()
+                            .centerCrop()
+                            .into(mainImage);
+                    mainRecipeName.setText("Sin favoritos");
                 }
+            }
 
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
 
-                }
-            });
-        }
-
+            }
+        });
     }
 
     private void printRecipe(String key) {
@@ -113,6 +130,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 String photo = dataSnapshot.child("photo").getValue(String.class);
                 String name = dataSnapshot.child("name").getValue(String.class);
                 String author = dataSnapshot.child("author").getValue(String.class);
+                int score = dataSnapshot.child("score").getValue(Integer.class);
                 id = dataSnapshot.child("id").getValue(Long.class);
                 Picasso.with(getContext()).load(photo)
                         .fit()
@@ -120,6 +138,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                         .into(mainImage);
                 mainRecipeName.setText(name);
                 mainRecipeAuthor.setText("by " + author);
+                ratingBar.setRating(score);
             }
 
             @Override
@@ -131,12 +150,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        MyAPI service = MyApiClient.createService(MyAPI.class);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.show();
-        Call<Recipe> recipe = service.getRecipe(id);
-        recipe.enqueue(getCallback());
+        if(v.getId() == R.id.random){
+            Log.d("kik","Click");
+            randomRecipe();
+        }else {
+            MyAPI service = MyApiClient.createService(MyAPI.class);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.show();
+            Call<Recipe> recipe = service.getRecipe(id);
+            recipe.enqueue(getCallback());
+        }
     }
 
     private Callback<Recipe> getCallback() {
