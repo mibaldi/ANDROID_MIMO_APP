@@ -127,7 +127,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
             public void onFinish() {
                 mCountDown.setText(transformTime(taskMiliseconds));
                 mBtTimer.setEnabled(true);
-                mBtTimer.setText("Start");
+                mBtTimer.setText(R.string.btalarmInit);
             }
         };
     }
@@ -160,7 +160,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
                 countDownTimer.start();
                 mBtTimer.setEnabled(false);
-                mBtTimer.setText("Wait!");
+                mBtTimer.setText(R.string.btalarmWait);
                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
                 alarmManager.setRepeating(type,when,0,pendingIntent);
             }else{

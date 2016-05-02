@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_share"
         android:orderInCategory="100"
-        android:title="Compartir"
+        android:title="@string/compartir"
         app:showAsAction="never" />
 </menu>

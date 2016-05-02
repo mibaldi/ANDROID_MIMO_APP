@@ -24,7 +24,7 @@ public class RecipeTaskListHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindItem(final Task task) {
-        name.setText("Paso "+task.name);
+        name.setText(String.format(context.getString(R.string.Paso), task.name));
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(itemView, task);

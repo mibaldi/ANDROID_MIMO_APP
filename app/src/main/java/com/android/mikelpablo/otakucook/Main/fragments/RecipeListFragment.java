@@ -192,15 +192,15 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
         switch (savedInstanceStateInt) {
             case R.id.todas:
-                getActivity().setTitle("Todas las recetas");
+                getActivity().setTitle(getActivity().getString(R.string.title_mainFragment));
                 onClick(btTodas);
                 break;
             case R.id.favoritas:
-                getActivity().setTitle("Recetas favoritas");
+                getActivity().setTitle(getActivity().getString(R.string.title_favoritesFragment));
                 onClick(btFavoritas);
                 break;
             case R.id.posibles:
-                getActivity().setTitle("Posibles recetas");
+                getActivity().setTitle(getActivity().getString(R.string.title_posiblesFragment));
                 onClick(btPosibles);
                 break;
         }
@@ -279,7 +279,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                             myActionMenuItem.setVisible(true);
                         }
                         btTodas.setEnabled(false);
-                        getActivity().setTitle("Todas las recetas");
+                        getActivity().setTitle(R.string.title_mainFragment);
 
                         recyclerView.setAdapter(adapter);
                         v.setBackgroundColor(getResources().getColor(R.color.accent2));
@@ -297,7 +297,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         }
                         btPosibles.setEnabled(false);
                         itemsPossibles.clear();
-                        getActivity().setTitle("Posibles recetas");
+                        getActivity().setTitle(R.string.title_posiblesFragment);
                         v.setBackgroundColor(getResources().getColor(R.color.accent2));
                         if (itemsPossibles.isEmpty()) {
                             initOnclick();
@@ -342,7 +342,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
                         //recyclerView.setAdapter(fbadapter);
 
-                        getActivity().setTitle("Recetas favoritas");
+                        getActivity().setTitle(R.string.title_favoritesFragment);
                         btFavoritas.setBackgroundColor(getResources().getColor(R.color.accent2));
                         //btFavoritas.setBackgroundColor(Color.BLUE);
                         //recyclerView.setAdapter(fbadapter);
@@ -360,7 +360,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
         service = MyApiClient.createService(MyAPI.class);
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(getActivity().getString(R.string.progressDialogMessage));
         mProgressDialog.show();
         //items.clear();
 

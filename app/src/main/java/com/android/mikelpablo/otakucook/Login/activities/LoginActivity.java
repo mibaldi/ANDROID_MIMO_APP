@@ -129,8 +129,8 @@ public class LoginActivity  extends AppCompatActivity implements
 
     private void initFirebaseConnection() {
         mAuthProgressDialog = new ProgressDialog(this);
-        mAuthProgressDialog.setTitle("Loading");
-        mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+        mAuthProgressDialog.setTitle(getString(R.string.title_progressDialog));
+        mAuthProgressDialog.setMessage(getString(R.string.authenticatedFB));
         mAuthProgressDialog.setCancelable(false);
         mAuthProgressDialog.show();
 
@@ -330,7 +330,7 @@ public class LoginActivity  extends AppCompatActivity implements
                     }
                 });
                 this.mAuthData = authData;
-                mLoggedInStatusString = "Logged in as " + name + " (" + authData.getProvider() + ")";
+                mLoggedInStatusString = getString(com.android.mikelpablo.otakucook.R.string.logged)+" "+name+" ("+authData.getProvider()+")";
                 Toast.makeText(this,mLoggedInStatusString,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -346,7 +346,7 @@ public class LoginActivity  extends AppCompatActivity implements
 
     private void showErrorDialog(String message) {
         new AlertDialog.Builder(this)
-                .setTitle("Error")
+                .setTitle(getString(R.string.title_alertDialogError))
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)

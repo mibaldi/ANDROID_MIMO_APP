@@ -115,7 +115,7 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         category = getArguments().getString("category");
 
         mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(context.getString(R.string.progressDialogMessage));
         mProgressDialog.show();
 
         refRoot = new Firebase(getResources().getString(R.string.users));

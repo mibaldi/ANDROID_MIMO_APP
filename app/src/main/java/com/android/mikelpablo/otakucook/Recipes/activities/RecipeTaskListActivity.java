@@ -32,7 +32,7 @@ public class RecipeTaskListActivity extends BaseActivity {
         Intent intent = getIntent();
         Recipe recipe= intent.getParcelableExtra("recipe");
         Log.d("RecipeActivity",recipe.author);
-        this.setTitle("Pasos de la receta");
+        this.setTitle(getString(R.string.title_RecipeTaskList));
         RecipeTaskListFragment recipeTaskListFragment = RecipeTaskListFragment.newInstance(recipe);
         getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeTaskList,recipeTaskListFragment).commit();
     }

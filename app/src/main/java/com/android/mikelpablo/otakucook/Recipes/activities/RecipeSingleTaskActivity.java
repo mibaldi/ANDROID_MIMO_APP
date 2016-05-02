@@ -24,7 +24,7 @@ public class RecipeSingleTaskActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        this.setTitle("Paso "+task.name);
+        this.setTitle(String.format(getString(R.string.Paso), task.name));
         RecipeSingleTaskFragment recipeSingleTaskFragment = RecipeSingleTaskFragment.newInstance(task);
         getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeSingleTask,recipeSingleTaskFragment).commit();
     }

@@ -1,0 +1,55 @@
+<resources>
+    <string name="action_logout">Logout</string>
+    <string name="login_with_google">Login with Google+</string>
+    <string name="firebase_url">https://otakucook.firebaseio.com/</string>
+    <string name="title_activity_recipes">RecipesActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="historical">Histórico de Ingredientes</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="_00_00_00">00:00:00</string>
+    <string name="comprar">Comprar</string>
+    <string name="eliminar">Eliminar</string>
+    <!-- TODO: Recipes -->
+    <string name="mensajeFinalRecipe">Selecciona los ingredientes que se te han acabado durante la preparacion de la receta</string>
+    <string name="btalarmInit">Empezar</string>
+    <string name="btalarmWait">Esperar</string>
+    <string name="cocinar">Cocinar</string>
+    <string name="favoritas">Favoritas</string>
+    <string name="ingredients_drawer">Mis ingredientes</string>
+    <string name="main_drawer">Principal</string>
+    <string name="posibles">Posibles</string>
+    <string name="recipes_drawer">Recetas</string>
+    <string name="shoping_cart_drawer">Carrito de la compra</string>
+    <string name="todas">Todas</string>
+    <string name="ver_pasos">Ver pasos</string>
+    <string name="disponible">disponible</string>
+    <string name="pendiente">pendiente de compra</string>
+    <string name="Paso">Paso %s</string>
+    <string name="por">por %s</string>
+    <string name="title_RecipeTaskList">Pasos de la receta</string>
+    <string name="title_Categories">Categorías</string>
+    <string name="title_RecipeFinal">Final de la receta</string>
+    <string name="title_RecipeTaskViewPage">Pasos de la receta</string>
+    <string name="title_dialogFinishRecipe">¿Quieres finalizar la receta?</string>
+    <string name="title_mainFragment">Todas las recetas</string>
+    <string name="title_favoritesFragment">Recetas favoritas</string>
+    <string name="title_posiblesFragment">Posibles recetas</string>
+    <string name="title_alertDialogError">Error</string>
+    <string name="title_dialogExit">¿Quieres salir de la aplicacion?</string>
+    <string name="title_progressDialog">Cargando</string>
+    <string name="progressDialogMessage">Cargando...</string>
+    <string name="authenticatedFB">Autenticando con Firebase</string>
+    <string name="fab_ingredienteServer">Ingredientes nuevos</string>
+    <string name="fab_ingredienteHistorico">Historial de ingredientes</string>
+    <string name="bt_finalizar">Finalizar</string>
+    <string name="bt_borrar">Borrar</string>
+    <string name="tarea">tarea %s</string>
+    <string name="ingredientes_necesarios">Ingredientes requeridos</string>
+    <string name="compartir">Compartir</string>
+    <string name="logged">Conectado como</string>
+    <!-- TODO: Ingredients -->
+    <!-- TODO: MAIN -->
+
+</resources>

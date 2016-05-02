@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="todas">Todas</string>
-    <string name="favoritas">Favoritas</string>
+    <string name="todas">All</string>
+    <string name="favoritas">Favorites</string>
     <string name="posibles">Posibles</string>
-    <string name="cocinar">Cocinar</string>
-    <string name="ver_pasos">Ver Pasos</string>
+    <string name="cocinar">Cook</string>
+    <string name="ver_pasos">See steps</string>
 </resources>

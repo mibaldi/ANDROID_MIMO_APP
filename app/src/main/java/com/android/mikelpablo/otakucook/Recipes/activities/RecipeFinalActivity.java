@@ -24,7 +24,7 @@ public class RecipeFinalActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        this.setTitle("Final de la receta");
+        this.setTitle(getString(R.string.title_RecipeFinal));
         RecipeFinalFragment recipeFinalFragment = RecipeFinalFragment.newInstance(recipe);
         getSupportFragmentManager().beginTransaction().replace(R.id.flRecipeFinal,recipeFinalFragment).commit();
     }

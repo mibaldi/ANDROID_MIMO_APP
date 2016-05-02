@@ -51,8 +51,7 @@
         android:visibility="gone"
         fab:menu_labels_ellipsize="end"
         fab:menu_labels_singleLine="true"
-        fab:menu_backgroundColor="#ccffffff"
-        fab:menu_fab_label="Menu label">
+        fab:menu_backgroundColor="#ccffffff">
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_historical_ingredient"
@@ -60,7 +59,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_facebook"
             fab:fab_size="mini"
-            fab:fab_label="Historial de ingredientes" />
+            fab:fab_label="@string/fab_ingredienteHistorico" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/add_category_ingredient"
@@ -68,7 +67,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_google"
             fab:fab_size="mini"
-            fab:fab_label="Ingredientes nuevos" />
+            fab:fab_label="@string/fab_ingredienteServer" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

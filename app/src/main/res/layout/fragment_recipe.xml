@@ -72,7 +72,7 @@
                     android:layout_below="@+id/ratingBar"
                     android:gravity="center"
                     android:layout_marginBottom="10dp"
-                    android:text="Ingredientes necesarios"/>
+                    android:text="@string/ingredientes_necesarios"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recipeIngredientsListRecyclerView"

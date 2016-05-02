@@ -109,7 +109,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 }else{
                     Picasso.with(getContext()).load(R.drawable.default_recipe)
                             .fit()
-                            .centerCrop()
                             .into(mainImage);
                     mainRecipeName.setText("Sin favoritos");
                 }
@@ -132,12 +131,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 String author = dataSnapshot.child("author").getValue(String.class);
                 int score = dataSnapshot.child("score").getValue(Integer.class);
                 id = dataSnapshot.child("id").getValue(Long.class);
+                Log.d("IMAGEN",photo);
                 Picasso.with(getContext()).load(photo)
                         .fit()
-                        .centerCrop()
                         .into(mainImage);
                 mainRecipeName.setText(name);
-                mainRecipeAuthor.setText("by " + author);
+                mainRecipeAuthor.setText(String.format(getActivity().getString(R.string.por), author));
                 ratingBar.setRating(score);
             }
 
@@ -156,7 +155,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }else {
             MyAPI service = MyApiClient.createService(MyAPI.class);
             mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setMessage(getActivity().getString(R.string.progressDialogMessage));
             mProgressDialog.show();
             Call<Recipe> recipe = service.getRecipe(id);
             recipe.enqueue(getCallback());

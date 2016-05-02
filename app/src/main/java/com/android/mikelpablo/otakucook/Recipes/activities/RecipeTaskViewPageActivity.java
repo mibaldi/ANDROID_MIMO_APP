@@ -43,7 +43,7 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        this.setTitle("Pasos de la receta");
+        this.setTitle(getString(R.string.title_RecipeTaskViewPage));
         adapter = new RecipeTaskViewPageAdapter(this,recipe.tasks);
         pagerTabStrip.setDrawFullUnderline(false);
         pagerTabStrip.setTabIndicatorColorResource(R.color.primary);

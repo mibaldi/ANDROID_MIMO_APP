@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.android.mikelpablo.otakucook.Models.Task;
+import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeTaskViewPageFragment;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class RecipeTaskViewPageAdapter extends FragmentPagerAdapter {
         Collections.sort(TASKS);
         TITLES.clear();
         for (Task t: TASKS){
-            TITLES.add("tarea "+t.name);
+            TITLES.add(String.format(activity.getString(R.string.tarea), t.name));
         }
     }
 

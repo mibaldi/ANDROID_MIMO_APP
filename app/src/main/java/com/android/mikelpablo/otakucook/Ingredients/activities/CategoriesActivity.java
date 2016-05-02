@@ -38,7 +38,7 @@ public class CategoriesActivity extends BaseActivity {
 
         Intent intent = getIntent();
         typeStatic = intent.getIntExtra("type",0);
-        this.setTitle("Categorías");
+        this.setTitle(getString(R.string.title_Categories));
 
         CategoriesCollectionFragment categoriesCollectionFragment = CategoriesCollectionFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.categories_content,categoriesCollectionFragment).commit();

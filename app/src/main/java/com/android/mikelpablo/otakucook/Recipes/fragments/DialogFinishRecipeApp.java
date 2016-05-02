@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Models.Recipe;
+import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeFinalActivity;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 
@@ -29,7 +30,7 @@ public class DialogFinishRecipeApp extends DialogFragment {
     {
 
         return  new AlertDialog.Builder(getActivity()).setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("¿Quieres finalizar la receta?")
+                .setTitle(R.string.title_dialogFinishRecipe)
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

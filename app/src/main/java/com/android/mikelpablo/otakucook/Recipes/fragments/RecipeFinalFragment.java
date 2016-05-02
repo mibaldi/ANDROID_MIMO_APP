@@ -83,7 +83,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
         recipe = getArguments().getParcelable("recipe");
         btFinal.setOnClickListener(this);
         btBorrar.setOnClickListener(this);
-        tvMensaje.setText("Selecciona los ingredientes que se te han acabado durante la preparacion de la receta");
+        tvMensaje.setText(R.string.mensajeFinalRecipe);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
         refRoot = new Firebase(getResources().getString(R.string.users));
