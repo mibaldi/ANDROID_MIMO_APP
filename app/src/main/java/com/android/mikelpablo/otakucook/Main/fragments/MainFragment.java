@@ -43,7 +43,7 @@ import retrofit2.Response;
  */
 public class MainFragment extends Fragment implements View.OnClickListener {
 
-    @Bind(R.id.mainLayout)
+    @Bind(R.id.mainLinearLayout)
     LinearLayout mainLayout;
     @Bind(R.id.mainImage)
     ImageView mainImage;
@@ -57,6 +57,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     RatingBar ratingBar;
     private Long id;
     private ProgressDialog mProgressDialog;
+    private String previousRecipe;
+    private String currentRecipe;
 
     public MainFragment() {
 
@@ -82,7 +84,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         randomButton.setOnClickListener(this);
 
         if (LoginActivity.mAuthData != null){
-            mainLayout.setOnClickListener(this);
             mProgressDialog = new ProgressDialog(getContext());
             randomRecipe();
         }
@@ -96,12 +97,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int numberChilds = (int) dataSnapshot.getChildrenCount();
                 if(numberChilds != 0) {
+                    if(numberChilds > 1) {
+                        randomButton.setVisibility(View.VISIBLE);
+                    }
+                    mainLayout.setOnClickListener(MainFragment.this);
                     int x = (int) (Math.random() * numberChilds);
                     int count = 0;
 
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         if (x == count) {
-                            printRecipe(child.getKey());
+                            currentRecipe = child.getKey();
+                            if (currentRecipe.equals(previousRecipe)){
+                                randomRecipe();
+                            }else {
+                                printRecipe(child.getKey());
+                            }
                             break;
                         }
                         count++;
@@ -111,6 +121,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                             .fit()
                             .into(mainImage);
                     mainRecipeName.setText("Sin favoritos");
+
                 }
             }
 
@@ -122,6 +133,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void printRecipe(String key) {
+        previousRecipe = key;
         Firebase ref = new Firebase(getActivity().getResources().getString(R.string.recipes));
         ref.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -150,7 +162,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.random){
-            Log.d("kik","Click");
             randomRecipe();
         }else {
             MyAPI service = MyApiClient.createService(MyAPI.class);

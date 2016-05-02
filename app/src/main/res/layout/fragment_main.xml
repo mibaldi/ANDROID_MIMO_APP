@@ -3,14 +3,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:id="@+id/mainLayout"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/round_view"
-    android:layout_margin="20dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:id="@+id/mainImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.5"
         android:cropToPadding="true">
     </ImageView>
     <LinearLayout
@@ -31,29 +29,30 @@
             android:textColor="@color/white"
             android:background="@drawable/round_button"
             android:layout_margin="3dp"
+            android:visibility="gone"
             />
     </LinearLayout>
 
     <LinearLayout
-        android:background="#80000000"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:id="@+id/mainLinearLayout">
+        android:id="@+id/mainLinearLayout"
+        android:background="@drawable/divider">
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:id="@+id/mainRecipeName"
             android:textSize="30sp"
             android:textAlignment="center"
-            android:textColor="#FFFFFFFF"/>
+            android:textColor="@color/white"/>
         <TextView
             android:id="@+id/mainRecipeAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textColor="#FFFFFFFF" />
+            android:textColor="@color/white"/>
 
 
     </LinearLayout>

@@ -8,8 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Main.activities.MainActivity"
-    android:background="@drawable/background_main">
+    tools:context=".Main.activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_layout"
