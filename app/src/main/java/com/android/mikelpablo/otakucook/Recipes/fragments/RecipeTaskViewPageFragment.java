@@ -1,18 +1,16 @@
 package com.android.mikelpablo.otakucook.Recipes.fragments;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.Builder;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,14 +47,18 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     private Task task;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    public int position;
 
     public RecipeTaskViewPageFragment() {
+
     }
 
-    public static RecipeTaskViewPageFragment newInstance(Task task) {
+    public static RecipeTaskViewPageFragment newInstance(Task task,int position) {
         RecipeTaskViewPageFragment fragment = new RecipeTaskViewPageFragment();
+
         Bundle args = new Bundle();
         args.putParcelable("task", task);
+        args.putInt("position",position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,6 +70,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_recipe_task_view_page, container, false);
     }
 
@@ -99,9 +102,12 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+        position=getArguments().getInt("position");
         emptyIntent = new Intent();
         task = getArguments().getParcelable("task");
+        Log.d("PABJIMCAS","onViewCreated"+task.id);
         if (RecipeTaskViewPageActivity.clicked && task.id == RecipeTaskViewPageActivity.task){
+            mBtTimer.setEnabled(false);
             mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
             mBtTimer.setText(R.string.btalarmWait);
         }
@@ -133,7 +139,26 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
     }
 
-    private void activateTimer(final long taskMiliseconds,final Task task) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("PABJIMCAS","onPause"+task.id);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("PABJIMCAS","onResume"+task.id);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("PABJIMCAS","onDestroyView"+task.id);
+    }
+
+    private void activateTimer(final long taskMiliseconds, final Task task) {
+
         countDownTimer = new CountDownTimer(taskMiliseconds,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -144,10 +169,18 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
             public void onFinish() {
                 mCountDown.setText(transformTime(taskMiliseconds));
                 mBtTimer.setEnabled(true);
+                countDownTimer.cancel();
                 RecipeTaskViewPageActivity.task = 0;
                 RecipeTaskViewPageActivity.clicked = false;
-                mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
-                mBtTimer.setText(R.string.btalarmInit);
+
+                FragmentActivity activity = getActivity();
+                if (activity != null){
+                    positionsChange(position,RecipeTaskViewPageActivity.clicked);
+                    mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+                    mBtTimer.setText(R.string.btalarmInit);
+                }
+
+
             }
         };
     }
@@ -158,7 +191,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
         if (getView() != null) {
 
-
+            setRetainInstance(true);
         }
 
     }
@@ -167,13 +200,19 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     public void onClick(View v) {
         Intent intent = new Intent(getContext(), AlarmReceiver.class);
         intent.putExtra("taskName", task.name);
-        intent.putExtra("taskId", task.id);
+        intent.putExtra("taskId", (int)task.id);
+
         pendingIntent = PendingIntent.getBroadcast(getContext(), (int) task.id, intent, PendingIntent.FLAG_ONE_SHOT);
         if (v.getId() == R.id.btTimer){
 
             if(!RecipeTaskViewPageActivity.clicked) {
+                Log.d("PABJIMCAS",String.valueOf(position)+" "+task.name);
+                mBtTimer.setEnabled(false);
+
                 RecipeTaskViewPageActivity.task = task.id;
                 RecipeTaskViewPageActivity.clicked = true;
+                positionsChange(position,RecipeTaskViewPageActivity.clicked);
+                RecipeTaskViewPageActivity.adapter.notifyDataSetChanged();
                 int type = AlarmManager.RTC_WAKEUP;
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.SECOND, 60);
@@ -200,6 +239,44 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
             }
         }
+    }
+
+    private void positionsChange(int position,boolean clicked) {
+        if (position == 0){
+           changeButton(position,clicked);
+
+        }
+        else if (position == 1){
+            changeButton(position,clicked);
+            changeButton(position+1,clicked);
+
+        }else if (position == 2){
+            changeButton(position-2,clicked);
+           changeButton(position+1,clicked);
+        }
+        else if(position == RecipeTaskViewPageActivity.adapter.getCount()-1){
+            changeButton(position-1,clicked);
+        }
+        else{
+            changeButton(position-1,clicked);
+            changeButton(position+1,clicked);
+        }
+    }
+
+    private void changeButton(int position,boolean clicked) {
+        RecipeTaskViewPageFragment recipeTaskViewPageFragment= (RecipeTaskViewPageFragment) getActivity().getSupportFragmentManager().getFragments().get(position);
+        Log.d("PABJIMCAS","task:"+recipeTaskViewPageFragment.task.name);
+        if (clicked){
+            recipeTaskViewPageFragment.mBtTimer.setEnabled(false);
+            recipeTaskViewPageFragment.mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+            recipeTaskViewPageFragment.mBtTimer.setText(R.string.btalarmWait);
+
+        }else {
+            recipeTaskViewPageFragment.mBtTimer.setEnabled(true);
+            recipeTaskViewPageFragment.mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+            recipeTaskViewPageFragment.mBtTimer.setText(R.string.btalarmInit);
+        }
+
     }
 
 }

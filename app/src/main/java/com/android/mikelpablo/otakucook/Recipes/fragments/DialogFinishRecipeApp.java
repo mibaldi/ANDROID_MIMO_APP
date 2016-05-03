@@ -35,8 +35,10 @@ public class DialogFinishRecipeApp extends DialogFragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(getActivity(),RecipeFinalActivity.class);
+                        RecipeTaskViewPageActivity.clicked = false;
                         intent.putExtra("recipe",getArguments().getParcelable("recipe"));
                         getActivity().startActivity(intent);
+
                         Toast.makeText(getContext(),"Final",Toast.LENGTH_SHORT).show();
                     }
                 })

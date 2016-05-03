@@ -10,6 +10,7 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
     ViewPager viewPager;
     @Bind(R.id.pager_tab_strip)
     PagerTabStrip pagerTabStrip;
-    private RecipeTaskViewPageAdapter adapter;
+    public static RecipeTaskViewPageAdapter adapter;
     private Recipe recipe;
     public static boolean clicked = false;
     public static long task = 0;
@@ -92,6 +93,7 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
+
             // TODO Auto-generated method stub
             if(selectedIndex == adapter.getCount() - 1)
             {
@@ -104,10 +106,19 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                clicked=false;
                 finish();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        clicked = false;
+        finish();
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 }

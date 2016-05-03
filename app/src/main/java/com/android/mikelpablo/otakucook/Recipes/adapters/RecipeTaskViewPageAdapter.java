@@ -23,6 +23,7 @@ public class RecipeTaskViewPageAdapter extends FragmentPagerAdapter {
 
     public RecipeTaskViewPageAdapter(FragmentActivity activity, List<Task> taskList) {
         super(activity.getSupportFragmentManager());
+
         TASKS = taskList;
         Collections.sort(TASKS);
         TITLES.clear();
@@ -38,7 +39,7 @@ public class RecipeTaskViewPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return RecipeTaskViewPageFragment.newInstance(TASKS.get(position));
+        return RecipeTaskViewPageFragment.newInstance(TASKS.get(position),position);
     }
 
     @Override
