@@ -15,28 +15,37 @@
         android:layout_alignRight="@+id/btFinal"
         android:layout_alignEnd="@+id/btFinal" />
     <android.support.v7.widget.RecyclerView
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recipeFinalListRecyclerView"
-        android:layout_below="@+id/tvMensaje">
+        android:layout_below="@+id/tvMensaje"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true">
     </android.support.v7.widget.RecyclerView>
     <Button
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bt_finalizar"
         android:id="@+id/btFinal"
         android:layout_below="@id/recipeFinalListRecyclerView"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/buy_button"
+        android:textColor="@color/white"/>
 
     <Button
+        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bt_borrar"
         android:id="@+id/btBorrar"
         android:layout_below="@id/recipeFinalListRecyclerView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:background="@drawable/delete_button"
+        android:textColor="@color/white"/>
 
 
 </RelativeLayout>

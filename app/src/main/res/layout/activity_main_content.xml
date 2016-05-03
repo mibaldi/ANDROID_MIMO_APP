@@ -58,7 +58,7 @@
             android:id="@+id/add_historical_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook"
+            android:src="@drawable/historical"
             fab:fab_size="mini"
             fab:fab_label="@string/fab_ingredienteHistorico"
             app:fab_colorNormal="@color/accent"/>
@@ -67,7 +67,7 @@
             android:id="@+id/add_category_ingredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_google"
+            android:src="@drawable/cloud"
             fab:fab_size="mini"
             fab:fab_label="@string/fab_ingredienteServer"
             app:fab_colorNormal="@color/accent"/>

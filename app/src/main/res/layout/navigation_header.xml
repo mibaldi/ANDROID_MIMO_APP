@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:visibility="visible"
-            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
             android:textStyle="bold"
             android:layout_below="@+id/user_image"
             android:layout_alignLeft="@+id/user_image"

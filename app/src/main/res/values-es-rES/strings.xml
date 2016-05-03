@@ -50,6 +50,7 @@
     <string name="compartir">Compartir</string>
     <string name="logged">Conectado como</string>
     <string name="free_main_fragment">Descárgate la versión Premium para guardar favoritos</string>
+    <string name="no_ingredients">No existen más ingredientes para esta categoría</string>
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->
 

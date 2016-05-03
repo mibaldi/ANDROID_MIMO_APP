@@ -42,6 +42,7 @@
     <string name="tarea">task %s</string>
     <string name="logged">Logged in as</string>
     <string name="free_main_fragment">Download Premium version for save favorites</string>
+    <string name="no_ingredients">There are no more ingredients for this category</string>
     <!-- TODO: Recipes -->
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->

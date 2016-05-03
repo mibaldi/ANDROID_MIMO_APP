@@ -7,21 +7,22 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Login.activities.LoginActivity">
+    tools:context=".Login.activities.LoginActivity"
+    android:background="@drawable/background_main">
     <ImageView
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:id="@+id/logo"
-
-        android:layout_above="@+id/login_with_google"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="97dp" />
     <com.google.android.gms.common.SignInButton
         android:id="@+id/login_with_google"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/login_with_google"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/logo"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

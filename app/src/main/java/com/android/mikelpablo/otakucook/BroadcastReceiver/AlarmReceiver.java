@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.R;
+import com.android.mikelpablo.otakucook.Recipes.fragments.RecipeTaskViewPageFragment;
 
 public class AlarmReceiver extends BroadcastReceiver{
     @Override

@@ -36,7 +36,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        Picasso.with(this).load(R.drawable.default_recipe).into(imageView);
+        Picasso.with(this).load(R.drawable.titulo_app).into(imageView);
         progressBar.setMax(max_progress());
         serverWakeUp();
         startAnimation();

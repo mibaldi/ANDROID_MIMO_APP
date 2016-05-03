@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Ingredients.Models.BaseIngredient;
@@ -61,6 +62,9 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
     public Context context;
     @Bind(R.id.ingredientsServer)
     RecyclerView recyclerView;
+
+    @Bind(R.id.not_exist_ingredients)
+    TextView not_exist_ingredients;
 
     private SearchView searchView;
     private MenuItem myActionMenuItem;
@@ -177,6 +181,13 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             @Override
             public void onResponse(Call<List<Ingredient>> call, Response<List<Ingredient>> response) {
                 items = (ArrayList<Ingredient>) response.body();
+                if(items.size() == 0){
+                    recyclerView.setVisibility(View.GONE);
+                    not_exist_ingredients.setVisibility(View.VISIBLE);
+                }else{
+                    recyclerView.setVisibility(View.VISIBLE);
+                    not_exist_ingredients.setVisibility(View.GONE);
+                }
                 generateBaseIngredients();
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
