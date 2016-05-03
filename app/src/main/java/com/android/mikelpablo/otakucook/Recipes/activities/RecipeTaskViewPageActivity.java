@@ -31,6 +31,7 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
     private RecipeTaskViewPageAdapter adapter;
     private Recipe recipe;
     public static boolean clicked = false;
+    public static long task = 0;
     //public static NotificationManagerCompat manager;
 
     @Override

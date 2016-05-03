@@ -41,6 +41,7 @@
     <string name="ingredientes_necesarios">Ingredient required</string>
     <string name="tarea">task %s</string>
     <string name="logged">Logged in as</string>
+    <string name="free_main_fragment">Download Premium version for save favorites</string>
     <!-- TODO: Recipes -->
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->

@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.android.mikelpablo.otakucook.BuildConfig;
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.R;
@@ -52,8 +53,9 @@ public class RecipeActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        if (BuildConfig.SHOW_PREMIUM_ACTIONS){
             getMenuInflater().inflate(R.menu.menu_recipes, menu);
+        }
         return true;
     }
     @Override

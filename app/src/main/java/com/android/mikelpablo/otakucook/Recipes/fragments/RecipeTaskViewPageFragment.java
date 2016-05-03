@@ -100,9 +100,22 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         emptyIntent = new Intent();
-
-        pi = PendingIntent.getActivity(getActivity(), 0, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         task = getArguments().getParcelable("task");
+        if (RecipeTaskViewPageActivity.clicked && task.id == RecipeTaskViewPageActivity.task){
+            mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+            mBtTimer.setText(R.string.btalarmWait);
+        }
+        else if (RecipeTaskViewPageActivity.clicked){
+            mBtTimer.setEnabled(false);
+            mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+            mBtTimer.setText(R.string.btalarmWait);
+        }else {
+            mBtTimer.setEnabled(true);
+            mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+            mBtTimer.setText(R.string.btalarmInit);
+        }
+        pi = PendingIntent.getActivity(getActivity(), 0, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         Picasso.with(getContext()).load(task.photo).placeholder(R.drawable.default_recipe).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
@@ -131,6 +144,9 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
             public void onFinish() {
                 mCountDown.setText(transformTime(taskMiliseconds));
                 mBtTimer.setEnabled(true);
+                RecipeTaskViewPageActivity.task = 0;
+                RecipeTaskViewPageActivity.clicked = false;
+                mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
                 mBtTimer.setText(R.string.btalarmInit);
             }
         };
@@ -155,7 +171,8 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         pendingIntent = PendingIntent.getBroadcast(getContext(), (int) task.id, intent, PendingIntent.FLAG_ONE_SHOT);
         if (v.getId() == R.id.btTimer){
 
-            if(RecipeTaskViewPageActivity.clicked == false) {
+            if(!RecipeTaskViewPageActivity.clicked) {
+                RecipeTaskViewPageActivity.task = task.id;
                 RecipeTaskViewPageActivity.clicked = true;
                 int type = AlarmManager.RTC_WAKEUP;
                 Calendar calendar = Calendar.getInstance();
@@ -173,11 +190,13 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
             } else {
                 alarmManager.cancel(pendingIntent);
                 RecipeTaskViewPageActivity.clicked = false;
+
                 countDownTimer.cancel();
                 long taskMiliseconds = task.seconds * 1000;
+                activateTimer(taskMiliseconds, task);
                 mCountDown.setText(transformTime(taskMiliseconds));
                 mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
-                mBtTimer.setText("Empezar");
+                mBtTimer.setText(R.string.btalarmInit);
 
             }
         }

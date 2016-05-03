@@ -18,44 +18,54 @@
         android:theme="@style/AppTheme">
         <receiver android:name=".BroadcastReceiver.AlarmReceiver" />
 
+        <activity android:name=".Login.activities.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Main.activities.MainActivity"
-            android:theme="@style/AppTheme.TransparentStatus"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransparentStatus" />
         <activity
             android:name=".Recipes.activities.RecipeActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_recipes"
-            android:parentActivityName=".Main.activities.MainActivity">
+            android:parentActivityName=".Main.activities.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.activities.MainActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeTaskViewPageActivity"
+        <activity
+            android:name=".Recipes.activities.RecipeTaskViewPageActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeFinalActivity"
+        <activity
+            android:name=".Recipes.activities.RecipeFinalActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeTaskViewPageActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeTaskListActivity"
+        <activity
+            android:name=".Recipes.activities.RecipeTaskListActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Recipes.activities.RecipeActivity" />
         </activity>
-        <activity android:name=".Recipes.activities.RecipeSingleTaskActivity"
+        <activity
+            android:name=".Recipes.activities.RecipeSingleTaskActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <meta-data
@@ -64,8 +74,8 @@
         </activity>
         <activity
             android:name=".Ingredients.activities.CategoriesActivity"
-            android:parentActivityName=".Main.activities.MainActivity"
             android:configChanges="orientation"
+            android:parentActivityName=".Main.activities.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -73,8 +83,8 @@
         </activity>
         <activity
             android:name=".Ingredients.activities.IngredientsServerActivity"
-            android:parentActivityName=".Ingredients.activities.CategoriesActivity"
             android:configChanges="orientation"
+            android:parentActivityName=".Ingredients.activities.CategoriesActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -82,12 +92,13 @@
         </activity>
         <activity
             android:name=".Preferences.PreferencesActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Utils.BaseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Utils.BaseActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -95,21 +106,18 @@
 
         <activity
             android:name=".Ingredients.activities.HistoricalIngredientsActivity"
-            android:parentActivityName=".Main.activities.MainActivity"
             android:configChanges="orientation"
+            android:parentActivityName=".Main.activities.MainActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Main.activities.MainActivity" />
         </activity>
-        <activity android:name=".Login.activities.LoginActivity"
+        <activity
+            android:name=".Login.activities.LoginActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

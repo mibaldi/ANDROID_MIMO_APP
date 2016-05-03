@@ -39,6 +39,7 @@ import com.android.mikelpablo.otakucook.Main.fragments.RecipeListFragment;
 import com.android.mikelpablo.otakucook.Utils.CircleTransform;
 import com.android.mikelpablo.otakucook.Utils.ThemeType;
 import com.android.mikelpablo.otakucook.Utils.ThemeUtils;
+import com.crashlytics.android.Crashlytics;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -178,10 +179,12 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null ) {
             navigationDrawer.setCheckedItem(itemIdPersist);
             Log.d("MIKEL", "saveInstanceState = null");
+            logUser();
             selectFragment(new MainFragment());
         }else{
             jumpSaveInstance();
         }
+
 
     }
 
@@ -267,6 +270,15 @@ public class MainActivity extends AppCompatActivity {
         ThemeUtils.applyThemeIntoStatusBar(this, theme);
         ThemeUtils.applyThemeIntoToolbar(this, theme, toolbar);
     }
+    private void logUser() {
+        // TODO: Use the current user's information
+        // You can call any combination of these three methods
+        Crashlytics.setUserIdentifier(LoginActivity.mAuthData.getUid());
+        Crashlytics.setUserEmail("user@fabric.io");
+        Crashlytics.setUserName((String)LoginActivity.mAuthData.getProviderData().get("displayName"));
+
+    }
+
 
 
 }

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,10 @@ public class RecipeSingleTaskFragment extends Fragment {
     ImageView mTaskPhoto;
     @Bind(R.id.taskDescription)
     TextView mTaskDescription;
+    @Bind(R.id.countdown)
+    TextView mCountDown;
+    @Bind(R.id.btTimer)
+    Button mBtTimer;
     public RecipeSingleTaskFragment() {
     }
 
@@ -49,8 +54,10 @@ public class RecipeSingleTaskFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         Task task = getArguments().getParcelable("task");
-        Picasso.with(getContext()).load(task.photo).into(mTaskPhoto);
+        Picasso.with(getContext()).load(task.photo).placeholder(R.drawable.default_recipe).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
+        mBtTimer.setVisibility(View.GONE);
+        mCountDown.setVisibility(View.GONE);
 
     }
 }

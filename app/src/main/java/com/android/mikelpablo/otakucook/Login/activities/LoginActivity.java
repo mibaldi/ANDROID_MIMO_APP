@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.mikelpablo.otakucook.Main.activities.MainActivity;
@@ -34,6 +35,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -94,10 +96,11 @@ public class LoginActivity  extends AppCompatActivity implements
 
         PreferencesManager.getInstance().setContext(getApplicationContext());
         setContentView(R.layout.activity_login);
-
+        Picasso.with(this).load(R.drawable.default_recipe).into((ImageView)findViewById(R.id.logo));
         initView();
         initGoogleApiClient();
         initFirebaseConnection();
+
 
         /*mGoogleLoginClicked = true;
         if (!mGoogleApiClient.isConnecting()) {

@@ -158,11 +158,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
-        if (favorito){
-            ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
-        }else{
-            ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add));
-        }
+
         //ib_favorite.setEnabled(false);
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
@@ -262,6 +258,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
                     favorito=false;
                    // ib_favorite.setEnabled(!favorito);
                    // sendIngredientFirebase(recipe);
+                }
+                if (favorito){
+                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
+                }else{
+                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add));
                 }
             }
             @Override
