@@ -10,12 +10,10 @@ public class PreferencesManager {
 
     private static final String SHARED_PREFS_FILE = "MimoPrefs";
     private static final String THEME_PREF_KEY = "toolbarColor";
-    private static final String SOUND_PREF_KEY = "notificationSound";
     private static PreferencesManager instance;
     private SharedPreferences sharedPreferences;
     private Context mContext;
     private Integer themePreference;
-    private Integer soundPreference;
 
 
 

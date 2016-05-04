@@ -43,6 +43,9 @@
     <string name="logged">Logged in as</string>
     <string name="free_main_fragment">Download Premium version for save favorites</string>
     <string name="no_ingredients">There are no more ingredients for this category</string>
+    <string name="textSettings">Option to change color theme. Two possibilites</string>
+    <string name="titleSettings">UPDATE SETTINGS</string>
+    <string name="subTitleSettings">Theme color</string>
     <!-- TODO: Recipes -->
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->

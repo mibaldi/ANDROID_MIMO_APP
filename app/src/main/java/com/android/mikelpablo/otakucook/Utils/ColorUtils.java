@@ -14,18 +14,18 @@ public class ColorUtils {
 
     public static int ColorFromTheme(Context context, ThemeType theme) {
         int color = 0;
-        if(theme == ThemeType.GREEN) {
+        if(theme == ThemeType.BLUE) {
             color = ContextCompat.getColor(context, R.color.accent);
-        } else if(theme == ThemeType.BLACK) {
+        } else if(theme == ThemeType.ORANGE) {
             color = ContextCompat.getColor(context, R.color.primary);
         }
         return color;
     }
     public static int ColorFromThemeReset(Context context, ThemeType theme) {
         int color = 0;
-        if(theme == ThemeType.GREEN) {
+        if(theme == ThemeType.BLUE) {
             color = ContextCompat.getColor(context, R.color.accent2);
-        } else if(theme == ThemeType.BLACK) {
+        } else if(theme == ThemeType.ORANGE) {
             color = ContextCompat.getColor(context, R.color.primary2);
         }
         return color;

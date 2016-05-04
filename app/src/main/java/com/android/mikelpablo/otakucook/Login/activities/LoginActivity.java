@@ -333,7 +333,7 @@ public class LoginActivity  extends AppCompatActivity implements
                     }
                 });
                 this.mAuthData = authData;
-                mLoggedInStatusString = getString(com.android.mikelpablo.otakucook.R.string.logged)+" "+name+" ("+authData.getProvider()+")";
+                mLoggedInStatusString = getString(com.android.mikelpablo.otakucook.R.string.logged)+" "+name;
                 Toast.makeText(this,mLoggedInStatusString,Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

@@ -30,11 +30,16 @@ public class ThemeUtils {
         }
     }
     public static void applyThemeIntoNavigationView(Context context, ThemeType theme, NavigationView navigationView){
-        if (theme ==ThemeType.GREEN){
+        int color = ColorUtils.ColorFromTheme(context, theme);
+        if (theme ==ThemeType.BLUE){
+            navigationView.setItemBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item));
+
             //navigationView.setItemBackground(R.drawable.drawer_item);
             //navigationView.setBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item));
 
         }else{
+            navigationView.setItemBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item_black));
+
             //navigationView.setBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item_black));
         }
 

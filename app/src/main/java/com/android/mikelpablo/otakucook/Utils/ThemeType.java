@@ -5,13 +5,13 @@ package com.android.mikelpablo.otakucook.Utils;
  */
 
 public enum ThemeType {
-    GREEN, BLACK;
+    ORANGE, BLUE;
 
     public static ThemeType ThemeTypeFromInt(int type){
         if(type == 1) {
-            return ThemeType.BLACK;
+            return ThemeType.BLUE;
         } else {
-            return ThemeType.GREEN;
+            return ThemeType.ORANGE;
         }
     }
 }

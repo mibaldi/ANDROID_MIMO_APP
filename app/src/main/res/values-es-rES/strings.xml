@@ -51,6 +51,9 @@
     <string name="logged">Conectado como</string>
     <string name="free_main_fragment">Descárgate la versión Premium para guardar favoritos</string>
     <string name="no_ingredients">No existen más ingredientes para esta categoría</string>
+    <string name="subTitleSettings">Color del tema</string>
+    <string name="textSettings">Opción para cambiar el color del tema. Dos posibilidades</string>
+    <string name="titleSettings">MODIFICAR AJUSTES</string>
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->
 
