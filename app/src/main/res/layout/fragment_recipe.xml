@@ -109,7 +109,8 @@
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:background="@color/accent2">
+            android:id="@+id/buttonsLayout"
+            >
             <Button
                 android:id="@+id/bt_cook"
                 android:layout_width="wrap_content"

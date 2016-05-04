@@ -77,7 +77,7 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             // TODO Auto-generated method stub
 
-            if( mPageEnd && arg0 == selectedIndex && !callHappened && !izquierda)
+            if( mPageEnd && arg0 == selectedIndex && !callHappened && !izquierda && !clicked)
             {
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 DialogFinishRecipeApp.newInstance(1,recipe).show(fm, "dialog");

@@ -24,9 +24,12 @@ import com.android.mikelpablo.otakucook.Main.adapters.IngredientListFirebaseAdap
 import com.android.mikelpablo.otakucook.Main.holders.IngredientListFBHolder;
 import com.android.mikelpablo.otakucook.Models.Ingredient;
 import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
+import com.android.mikelpablo.otakucook.Preferences.PreferencesManager;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Utils.Connectivity;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
+import com.android.mikelpablo.otakucook.Utils.ThemeType;
+import com.android.mikelpablo.otakucook.Utils.ThemeUtils;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.Query;
@@ -81,10 +84,11 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
+
         mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_category_ingredient);
         mBtAddHistoricalIngredients = (com.github.clans.fab.FloatingActionButton) getActivity().findViewById(R.id.add_historical_ingredient);
         mBtFloatingMenu = (com.github.clans.fab.FloatingActionMenu) getActivity().findViewById(R.id.menu_red);
-
+        applySelectedTheme();
         setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
@@ -118,6 +122,14 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                 Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
             }
         }
+
+    }
+    private void applySelectedTheme() {
+        ThemeType theme = PreferencesManager.getInstance().getSelectedTheme();
+
+        ThemeUtils.applyThemeIntoFloatingActionMenu(getActivity(),theme,mBtFloatingMenu);
+        ThemeUtils.applyThemeIntoFloatingActionButton(getActivity(),theme,mBtAddCategoryIngredients);
+        ThemeUtils.applyThemeIntoFloatingActionButton(getActivity(),theme,mBtAddHistoricalIngredients);
 
     }
 

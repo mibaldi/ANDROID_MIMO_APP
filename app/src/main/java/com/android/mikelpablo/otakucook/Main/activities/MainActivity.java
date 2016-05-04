@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         ThemeType theme = PreferencesManager.getInstance().getSelectedTheme();
         ThemeUtils.applyThemeIntoStatusBar(this, theme);
         ThemeUtils.applyThemeIntoToolbar(this, theme, toolbar);
+        ThemeUtils.applyThemeIntoNavigationView(this,theme,navigationDrawer);
     }
     private void logUser() {
         // TODO: Use the current user's information

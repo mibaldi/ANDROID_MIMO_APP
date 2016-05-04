@@ -21,6 +21,15 @@ public class ColorUtils {
         }
         return color;
     }
+    public static int ColorFromThemeReset(Context context, ThemeType theme) {
+        int color = 0;
+        if(theme == ThemeType.GREEN) {
+            color = ContextCompat.getColor(context, R.color.accent2);
+        } else if(theme == ThemeType.BLACK) {
+            color = ContextCompat.getColor(context, R.color.primary2);
+        }
+        return color;
+    }
 
     public static int makeColorDarker(int color) {
         float[] hsv = new float[3];

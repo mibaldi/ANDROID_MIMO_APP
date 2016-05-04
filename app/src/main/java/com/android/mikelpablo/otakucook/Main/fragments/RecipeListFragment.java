@@ -28,11 +28,14 @@ import com.android.mikelpablo.otakucook.Models.OwnIngredientFB;
 import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
+import com.android.mikelpablo.otakucook.Preferences.PreferencesManager;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Main.holders.RecipeListHolder;
 import com.android.mikelpablo.otakucook.Main.adapters.RecipesListAdapter;
 import com.android.mikelpablo.otakucook.Utils.Connectivity;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
+import com.android.mikelpablo.otakucook.Utils.ThemeType;
+import com.android.mikelpablo.otakucook.Utils.ThemeUtils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -82,6 +85,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private Firebase refRecipe;
     private MenuItem myActionMenuItem;
     private SearchView searchView;
+    private ThemeType theme;
 
     public RecipeListFragment() {
     }
@@ -93,6 +97,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         if (savedInstanceState != null){
             selected= savedInstanceState.getInt("selected");
         }
+
     }
 
     @Override
@@ -104,6 +109,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         ButterKnife.bind(this, view);
+        applySelectedTheme();
         if (BuildConfig.SHOW_PREMIUM_ACTIONS){
             btFavoritas.setVisibility(View.VISIBLE);
         }
@@ -252,9 +258,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         if(Connectivity.isNetworkAvailable(getContext())) {
 
-                btTodas.setBackground(getResources().getDrawable(R.drawable.custom_tab_bar_button));
-                btFavoritas.setBackground(getResources().getDrawable(R.drawable.custom_tab_bar_button));
-                btPosibles.setBackground(getResources().getDrawable(R.drawable.custom_tab_bar_button));
+            resetButtonBackgroundColor();
                 selected = v.getId();
                if (selected == R.id.todas){
                    btPosibles.setEnabled(true);
@@ -282,7 +286,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         getActivity().setTitle(R.string.title_mainFragment);
 
                         recyclerView.setAdapter(adapter);
-                        v.setBackgroundColor(getResources().getColor(R.color.accent2));
+                        ThemeUtils.applyThemeIntoButton(getActivity(),theme,btTodas);
                         items.clear();
                         if (items.isEmpty()) {
                             initOnclick();
@@ -298,7 +302,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         btPosibles.setEnabled(false);
                         itemsPossibles.clear();
                         getActivity().setTitle(R.string.title_posiblesFragment);
-                        v.setBackgroundColor(getResources().getColor(R.color.accent2));
+                        ThemeUtils.applyThemeIntoButton(getActivity(),theme,btPosibles);
                         if (itemsPossibles.isEmpty()) {
                             initOnclick();
                             String ingredientsIdString = "0";
@@ -343,7 +347,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         //recyclerView.setAdapter(fbadapter);
 
                         getActivity().setTitle(R.string.title_favoritesFragment);
-                        btFavoritas.setBackgroundColor(getResources().getColor(R.color.accent2));
+                        ThemeUtils.applyThemeIntoButton(getActivity(),theme,btFavoritas);
                         //btFavoritas.setBackgroundColor(Color.BLUE);
                         //recyclerView.setAdapter(fbadapter);
                         //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
@@ -353,6 +357,13 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         }else{
             Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private void resetButtonBackgroundColor() {
+        ThemeUtils.applyThemeIntoButtonReset(getActivity(),theme,btTodas);
+        ThemeUtils.applyThemeIntoButtonReset(getActivity(),theme,btPosibles);
+        ThemeUtils.applyThemeIntoButtonReset(getActivity(),theme,btFavoritas);
+
     }
 
 
@@ -469,6 +480,10 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             }
         };
         refRecipe.addListenerForSingleValueEvent(valueEventListener);
+    }
+    private void applySelectedTheme() {
+        theme = PreferencesManager.getInstance().getSelectedTheme();
+        resetButtonBackgroundColor();
     }
 
     @Override

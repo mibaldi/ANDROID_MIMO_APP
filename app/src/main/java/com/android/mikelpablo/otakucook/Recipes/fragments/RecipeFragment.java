@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,11 +41,14 @@ import com.android.mikelpablo.otakucook.Models.Recipe;
 import com.android.mikelpablo.otakucook.Models.RecipeFB;
 import com.android.mikelpablo.otakucook.Models.Task;
 import com.android.mikelpablo.otakucook.Models.TaskFB;
+import com.android.mikelpablo.otakucook.Preferences.PreferencesManager;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskListActivity;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeTaskViewPageActivity;
 import com.android.mikelpablo.otakucook.Recipes.adapters.RecipeAdapter;
 import com.android.mikelpablo.otakucook.Utils.DividerItemDecoration;
+import com.android.mikelpablo.otakucook.Utils.ThemeType;
+import com.android.mikelpablo.otakucook.Utils.ThemeUtils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -81,6 +85,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     AppBarLayout appBarLayout;
     @Bind(R.id.recipeIngredientsListRecyclerView)
     RecyclerView recyclerView;
+    @Bind(R.id.buttonsLayout)
+    RelativeLayout buttonsLayout;
     private static final String TAG = RecipeFragment.class.getName();
     Boolean favorito = false;
     public List<Ingredient> items = new ArrayList<>();
@@ -127,6 +133,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
             if (!BuildConfig.SHOW_PREMIUM_ACTIONS){
                 ib_favorite.setVisibility(View.GONE);
             }
+            applySelectedTheme();
             setSizeAppBarLayout();
             settingArguments();
             configureView();
@@ -299,6 +306,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
 
             }
         });
+    }
+    private void applySelectedTheme() {
+        ThemeType theme = PreferencesManager.getInstance().getSelectedTheme();
+        ThemeUtils.applyThemeIntoStatusBar(getActivity(), theme);
+       ThemeUtils.applyThemeIntoCollapsing(getActivity(),theme,collapsingToolbarLayout);
+        ThemeUtils.applyThemeIntoRelative(getActivity(),theme,buttonsLayout);
+        ThemeUtils.applyThemeIntoFloatingActionButton(getActivity(),theme,ib_favorite);
     }
 
     @Override
