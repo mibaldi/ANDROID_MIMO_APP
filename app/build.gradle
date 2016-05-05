@@ -28,9 +28,9 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
-        applicationId "com.android.mikelpablo.otakucook"
-        manifestPlaceholders = [manifestApplicationId: "${applicationId}",
-                                onesignal_app_id: "eb3cd3b5-8422-4ae1-bbb1-cc1b48b00394",
+        applicationId "com.mimo.mikelpablo.otakucook"
+        manifestPlaceholders = [manifestApplicationId          : "${applicationId}",
+                                onesignal_app_id               : "eb3cd3b5-8422-4ae1-bbb1-cc1b48b00394",
                                 onesignal_google_project_number: "970413221609"]
         minSdkVersion 16
         targetSdkVersion 23
@@ -41,8 +41,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
         }
         debug {
+            debuggable false
         }
     }
     productFlavors {
@@ -52,13 +54,6 @@ android {
         premium {
             buildConfigField "boolean", "SHOW_PREMIUM_ACTIONS", "true"
         }
-    }
-    sourceSets {
-        premium {
-            java.srcDir 'src/premium/java'
-            manifest.srcFile 'src/premium/AndroidManifest.xml'
-        }
-
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -74,6 +69,9 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.google.android.gms:play-services-auth:8.4.0'
@@ -89,10 +87,7 @@ dependencies {
     compile 'com.bignerdranch.android:expandablerecyclerview:2.1.1'
     compile 'com.github.clans:fab:1.6.3'
     compile 'com.onesignal:OneSignal:2.+@aar'
-    compile 'com.google.android.gms:play-services-gcm:+'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.google.android.gms:play-services-analytics:+'
-    compile "com.google.android.gms:play-services-location:+"
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
+    compile 'com.google.android.gms:play-services-location:+'
 }

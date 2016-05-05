@@ -96,7 +96,7 @@ public class LoginActivity  extends AppCompatActivity implements
 
         PreferencesManager.getInstance().setContext(getApplicationContext());
         setContentView(R.layout.activity_login);
-        Picasso.with(this).load(R.drawable.titulo_app).into((ImageView)findViewById(R.id.logo));
+        Picasso.with(this).load(R.drawable.splash_image).into((ImageView)findViewById(R.id.logo));
         initView();
         initGoogleApiClient();
         initFirebaseConnection();

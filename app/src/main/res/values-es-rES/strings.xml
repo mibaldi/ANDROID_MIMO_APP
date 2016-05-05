@@ -1,9 +1,9 @@
 <resources>
-    <string name="action_logout">Logout</string>
+    <string name="action_logout">Cerrar sesión</string>
     <string name="login_with_google">Login with Google+</string>
     <string name="firebase_url">https://otakucook.firebaseio.com/</string>
     <string name="title_activity_recipes">RecipesActivity</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Ajustes</string>
     <string name="historical">Histórico de Ingredientes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -49,11 +49,12 @@
     <string name="ingredientes_necesarios">Ingredientes requeridos</string>
     <string name="compartir">Compartir</string>
     <string name="logged">Conectado como</string>
-    <string name="free_main_fragment">Descárgate la versión Premium para guardar favoritos</string>
+    <string name="free_main_fragment">Descárgate la versión Premium para guardar favoritos, compartir recetas y recibir noticias.</string>
     <string name="no_ingredients">No existen más ingredientes para esta categoría</string>
     <string name="subTitleSettings">Color del tema</string>
     <string name="textSettings">Opción para cambiar el color del tema. Dos posibilidades</string>
     <string name="titleSettings">MODIFICAR AJUSTES</string>
+    <string name="random">Aleatorio</string>
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->
 
