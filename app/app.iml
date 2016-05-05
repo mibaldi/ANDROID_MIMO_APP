@@ -65,14 +65,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/premium/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/premium/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/premium/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestPremium/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestPremium/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestPremium/assets" type="java-test-resource" />
@@ -81,6 +73,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestPremium/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestPremium/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestPremium/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testPremium/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/debug/assets" type="java-resource" />
@@ -121,7 +121,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/build/.DS_Store" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />

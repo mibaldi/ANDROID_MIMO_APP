@@ -55,6 +55,19 @@
     <string name="textSettings">Opción para cambiar el color del tema. Dos posibilidades</string>
     <string name="titleSettings">MODIFICAR AJUSTES</string>
     <string name="random">Aleatorio</string>
+    <string name="no_connectivity">No tienes conexión</string>
+    <string name="ingredient_in_cart">Ingrediente en el carrito</string>
+    <string name="test_alarm_receiver">La tarea ha finalizado</string>
+    <string name="toast_add_shopping_cart">Ingrediente añadido al carrito de la compra</string>
+    <string name="toast_buy_ingredient">Ingrediente comprado</string>
+    <string name="toast_add_ingredient">Ingrediente añadido</string>
+    <string name="toasr_delete_ingredient">Ingrediente Eliminado</string>
+    <string name="toast_delete_favorite">Receta eliminada de favoritos</string>
+    <string name="toast_save_favorite">Receta guardada en favoritos</string>
+    <string name="title_alarm_receiver">Paso %s</string>
+    <string name="suggestion">Sugerencias</string>
+    <string name="dialog_suggestion_question">¿Quieres mandarnos alguna sugerencia?</string>
+    <string name="placeholder_suggestion">Sugerencia</string>
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->
 

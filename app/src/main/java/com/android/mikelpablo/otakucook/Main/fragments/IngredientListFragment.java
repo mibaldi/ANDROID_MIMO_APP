@@ -119,7 +119,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
             }else{
-                Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
             }
         }
 
@@ -151,13 +151,12 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                     break;
             }
         }else{
-            Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(v, R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onItemClick(View view, String id) {
-        if(Connectivity.isNetworkAvailable(view.getContext())) {
             Firebase refUser = new Firebase(getResources().getString(R.string.users));
             switch (view.getId()){
                 case R.id.btEliminarIngrediente:
@@ -172,18 +171,16 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                             break;
 
                     }
-                    Toast.makeText(getContext(),"Ingrediente Eliminado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toasr_delete_ingredient, Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.btAddIngredient:
 
                     ref.child(String.valueOf(id)).child("shoppingcart").setValue("0");
                     ref.child(String.valueOf(id)).child("storage").setValue("1");
-                    Toast.makeText(getContext(),"Ingrediente comprado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),R.string.toast_buy_ingredient, Toast.LENGTH_SHORT).show();
                     break;
             }
-        }else{
-            Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
-        }
+
 
 
     }

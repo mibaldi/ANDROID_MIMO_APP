@@ -216,8 +216,8 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
             case R.id.fab:{
                 if (favorito){
                     removeFavoriteFirebase(recipe);
-                    Toast.makeText(getContext(),"Receta eliminada de favoritos", Toast.LENGTH_SHORT).show();
-                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add));
+                    Toast.makeText(getContext(), R.string.toast_delete_favorite, Toast.LENGTH_SHORT).show();
+                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.favoritos));
                 }else {
 
                     sendIngredientFirebase(recipe);
@@ -247,7 +247,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         mFirebaseRef = refUser.child(LoginActivity.mAuthData.getUid()).child("favorites");
         mFirebaseRef.child(String.valueOf(recipe.id)).setValue(recipe.id);
 
-        Toast.makeText(getContext(),"Receta guardada en favoritos", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.toast_save_favorite, Toast.LENGTH_SHORT).show();
 
     }
     public void recipeExistsReturn(){
@@ -269,7 +269,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
                 if (favorito){
                     ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
                 }else{
-                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add));
+                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.favoritos));
                 }
             }
             @Override
@@ -327,7 +327,7 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         adapter.notifyItemChanged(position);
         adapter.notifyDataSetChanged();
        // view.setBackgroundColor(Color.YELLOW);
-        Snackbar.make(getView(), "Ingrediente en el carrito", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getView(), R.string.ingredient_in_cart, Snackbar.LENGTH_LONG).show();
         Log.d("PABLO",""+ item);
     }
     public static class IngredientType{

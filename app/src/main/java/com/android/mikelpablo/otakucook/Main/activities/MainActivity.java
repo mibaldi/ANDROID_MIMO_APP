@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.android.mikelpablo.otakucook.Login.activities.LoginActivity;
 import com.android.mikelpablo.otakucook.Main.fragments.DialogExitApp;
+import com.android.mikelpablo.otakucook.Main.fragments.DialogSuggestions;
 import com.android.mikelpablo.otakucook.Main.fragments.IngredientListFragment;
 import com.android.mikelpablo.otakucook.Main.fragments.MainFragment;
 import com.android.mikelpablo.otakucook.Preferences.PreferencesActivity;
@@ -141,6 +142,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), PreferencesActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
+                return true;
+            case R.id.action_suggestion:
+                android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+                DialogSuggestions.newInstance().show(fm, "dialog");
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

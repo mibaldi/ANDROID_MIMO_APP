@@ -94,8 +94,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null){
-            selected= savedInstanceState.getInt("selected");
+        if (savedInstanceState != null) {
+            selected = savedInstanceState.getInt("selected");
         }
 
     }
@@ -110,13 +110,13 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         setHasOptionsMenu(true);
         ButterKnife.bind(this, view);
         applySelectedTheme();
-        if (BuildConfig.SHOW_PREMIUM_ACTIONS){
+        if (BuildConfig.SHOW_PREMIUM_ACTIONS) {
             btFavoritas.setVisibility(View.VISIBLE);
         }
         mProgressDialog = new ProgressDialog(getContext());
-       // adapter = new RecipesListAdapter(getContext(), items);
+        // adapter = new RecipesListAdapter(getContext(), items);
         refRoot = new Firebase(getResources().getString(R.string.users));
-        if (LoginActivity.mAuthData != null){
+        if (LoginActivity.mAuthData != null) {
             mRef = refRoot.child(LoginActivity.mAuthData.getUid()).child("favorites");
             mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient");
             getIngredientsIdStorage(mRefStorage);
@@ -125,27 +125,33 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
         MainActivity.main_title.setVisibility(View.GONE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
         btTodas.setOnClickListener(this);
         btFavoritas.setOnClickListener(this);
         btPosibles.setOnClickListener(this);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (selected == R.id.todas){
-                    items.clear();
-                    refreshSwipe();
-                }else if (selected == R.id.posibles){
-                    itemsPossibles.clear();
-                    refreshSwipePossibles();
-                }else {
-                    mSwipeRefreshLayout.setRefreshing(false);
+                if (Connectivity.isNetworkAvailable(getView().getContext())) {
+                    if (selected == R.id.todas) {
+                        items.clear();
+                        refreshSwipe();
+                    } else if (selected == R.id.posibles) {
+                        itemsPossibles.clear();
+                        refreshSwipePossibles();
+                    } else {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                } else {
+                    Snackbar.make(getView(), R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
                 }
 
 
                 //ServerRecipeList(recipes, items);
             }
         });
+
     }
 
     private void refreshSwipePossibles() {
@@ -217,10 +223,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (getView() != null) {
-            if (savedInstanceState == null){
+            if (savedInstanceState == null) {
                 loadRecyclerview(R.id.todas);
-            }
-            else{
+            } else {
                 loadRecyclerview(selected);
             }
 
@@ -231,7 +236,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         recipes.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                allRecipes(response,lista);
+                allRecipes(response, lista);
                 if (mProgressDialog.isShowing())
                     mProgressDialog.dismiss();
             }
@@ -245,7 +250,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         });
     }
 
-    private void allRecipes(Response<List<Recipe>> response,ArrayList<Recipe> lista) {
+    private void allRecipes(Response<List<Recipe>> response, ArrayList<Recipe> lista) {
         List<Recipe> recipesServer = response.body();
 
         for (Recipe r : recipesServer) {
@@ -256,113 +261,113 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if(Connectivity.isNetworkAvailable(getContext())) {
+        if (Connectivity.isNetworkAvailable(getContext())) {
 
             resetButtonBackgroundColor();
-                selected = v.getId();
-               if (selected == R.id.todas){
-                   btPosibles.setEnabled(true);
-                   btFavoritas.setEnabled(true);
-               }else if (selected == R.id.posibles){
-                   btTodas.setEnabled(true);
-                   btFavoritas.setEnabled(true);
-               }else {
-                   btTodas.setEnabled(true);
-                   btPosibles.setEnabled(true);
-               }
-                if (searchView != null) {
-                    myActionMenuItem.collapseActionView();
-                    searchView.setQuery("", false);
-                    searchView.clearFocus();
-                }
+            selected = v.getId();
+            if (selected == R.id.todas) {
+                btPosibles.setEnabled(true);
+                btFavoritas.setEnabled(true);
+            } else if (selected == R.id.posibles) {
+                btTodas.setEnabled(true);
+                btFavoritas.setEnabled(true);
+            } else {
+                btTodas.setEnabled(true);
+                btPosibles.setEnabled(true);
+            }
+            if (searchView != null) {
+                myActionMenuItem.collapseActionView();
+                searchView.setQuery("", false);
+                searchView.clearFocus();
+            }
 
 
-                switch (v.getId()) {
-                    case R.id.todas:
-                        if (myActionMenuItem != null) {
-                            myActionMenuItem.setVisible(true);
+            switch (v.getId()) {
+                case R.id.todas:
+                    if (myActionMenuItem != null) {
+                        myActionMenuItem.setVisible(true);
+                    }
+                    btTodas.setEnabled(false);
+                    getActivity().setTitle(R.string.title_mainFragment);
+
+                    recyclerView.setAdapter(adapter);
+                    ThemeUtils.applyThemeIntoButton(getActivity(), theme, btTodas);
+                    items.clear();
+                    if (items.isEmpty()) {
+                        initOnclick();
+                        Call<List<Recipe>> recipes = service.recipes();
+                        ServerRecipeList(recipes, items);
+                    }
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    break;
+                case R.id.posibles:
+                    if (myActionMenuItem != null) {
+                        myActionMenuItem.setVisible(true);
+                    }
+                    btPosibles.setEnabled(false);
+                    itemsPossibles.clear();
+                    getActivity().setTitle(R.string.title_posiblesFragment);
+                    ThemeUtils.applyThemeIntoButton(getActivity(), theme, btPosibles);
+                    if (itemsPossibles.isEmpty()) {
+                        initOnclick();
+                        String ingredientsIdString = "0";
+                        if (!ingredientsId.isEmpty()) {
+                            ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
                         }
-                        btTodas.setEnabled(false);
-                        getActivity().setTitle(R.string.title_mainFragment);
+                        Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
+                        ServerRecipeList(possiblesRecipes, itemsPossibles);
+                    }
+                    adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+                    recyclerView.setAdapter(adapterPosibles);
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    break;
+                case R.id.favoritas:
+                    if (myActionMenuItem != null) {
+                        myActionMenuItem.setVisible(false);
+                    }
+                    btFavoritas.setEnabled(false);
 
-                        recyclerView.setAdapter(adapter);
-                        ThemeUtils.applyThemeIntoButton(getActivity(),theme,btTodas);
-                        items.clear();
-                        if (items.isEmpty()) {
-                            initOnclick();
-                            Call<List<Recipe>> recipes = service.recipes();
-                            ServerRecipeList(recipes, items);
+                    if (LoginActivity.mAuthData != null) {
+
+                        if (fbadapter == null) {
+                            fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.item_recipelist,
+                                    RecipeListHolder.class, mRef) {
+                                @Override
+                                protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
+
+                                    recoveryRecipesNames(recipeHolder, s);
+
+                                    Log.d(TAG, "getFavoritesRecipes");
+                                }
+
+                            };
+                            Log.d(TAG, "fbadapter");
+                        } else {
+                            fbadapter.notifyDataSetChanged();
                         }
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                        break;
-                    case R.id.posibles:
-                        if (myActionMenuItem != null) {
-                            myActionMenuItem.setVisible(true);
-                        }
-                        btPosibles.setEnabled(false);
-                        itemsPossibles.clear();
-                        getActivity().setTitle(R.string.title_posiblesFragment);
-                        ThemeUtils.applyThemeIntoButton(getActivity(),theme,btPosibles);
-                        if (itemsPossibles.isEmpty()) {
-                            initOnclick();
-                            String ingredientsIdString = "0";
-                            if (!ingredientsId.isEmpty()) {
-                                ingredientsIdString = android.text.TextUtils.join(",", ingredientsId);
-                            }
-                            Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
-                            ServerRecipeList(possiblesRecipes, itemsPossibles);
-                        }
-                        adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
-                        recyclerView.setAdapter(adapterPosibles);
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                        break;
-                    case R.id.favoritas:
-                        if (myActionMenuItem != null) {
-                            myActionMenuItem.setVisible(false);
-                        }
-                        btFavoritas.setEnabled(false);
+                        recyclerView.setAdapter(fbadapter);
 
-                        if (LoginActivity.mAuthData != null) {
+                    }
 
-                            if (fbadapter == null) {
-                                fbadapter = new FirebaseRecyclerAdapter<String, RecipeListHolder>(String.class, R.layout.item_recipelist,
-                                        RecipeListHolder.class, mRef) {
-                                    @Override
-                                    protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
+                    //recyclerView.setAdapter(fbadapter);
 
-                                        recoveryRecipesNames(recipeHolder, s);
+                    getActivity().setTitle(R.string.title_favoritesFragment);
+                    ThemeUtils.applyThemeIntoButton(getActivity(), theme, btFavoritas);
+                    //btFavoritas.setBackgroundColor(Color.BLUE);
+                    //recyclerView.setAdapter(fbadapter);
+                    //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
-                                        Log.d(TAG, "getFavoritesRecipes");
-                                    }
-
-                                };
-                                Log.d(TAG, "fbadapter");
-                            } else {
-                                fbadapter.notifyDataSetChanged();
-                            }
-                            recyclerView.setAdapter(fbadapter);
-
-                        }
-
-                        //recyclerView.setAdapter(fbadapter);
-
-                        getActivity().setTitle(R.string.title_favoritesFragment);
-                        ThemeUtils.applyThemeIntoButton(getActivity(),theme,btFavoritas);
-                        //btFavoritas.setBackgroundColor(Color.BLUE);
-                        //recyclerView.setAdapter(fbadapter);
-                        //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-
-        }else{
-            Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+        } else {
+            Snackbar.make(v, R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
         }
     }
 
     private void resetButtonBackgroundColor() {
-        ThemeUtils.applyThemeIntoButtonReset(getActivity(),theme,btTodas);
-        ThemeUtils.applyThemeIntoButtonReset(getActivity(),theme,btPosibles);
-        ThemeUtils.applyThemeIntoButtonReset(getActivity(),theme,btFavoritas);
+        ThemeUtils.applyThemeIntoButtonReset(getActivity(), theme, btTodas);
+        ThemeUtils.applyThemeIntoButtonReset(getActivity(), theme, btPosibles);
+        ThemeUtils.applyThemeIntoButtonReset(getActivity(), theme, btFavoritas);
 
     }
 
@@ -380,17 +385,18 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private void getIngredientsIdStorage(Firebase ref) {
 
         ingredientsId.clear();
-         eventListener=new ValueEventListener() {
+        eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     OwnIngredientFB ownIngredientFB = postSnapshot.getValue(OwnIngredientFB.class);
-                    if (ownIngredientFB.storage.equals("1")){
+                    if (ownIngredientFB.storage.equals("1")) {
                         ingredientsId.add(ownIngredientFB.id);
                     }
 
                 }
             }
+
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
@@ -398,11 +404,12 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         };
         ref.addValueEventListener(eventListener);
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_search,menu);
+        inflater.inflate(R.menu.menu_search, menu);
 
         myActionMenuItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) myActionMenuItem.getActionView();
@@ -421,12 +428,13 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         });
 
     }
-    private ArrayList<Recipe> filter(List<Recipe> recipes, String query){
+
+    private ArrayList<Recipe> filter(List<Recipe> recipes, String query) {
         query = query.toLowerCase();
         final ArrayList<Recipe> filteredRecipes = new ArrayList<>();
-        for(Recipe recipe: recipes){
+        for (Recipe recipe : recipes) {
             final String name = recipe.name.toLowerCase();
-            if(name.contains(query)){
+            if (name.contains(query)) {
                 filteredRecipes.add(recipe);
             }
         }
@@ -440,15 +448,15 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        switch (selected){
-            case R.id.todas:{
-                Log.d("MIKEL","todas");
+        switch (selected) {
+            case R.id.todas: {
+                Log.d("MIKEL", "todas");
                 final List<Recipe> filteredModelList = filter(items, newText);
-               adapter.setFilter(filteredModelList);
+                adapter.setFilter(filteredModelList);
                 break;
             }
-            case R.id.posibles:{
-                Log.d("MIKEL","possibles");
+            case R.id.posibles: {
+                Log.d("MIKEL", "possibles");
                 final List<Recipe> filteredModelList = filter(itemsPossibles, newText);
                 adapterPosibles.setFilter(filteredModelList);
                 break;
@@ -460,17 +468,17 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
         refRoot = new Firebase(getResources().getString(R.string.recipes));
         refRecipe = refRoot.child(s);
-        Log.d(TAG,"dentro de recoveryRecipesNames");
-        valueEventListener=new ValueEventListener() {
+        Log.d(TAG, "dentro de recoveryRecipesNames");
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
 
                     String title = (String) dataSnapshot.child("name").getValue();
                     long id = (long) dataSnapshot.child("id").getValue();
                     recipeListHolder.name.setText(title);
                     recipeListHolder.id = id;
-                    Log.d(TAG,"recoveryRecipesNames");
+                    Log.d(TAG, "recoveryRecipesNames");
                 }
             }
 
@@ -481,6 +489,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         };
         refRecipe.addListenerForSingleValueEvent(valueEventListener);
     }
+
     private void applySelectedTheme() {
         theme = PreferencesManager.getInstance().getSelectedTheme();
         resetButtonBackgroundColor();
@@ -489,6 +498,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("selected",selected);
+        outState.putInt("selected", selected);
     }
 }

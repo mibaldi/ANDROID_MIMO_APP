@@ -243,9 +243,9 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             }
             refOwnIngredient.setValue(ownIngredientFB);
 
-            Toast.makeText(getContext(), "Ingrediente añadido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.toast_add_ingredient, Toast.LENGTH_SHORT).show();
         }else{
-            Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
         }
     }
 

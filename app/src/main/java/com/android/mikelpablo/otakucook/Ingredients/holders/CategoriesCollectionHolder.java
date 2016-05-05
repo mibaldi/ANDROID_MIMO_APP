@@ -44,7 +44,7 @@ public class CategoriesCollectionHolder  extends RecyclerView.ViewHolder impleme
             intent.putExtra("category",category_name.getText());
             v.getContext().startActivity(intent);
         }else{
-            Snackbar.make(v, "No tienes conexión", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(v, R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
         }
     }
 }

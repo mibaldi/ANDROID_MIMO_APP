@@ -89,23 +89,19 @@ public class HistoricalIngredientsFragment extends Fragment implements Ingredien
 
     @Override
     public void onItemClick(View view, String id) {
-        if(Connectivity.isNetworkAvailable(view.getContext())) {
             if(view.getId() == R.id.btAddIngredient) {
                 switch (getArguments().getInt("TYPE")) {
                     case R.string.shoping_cart_drawer:
                         ref.child(String.valueOf(id)).child("shoppingcart").setValue("1");
-                        Toast.makeText(getContext(), "Ingrediente añadido a la lista de compra", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_add_shopping_cart, Toast.LENGTH_SHORT).show();
                         break;
                     case R.string.ingredients_drawer:
                         ref.child(String.valueOf(id)).child("storage").setValue("1");
-                        Toast.makeText(getContext(), "Ingrediente comprado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_buy_ingredient, Toast.LENGTH_SHORT).show();
                         break;
                 }
 
             }
 
-        }else{
-            Snackbar.make(view, "No tienes conexión", Snackbar.LENGTH_LONG).show();
-        }
     }
 }

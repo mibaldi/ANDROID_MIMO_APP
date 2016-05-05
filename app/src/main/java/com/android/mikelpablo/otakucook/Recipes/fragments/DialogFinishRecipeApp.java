@@ -39,7 +39,7 @@ public class DialogFinishRecipeApp extends DialogFragment {
                         intent.putExtra("recipe",getArguments().getParcelable("recipe"));
                         getActivity().startActivity(intent);
 
-                        Toast.makeText(getContext(),"Final",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.toast_final,Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)

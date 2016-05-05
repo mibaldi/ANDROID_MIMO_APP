@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.android.mikelpablo.otakucook.MyApiClient.MyAPI;
 import com.android.mikelpablo.otakucook.MyApiClient.MyApiClient;
 import com.android.mikelpablo.otakucook.R;
 import com.android.mikelpablo.otakucook.Recipes.activities.RecipeActivity;
+import com.android.mikelpablo.otakucook.Utils.Connectivity;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -172,12 +174,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         if(v.getId() == R.id.random){
             randomRecipe();
         }else {
-            MyAPI service = MyApiClient.createService(MyAPI.class);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage(getActivity().getString(R.string.progressDialogMessage));
-            mProgressDialog.show();
-            Call<Recipe> recipe = service.getRecipe(id);
-            recipe.enqueue(getCallback());
+            if(Connectivity.isNetworkAvailable(getView().getContext())) {
+                MyAPI service = MyApiClient.createService(MyAPI.class);
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setMessage(getActivity().getString(R.string.progressDialogMessage));
+                mProgressDialog.show();
+                Call<Recipe> recipe = service.getRecipe(id);
+                recipe.enqueue(getCallback());
+            }else{
+            Snackbar.make(getView(), R.string.no_connectivity, Snackbar.LENGTH_LONG).show();
+         }
         }
     }
 

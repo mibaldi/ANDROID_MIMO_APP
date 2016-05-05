@@ -26,8 +26,8 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         notification = builder.setSmallIcon(R.drawable.ic_menu)
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle("Task "+taskName)
-                .setContentText("Mi contenido")
+                .setContentTitle(String.format(context.getString(R.string.title_alarm_receiver), taskName))
+                .setContentText(context.getString(R.string.test_alarm_receiver))
                 .setContentIntent(pendingIntent).build();
 
         notificationManager.notify(taskId,notification);
