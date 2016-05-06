@@ -68,6 +68,7 @@
     <string name="suggestion">Sugerencias</string>
     <string name="dialog_suggestion_question">¿Quieres mandarnos alguna sugerencia?</string>
     <string name="placeholder_suggestion">Sugerencia</string>
+    <string name="select_email">Escoge un cliente de email</string>
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->
 

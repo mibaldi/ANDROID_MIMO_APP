@@ -64,6 +64,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     private Firebase refHistorico;
     private Firebase refShopping;
     private Query query;
+    private int item_ingredientlist;
 
     public IngredientListFragment() {
     }
@@ -104,15 +105,16 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
 
             switch (ingredientType){
                 case R.string.shoping_cart_drawer:
-
+                    item_ingredientlist = R.layout.item_ingredientlist_shopping;
                     query =ref.orderByChild("shoppingcart").equalTo("1");
                     break;
                 case R.string.ingredients_drawer:
+                    item_ingredientlist = R.layout.item_ingredientlist;
                     query = ref.orderByChild("storage").equalTo("1");
                     break;
             }
             if(Connectivity.isNetworkAvailable(getContext())) {
-                FirebaseRecyclerAdapter<OwnIngredientFB, IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, R.layout.item_ingredientlist,
+                FirebaseRecyclerAdapter<OwnIngredientFB, IngredientListFBHolder> fbadapter = new IngredientListFirebaseAdapter(OwnIngredientFB.class, item_ingredientlist,
                         IngredientListFBHolder.class, query, ingredientType, this);
 
                 recyclerView.setAdapter(fbadapter);

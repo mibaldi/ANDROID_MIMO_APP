@@ -61,6 +61,7 @@
     <string name="suggestion">Suggestions</string>
     <string name="dialog_suggestion_question">Do you want to send us any suggestion?</string>
     <string name="placeholder_suggestion">Suggestion</string>
+    <string name="select_email">Select an email client</string>
     <!-- TODO: Recipes -->
     <!-- TODO: Ingredients -->
     <!-- TODO: MAIN -->

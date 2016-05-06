@@ -108,16 +108,17 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        mMnAddCategoryIngredients.setVisibility(View.GONE);
+
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(itemIdPersist == R.id.item2 || itemIdPersist == R.id.item4){
+                /*if(itemIdPersist == R.id.item2 || itemIdPersist == R.id.item4){
                     mMnAddCategoryIngredients.setVisibility(View.VISIBLE);
-                }
+                }*/
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.item1:
+                mMnAddCategoryIngredients.setVisibility(View.GONE);
                 itemIdPersist = R.id.item1;
                 selectFragment(new MainFragment());
                 return true;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 selectFragment(IngredientListFragment.newInstance(R.string.shoping_cart_drawer));
                 return true;
             case R.id.item3:
+                mMnAddCategoryIngredients.setVisibility(View.GONE);
                 itemIdPersist = R.id.item3;
                 selectFragment(new RecipeListFragment());
                 return true;

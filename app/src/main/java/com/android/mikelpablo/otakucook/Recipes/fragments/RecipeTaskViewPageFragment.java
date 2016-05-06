@@ -215,7 +215,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
                 RecipeTaskViewPageActivity.adapter.notifyDataSetChanged();
                 int type = AlarmManager.RTC_WAKEUP;
                 Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.SECOND, 60);
+                calendar.add(Calendar.SECOND, task.seconds);
                 long when = calendar.getTimeInMillis();
                 
                 Log.d("TaskId", String.valueOf(task.id));

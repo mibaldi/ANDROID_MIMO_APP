@@ -16,14 +16,6 @@ repositories {
 
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file(myStoreFile)
-            storePassword myStorePassword
-            keyAlias myKeyAlias
-            keyPassword myKeyPassword
-        }
-    }
 
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -42,6 +34,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
+            signingConfig signingConfigs.debug
         }
         debug {
             debuggable false

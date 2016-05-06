@@ -40,11 +40,11 @@ public class DialogSuggestions extends DialogFragment {
                             email.setAction(Intent.ACTION_SEND);
                             email.putExtra(Intent.EXTRA_TEXT, text.getText());
                             email.setType("message/rfc822");
-                            email.putExtra(Intent.EXTRA_EMAIL,new String[]{"mibaldi2@gmail.com"});
-                            email.putExtra(Intent.EXTRA_SUBJECT,"Sujerencias");
+                            email.putExtra(Intent.EXTRA_EMAIL,new String[]{"otakucook.sugerencias@gmail.com"});
+                            email.putExtra(Intent.EXTRA_SUBJECT,getResources().getString(R.string.suggestion));
                             email.putExtra(Intent.EXTRA_TEXT,text.getText());
 
-                            startActivity(Intent.createChooser(email,"Escoje un cliente de email"));
+                            startActivity(Intent.createChooser(email,getResources().getString(R.string.select_email)));
                         }
                     }
                 })

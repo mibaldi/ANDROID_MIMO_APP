@@ -55,14 +55,14 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
                     ingredientListHolder.name.setText(title);
                     ingredientListHolder.id = id;
 
-                    switch (ingredientType){
+                  /* switch (ingredientType){
                         case R.string.shoping_cart_drawer:
                             ingredientListHolder.add.setVisibility(View.VISIBLE);
                             break;
                         case R.string.ingredients_drawer:
                             ingredientListHolder.add.setVisibility(View.GONE);
                             break;
-                    }
+                    }*/
                     if(ingredientType != R.string.historical) {
                         ingredientListHolder.delete.setOnClickListener(new View.OnClickListener() {
                             @Override
