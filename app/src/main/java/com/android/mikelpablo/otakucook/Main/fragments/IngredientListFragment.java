@@ -44,9 +44,7 @@ import butterknife.ButterKnife;
 
 public class IngredientListFragment  extends Fragment implements View.OnClickListener,IngredientListFirebaseAdapter.OnItemClickListener{
 
-    private static final String TAG = IngredientListFragment.class.getName();
-    public List<Ingredient> items = new ArrayList<>();
-    private ProgressDialog mProgressDialog;
+
     private int ingredientType;
     private Firebase ref;
 
@@ -56,13 +54,6 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
     com.github.clans.fab.FloatingActionButton mBtAddCategoryIngredients;
     com.github.clans.fab.FloatingActionButton mBtAddHistoricalIngredients;
     com.github.clans.fab.FloatingActionMenu mBtFloatingMenu;
-
-    private SearchView searchView;
-    private MenuItem myActionMenuItem;
-    private HashMap<String, Long> ingredientsMap;
-    private Firebase mRefStorage;
-    private Firebase refHistorico;
-    private Firebase refShopping;
     private Query query;
     private int item_ingredientlist;
 
@@ -91,14 +82,12 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
         mBtFloatingMenu = (com.github.clans.fab.FloatingActionMenu) getActivity().findViewById(R.id.menu_red);
         applySelectedTheme();
         setHasOptionsMenu(true);
-        mProgressDialog = new ProgressDialog(getContext());
         ingredientType = getArguments().getInt("ingredientType");
         getActivity().setTitle(ingredientType);
         MainActivity.main_title.setVisibility(View.GONE);
         mBtAddCategoryIngredients.setOnClickListener(this);
         mBtAddHistoricalIngredients.setOnClickListener(this);
         AuthData authData = LoginActivity.mAuthData;
-        ingredientsMap = new HashMap<>();
         if (authData != null){
             Firebase refRoot = new Firebase(getResources().getString(R.string.users));
             ref = refRoot.child(authData.getUid()).child("owningredient");
@@ -169,7 +158,7 @@ public class IngredientListFragment  extends Fragment implements View.OnClickLis
                             break;
                         case R.string.ingredients_drawer:
                             ref.child(id).child("storage").setValue("0");
-                            Log.d("fgfd",id);
+
                             break;
 
                     }

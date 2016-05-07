@@ -92,17 +92,6 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
             getIngredientsIdStorage();
         }
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (getView() != null) {
-
-
-        }
-
-    }
     private void getIngredientsIdStorage() {
 
         ingredientsId.clear();
@@ -125,7 +114,7 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
                 if (recipeIngredientSelectablesStorage.isEmpty()){
                    btBorrar.setVisibility(View.GONE);
                 }
-                adapter = new RecipeFinalIngredientsAdapter(getContext(), recipeIngredientSelectablesStorage);
+                adapter = new RecipeFinalIngredientsAdapter(recipeIngredientSelectablesStorage);
                 recyclerView.setAdapter(adapter);
 
             }

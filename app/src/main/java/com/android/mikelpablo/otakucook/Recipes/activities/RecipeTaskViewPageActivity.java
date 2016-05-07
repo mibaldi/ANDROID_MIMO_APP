@@ -33,12 +33,10 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
     public static Recipe recipe;
     public static boolean clicked = false;
     public static long task = 0;
-    //public static NotificationManagerCompat manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //manager = (NotificationManagerCompat) getSystemService(Context.NOTIFICATION_SERVICE);
         setContentView(R.layout.activity_recipe_task_view_page);
         Intent intent = getIntent();
         recipe= intent.getParcelableExtra("recipe");
@@ -62,7 +60,6 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
 
         @Override
         public void onPageSelected(int arg0) {
-            // TODO Auto-generated method stub
             if (selectedIndex > arg0){
                 izquierda = true;
             }else {
@@ -75,7 +72,6 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
         boolean callHappened;
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-            // TODO Auto-generated method stub
 
             if( mPageEnd && arg0 == selectedIndex && !callHappened && !izquierda && !clicked)
             {
@@ -93,8 +89,6 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
-
-            // TODO Auto-generated method stub
             if(selectedIndex == adapter.getCount() - 1)
             {
                 mPageEnd = true;

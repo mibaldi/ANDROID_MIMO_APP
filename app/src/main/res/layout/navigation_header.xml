@@ -12,7 +12,7 @@
         android:layout_width="@dimen/drawer_image_size"
         android:layout_height="@dimen/drawer_image_size"
         android:layout_marginLeft="@dimen/drawer_image_margin"
-        android:layout_marginTop="@dimen/drawer_image_size"
+        android:layout_marginTop="@dimen/drawer_image_margin"
         android:layout_gravity="left"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

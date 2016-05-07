@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,9 +42,6 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     @Bind(R.id.btTimer)
     Button mBtTimer;
     private CountDownTimer countDownTimer;
-    private PendingIntent pi;
-    private Intent emptyIntent;
-    public static int ID = 1;
     private Task task;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
@@ -103,29 +101,25 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         position=getArguments().getInt("position");
-        emptyIntent = new Intent();
         task = getArguments().getParcelable("task");
-        Log.d("PABJIMCAS","onViewCreated"+task.id);
         if (RecipeTaskViewPageActivity.clicked && task.id == RecipeTaskViewPageActivity.task){
             mBtTimer.setEnabled(false);
-            mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+            mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.delete_button));
             mBtTimer.setText(R.string.btalarmWait);
         }
         else if (RecipeTaskViewPageActivity.clicked){
             mBtTimer.setEnabled(false);
-            mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+            mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.delete_button));
             mBtTimer.setText(R.string.btalarmWait);
         }else {
             mBtTimer.setEnabled(true);
-            mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+            mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.buy_button));
             mBtTimer.setText(R.string.btalarmInit);
         }
-        pi = PendingIntent.getActivity(getActivity(), 0, emptyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Picasso.with(getContext()).load(task.photo).placeholder(R.drawable.default_recipe).into(mTaskPhoto);
         mTaskDescription.setText(task.description);
         alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        //int notif = RecipeTaskViewPageActivity.manager.getActiveNotifications().length;
         if(task.seconds == 0){
             mBtTimer.setVisibility(View.GONE);
             mCountDown.setVisibility(View.GONE);
@@ -137,24 +131,6 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         }
 
 
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("PABJIMCAS","onPause"+task.id);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("PABJIMCAS","onResume"+task.id);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("PABJIMCAS","onDestroyView"+task.id);
     }
 
     private void activateTimer(final long taskMiliseconds, final Task task) {
@@ -176,7 +152,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
                 FragmentActivity activity = getActivity();
                 if (activity != null){
                     positionsChange(position,RecipeTaskViewPageActivity.clicked);
-                    mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+                    mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.buy_button));
                     mBtTimer.setText(R.string.btalarmInit);
                 }
 
@@ -207,7 +183,6 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         if (v.getId() == R.id.btTimer){
 
             if(!RecipeTaskViewPageActivity.clicked) {
-                Log.d("PABJIMCAS",String.valueOf(position)+" "+task.name);
                 mBtTimer.setEnabled(false);
 
                 RecipeTaskViewPageActivity.task = task.id;
@@ -218,13 +193,9 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.SECOND, task.seconds);
                 long when = calendar.getTimeInMillis();
-                
-                Log.d("TaskId", String.valueOf(task.id));
-                
 
                 countDownTimer.start();
-                //mBtTimer.setEnabled(false);
-                mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+                mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.delete_button));
                 mBtTimer.setText(R.string.btalarmWait);
                 alarmManager.setRepeating(type,when,0,pendingIntent);
             } else {
@@ -235,7 +206,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
                 long taskMiliseconds = task.seconds * 1000;
                 activateTimer(taskMiliseconds, task);
                 mCountDown.setText(transformTime(taskMiliseconds));
-                mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+                mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.buy_button));
                 mBtTimer.setText(R.string.btalarmInit);
 
             }
@@ -266,15 +237,14 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
 
     private void changeButton(int position,boolean clicked) {
         RecipeTaskViewPageFragment recipeTaskViewPageFragment= (RecipeTaskViewPageFragment) getActivity().getSupportFragmentManager().getFragments().get(position);
-        Log.d("PABJIMCAS","task:"+recipeTaskViewPageFragment.task.name);
         if (clicked){
             recipeTaskViewPageFragment.mBtTimer.setEnabled(false);
-            recipeTaskViewPageFragment.mBtTimer.setBackground(getResources().getDrawable(R.drawable.delete_button));
+            recipeTaskViewPageFragment.mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.delete_button));
             recipeTaskViewPageFragment.mBtTimer.setText(R.string.btalarmWait);
 
         }else {
             recipeTaskViewPageFragment.mBtTimer.setEnabled(true);
-            recipeTaskViewPageFragment.mBtTimer.setBackground(getResources().getDrawable(R.drawable.buy_button));
+            recipeTaskViewPageFragment.mBtTimer.setBackground(ContextCompat.getDrawable(getActivity(),R.drawable.buy_button));
             recipeTaskViewPageFragment.mBtTimer.setText(R.string.btalarmInit);
         }
 

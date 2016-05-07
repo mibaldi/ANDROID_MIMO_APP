@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -42,7 +43,6 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
     public TextView name;
     public TextView measure;
     public Context context;
-    private Firebase mFirebaseRef;
 
     public RecipeHolder(View itemView) {
         super(itemView);
@@ -60,21 +60,19 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
         status.setText("");
         if (itemsIDStorage.contains(String.valueOf(ingredient.id))){
             ingredient.type = RecipeFragment.IngredientType.typeEnum.storage;
-            itemView.setBackground(context.getResources().getDrawable(R.drawable.exist_item));
+            itemView.setBackground(ContextCompat.getDrawable(context,R.drawable.exist_item));
             status.setVisibility(View.VISIBLE);
             status.setText(R.string.disponible);
         }else if (itemsIDShoppingCart.contains(String.valueOf(ingredient.id))){
             ingredient.type = RecipeFragment.IngredientType.typeEnum.shoppingCart;
-            itemView.setBackground(context.getResources().getDrawable(R.drawable.in_cart_item));
+            itemView.setBackground(ContextCompat.getDrawable(context,R.drawable.in_cart_item));
             status.setVisibility(View.VISIBLE);
             status.setText(R.string.pendiente);
         }else {
             add.setVisibility(View.VISIBLE);
-            itemView.setBackground(context.getResources().getDrawable(R.drawable.not_exist_item));
+            itemView.setBackground(ContextCompat.getDrawable(context,R.drawable.not_exist_item));
             ingredient.type = RecipeFragment.IngredientType.typeEnum.historical;
         }
-
-        //existFirebase(ingredient.id);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,38 +81,5 @@ public class RecipeHolder extends RecyclerView.ViewHolder {
             }
         });
     }
-   /* public void existFirebase(long id) {
-        Firebase userRef= new Firebase(context.getResources().getString(R.string.users));
-        userRef = userRef.child(LoginActivity.mAuthData.getUid()).child("owningredient");
-        userRef.child(String.valueOf(id)).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    for(DataSnapshot data:dataSnapshot.getChildren()) {
-                        if (data.getKey().equals("storage") && data.getValue(String.class).equals("1")){
-
-                            //add.setVisibility(View.GONE);
-                            //itemView.setBackgroundColor(Color.GREEN);
-                            break;
-                        }else if(data.getKey().equals("shoppingcart") && data.getValue(String.class).equals("1")){
-                            //add.setVisibility(View.GONE);
-                            //itemView.setBackgroundColor(Color.YELLOW);
-                            break;
-                        }else {
-                            //itemView.setBackgroundColor(Color.RED);
-                        }
-                    }
-                } else {
-                    //itemView.setBackgroundColor(Color.RED);
-                    // sendIngredientFirebase(recipe);
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-    };*/
 
 }

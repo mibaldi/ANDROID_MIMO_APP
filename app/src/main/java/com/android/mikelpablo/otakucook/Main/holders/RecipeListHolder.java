@@ -26,7 +26,6 @@ public class RecipeListHolder extends RecyclerView.ViewHolder implements View.On
     public TextView name;
     public long id;
     public Context context;
-    //public Context context;
     public RecipeListHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
@@ -34,13 +33,6 @@ public class RecipeListHolder extends RecyclerView.ViewHolder implements View.On
         itemView.setOnClickListener(this);
 
     }
-    /*public RecipeListHolder(Context context,View itemView) {
-        super(itemView);
-        this.context=context;
-        itemView.setOnClickListener(this);
-        name = (TextView) itemView.findViewById(R.id.recipeName);
-    }*/
-
 
     public void bindItem(Recipe recipe) {
         name.setText(recipe.name);
@@ -49,13 +41,9 @@ public class RecipeListHolder extends RecyclerView.ViewHolder implements View.On
 
     @Override
     public void onClick(View v) {
-        //Toast.makeText(v.getContext(),String.valueOf(id),Toast.LENGTH_SHORT).show();
         MyAPI service = MyApiClient.createService(MyAPI.class);
         Call<Recipe> recipe= service.getRecipe(id);
         recipe.enqueue(getCallback());
-
-        /*Intent intent = new Intent(v.getContext(), RecipeActivity.class);
-        v.getContext().startActivity(intent);*/
     }
 
     @NonNull
@@ -64,14 +52,9 @@ public class RecipeListHolder extends RecyclerView.ViewHolder implements View.On
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                     Recipe recipe= response.body();
-                //Log.d("RecipeListHolder",String.valueOf(recipe.getMeasures().size()));
-                // Log.i("Mikel",recipe.getMeasures().get(0).measure);
                 for (Measure measure: recipe.measureIngredients){
-                   // Log.i("Mikel",measure.ingredient.name);
                     recipe.ingredients.add(measure.ingredient);
                 }
-               // Log.d("Mikel", String.valueOf(recipe.ingredients.size()));
-                //Log.d("RecipeListHolder",recipe.author);
                 Intent intent = new Intent(context,RecipeActivity.class);
                 intent.putExtra("recipe",recipe);
                 context.startActivity(intent);

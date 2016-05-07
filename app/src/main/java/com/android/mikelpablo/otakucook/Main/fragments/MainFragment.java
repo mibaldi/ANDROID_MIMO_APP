@@ -153,7 +153,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 String author = dataSnapshot.child("author").getValue(String.class);
                 int score = dataSnapshot.child("score").getValue(Integer.class);
                 id = dataSnapshot.child("id").getValue(Long.class);
-                Log.d("IMAGEN",photo);
                 Picasso.with(getContext()).load(photo)
                         .fit()
                         .into(mainImage);

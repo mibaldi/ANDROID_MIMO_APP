@@ -27,12 +27,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeHolder>{
     private List<String> listItemFBShoppingCart;
     private List<String> listItemFBHistorical;
     private OnItemClickListener listener;
-    private Context context;
-    private Firebase mref;
-    public RecipeAdapter(Context context, List<RecipeFragment.IngredientType> objects, OnItemClickListener listener, List<String>itemsIDStorage, List<String>itemsIDShoppingCart, List<String>itemsIDHistorical) {
+
+    public RecipeAdapter(List<RecipeFragment.IngredientType> objects, OnItemClickListener listener, List<String>itemsIDStorage, List<String>itemsIDShoppingCart, List<String>itemsIDHistorical) {
         listItem = objects;
         this.listener = listener;
-        this.context = context;
        this.listItemFBStorage=itemsIDStorage;
         this.listItemFBShoppingCart=itemsIDShoppingCart;
         this.listItemFBHistorical=itemsIDHistorical;

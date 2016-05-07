@@ -121,8 +121,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
             mRefStorage = refRoot.child(LoginActivity.mAuthData.getUid()).child("owningredient");
             getIngredientsIdStorage(mRefStorage);
         }
-        adapter = new RecipesListAdapter(getContext(), items);
-        adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+        adapter = new RecipesListAdapter(items);
+        adapterPosibles = new RecipesListAdapter(itemsPossibles);
         MainActivity.main_title.setVisibility(View.GONE);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
@@ -317,7 +317,7 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                         Call<List<Recipe>> possiblesRecipes = service.getPossiblesRecipes(ingredientsIdString);
                         ServerRecipeList(possiblesRecipes, itemsPossibles);
                     }
-                    adapterPosibles = new RecipesListAdapter(getContext(), itemsPossibles);
+                    adapterPosibles = new RecipesListAdapter(itemsPossibles);
                     recyclerView.setAdapter(adapterPosibles);
                     recyclerView.getAdapter().notifyDataSetChanged();
                     break;
@@ -336,12 +336,9 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                                 protected void populateViewHolder(final RecipeListHolder recipeHolder, final String s, int i) {
 
                                     recoveryRecipesNames(recipeHolder, s);
-
-                                    Log.d(TAG, "getFavoritesRecipes");
                                 }
 
                             };
-                            Log.d(TAG, "fbadapter");
                         } else {
                             fbadapter.notifyDataSetChanged();
                         }
@@ -349,13 +346,8 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
 
                     }
 
-                    //recyclerView.setAdapter(fbadapter);
-
                     getActivity().setTitle(R.string.title_favoritesFragment);
                     ThemeUtils.applyThemeIntoButton(getActivity(), theme, btFavoritas);
-                    //btFavoritas.setBackgroundColor(Color.BLUE);
-                    //recyclerView.setAdapter(fbadapter);
-                    //Toast.makeText(getContext(), "favoritos", Toast.LENGTH_SHORT).show();
                     break;
             }
 
@@ -378,7 +370,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setMessage(getActivity().getString(R.string.progressDialogMessage));
         mProgressDialog.show();
-        //items.clear();
 
     }
 
@@ -450,13 +441,11 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     public boolean onQueryTextChange(String newText) {
         switch (selected) {
             case R.id.todas: {
-                Log.d("MIKEL", "todas");
                 final List<Recipe> filteredModelList = filter(items, newText);
                 adapter.setFilter(filteredModelList);
                 break;
             }
             case R.id.posibles: {
-                Log.d("MIKEL", "possibles");
                 final List<Recipe> filteredModelList = filter(itemsPossibles, newText);
                 adapterPosibles.setFilter(filteredModelList);
                 break;
@@ -468,7 +457,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
     private void recoveryRecipesNames(final RecipeListHolder recipeListHolder, String s) {
         refRoot = new Firebase(getResources().getString(R.string.recipes));
         refRecipe = refRoot.child(s);
-        Log.d(TAG, "dentro de recoveryRecipesNames");
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -478,7 +466,6 @@ public class RecipeListFragment extends Fragment implements View.OnClickListener
                     long id = (long) dataSnapshot.child("id").getValue();
                     recipeListHolder.name.setText(title);
                     recipeListHolder.id = id;
-                    Log.d(TAG, "recoveryRecipesNames");
                 }
             }
 

@@ -66,8 +66,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.drawer_layout)
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationDrawer;
     private TextView mLoggedInStatusTextView;
     private ImageView userImage;
-    private com.github.clans.fab.FloatingActionButton mBtAddCategoryIngredients;
     private FloatingActionMenu mMnAddCategoryIngredients;
     private AuthData authdata;
 
@@ -87,9 +84,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putInt("navigationDrawerSelectedItemId", itemIdPersist);
-        Log.d("MIKEL", "instancia guardada" + String.valueOf(itemIdPersist));
     }
 
     @Override
@@ -112,9 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*if(itemIdPersist == R.id.item2 || itemIdPersist == R.id.item4){
-                    mMnAddCategoryIngredients.setVisibility(View.VISIBLE);
-                }*/
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.item1:
@@ -148,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_suggestion:
                 android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
                 DialogSuggestions.newInstance().show(fm, "dialog");
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -160,14 +151,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         main_title = (ImageView) findViewById(R.id.main_title);
         authdata = LoginActivity.mAuthData;
         navigationDrawer = (NavigationView) findViewById(R.id.navigation_view);
-        mBtAddCategoryIngredients = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.add_category_ingredient);
         mMnAddCategoryIngredients= (FloatingActionMenu) findViewById(R.id.menu_red);
         View headerLayout = navigationDrawer.getHeaderView(0);
-
         mLoggedInStatusTextView =(TextView) headerLayout.findViewById(R.id.login_status);
         userImage = (ImageView) headerLayout.findViewById(R.id.user_image);
         ButterKnife.bind(this);
@@ -186,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null ) {
             navigationDrawer.setCheckedItem(itemIdPersist);
-            Log.d("MIKEL", "saveInstanceState = null");
             logUser();
             selectFragment(new MainFragment());
         }else{
@@ -230,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
             mLoggedInStatusTextView.setText(LoginActivity.mLoggedInStatusString);
 
         }
-        Log.d("MIKEL", "onStart");
     }
 
     private void selectFragment(Fragment fragment) {
@@ -248,10 +234,8 @@ public class MainActivity extends AppCompatActivity {
             GoogleApiClient mGoogleApiClient = LoginActivity.mGoogleApiClient;
             if (authdata.getProvider().equals("google")) {
                 if (mGoogleApiClient.isConnected()) {
-                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
                     mGoogleApiClient.clearDefaultAccountAndReconnect();
                     mGoogleApiClient.disconnect();
-                    //Ir a ventana principal
                 }
             }
             LoginActivity.mAuthData = null;
@@ -280,8 +264,6 @@ public class MainActivity extends AppCompatActivity {
         ThemeUtils.applyThemeIntoNavigationView(this,theme,navigationDrawer);
     }
     private void logUser() {
-        // TODO: Use the current user's information
-        // You can call any combination of these three methods
         Crashlytics.setUserIdentifier(LoginActivity.mAuthData.getUid());
         Crashlytics.setUserEmail("user@fabric.io");
         Crashlytics.setUserName((String)LoginActivity.mAuthData.getProviderData().get("displayName"));

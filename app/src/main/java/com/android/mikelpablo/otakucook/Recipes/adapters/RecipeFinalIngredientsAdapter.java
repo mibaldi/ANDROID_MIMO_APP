@@ -20,10 +20,8 @@ import java.util.List;
 public class RecipeFinalIngredientsAdapter extends RecyclerView.Adapter<RecipeFinalIngredientsHolder>{
 
     private List<RecipeFinalFragment.IngredientSelectable> listItem;
-    private Context context;
-    public RecipeFinalIngredientsAdapter(Context context, List<RecipeFinalFragment.IngredientSelectable> objects) {
+    public RecipeFinalIngredientsAdapter(List<RecipeFinalFragment.IngredientSelectable> objects) {
         listItem = objects;
-        this.context = context;
     }
 
     @Override

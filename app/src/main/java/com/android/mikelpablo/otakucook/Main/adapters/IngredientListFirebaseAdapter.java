@@ -51,18 +51,8 @@ public class IngredientListFirebaseAdapter extends FirebaseRecyclerAdapter<OwnIn
 
                     String title = dataSnapshot.child("name").getValue(String.class);
                     final String id = dataSnapshot.child("id").getValue(String.class);
-                    String baseType = dataSnapshot.child("baseType").getValue(String.class);
                     ingredientListHolder.name.setText(title);
                     ingredientListHolder.id = id;
-
-                  /* switch (ingredientType){
-                        case R.string.shoping_cart_drawer:
-                            ingredientListHolder.add.setVisibility(View.VISIBLE);
-                            break;
-                        case R.string.ingredients_drawer:
-                            ingredientListHolder.add.setVisibility(View.GONE);
-                            break;
-                    }*/
                     if(ingredientType != R.string.historical) {
                         ingredientListHolder.delete.setOnClickListener(new View.OnClickListener() {
                             @Override

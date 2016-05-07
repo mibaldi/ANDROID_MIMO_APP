@@ -20,16 +20,13 @@ import java.util.List;
 public class RecipesListAdapter extends RecyclerView.Adapter<RecipeListHolder>{
 
     private List<Recipe> listItem;
-    private Context context;
-    public RecipesListAdapter(Context context,List<Recipe> objects) {
+    public RecipesListAdapter(List<Recipe> objects) {
         listItem = objects;
-        this.context = context;
     }
 
     @Override
     public RecipeListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipelist,parent,false);
-        //return new RecipeListHolder(view);
 
         return new RecipeListHolder(view);
     }

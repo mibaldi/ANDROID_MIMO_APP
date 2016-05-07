@@ -20,10 +20,6 @@ import butterknife.Bind;
 import retrofit2.Call;
 
 public class IngredientListFBHolder extends RecyclerView.ViewHolder{
-
-    /*@Bind(R.id.ingredientName)
-    public TextView name;*/
-
     public TextView name;
     public Button delete;
     public Button add;
@@ -37,11 +33,6 @@ public class IngredientListFBHolder extends RecyclerView.ViewHolder{
         name = (TextView) itemView.findViewById(R.id.ingredientName);
         delete = (Button) itemView.findViewById(R.id.btEliminarIngrediente);
         add = (Button) itemView.findViewById(R.id.btAddIngredient);
-    }
-
-    public void bindItem(Ingredient ingredient) {
-        name.setText(ingredient.name);
-        id = String.valueOf(ingredient.id);
     }
 
 }

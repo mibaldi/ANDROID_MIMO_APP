@@ -53,7 +53,6 @@ public class RecipeTaskListFragment extends Fragment implements RecipeTaskListAd
         ButterKnife.bind(this, view);
         recipe = getArguments().getParcelable("recipe");
         items = recipe.tasks;
-        //falta la parte de join entre items y los ingredientes del almacen
         final RecipeTaskListAdapter adapter = new RecipeTaskListAdapter(items,RecipeTaskListFragment.this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

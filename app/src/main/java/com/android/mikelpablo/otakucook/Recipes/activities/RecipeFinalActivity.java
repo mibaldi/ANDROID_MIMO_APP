@@ -20,7 +20,6 @@ public class RecipeFinalActivity extends BaseActivity {
         setContentView(R.layout.activity_recipe_final);
         Intent intent = getIntent();
         Recipe recipe= intent.getParcelableExtra("recipe");
-        Log.d("RecipeActivity",recipe.author);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

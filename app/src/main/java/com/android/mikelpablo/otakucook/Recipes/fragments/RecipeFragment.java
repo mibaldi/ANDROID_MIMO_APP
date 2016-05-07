@@ -13,6 +13,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -90,7 +91,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     private static final String TAG = RecipeFragment.class.getName();
     Boolean favorito = false;
     public List<Ingredient> items = new ArrayList<>();
-    /* A reference to the Firebase */
     public Firebase mFirebaseRef;
     private Recipe recipe;
     private ArrayList<String> lista = new ArrayList<>();
@@ -137,7 +137,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
             setSizeAppBarLayout();
             settingArguments();
             configureView();
-            populateFragment();
             setHasOptionsMenu(true);
         }
 
@@ -160,13 +159,10 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
     private void configureView() {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         getActivity().setTitle("");
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
         Log.d(TAG,String.valueOf(recipe.score));
-
-        //ib_favorite.setEnabled(false);
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
         for (Measure measure:recipe.measureIngredients){
@@ -177,25 +173,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         btCook.setOnClickListener(this);
         ib_favorite.setOnClickListener(this);
         bt_tasks.setOnClickListener(this);
-        adapter = new RecipeAdapter(getContext(), itemsType,this,lista,listaShoppingCart,listaHistorical);
+        adapter = new RecipeAdapter(itemsType,this,lista,listaShoppingCart,listaHistorical);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
-    }
-
-    private void populateFragment() {
-
-    }
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if (getView() != null) {
-            Log.i(TAG, "fragment creado");
-
-        }
-
     }
 
     @Override
@@ -217,11 +199,11 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
                 if (favorito){
                     removeFavoriteFirebase(recipe);
                     Toast.makeText(getContext(), R.string.toast_delete_favorite, Toast.LENGTH_SHORT).show();
-                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.favoritos));
+                    ib_favorite.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favoritos));
                 }else {
 
                     sendIngredientFirebase(recipe);
-                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
+                    ib_favorite.setImageDrawable(ContextCompat.getDrawable(getActivity(),android.R.drawable.ic_menu_delete));
                 }
                 favorito = !favorito;
 
@@ -259,17 +241,13 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.getValue() != null) {
                     favorito=true;
-
-                   // ib_favorite.setEnabled(!favorito);
                 } else {
                     favorito=false;
-                   // ib_favorite.setEnabled(!favorito);
-                   // sendIngredientFirebase(recipe);
                 }
                 if (favorito){
-                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(android.R.drawable.ic_menu_delete));
+                    ib_favorite.setImageDrawable(ContextCompat.getDrawable(getActivity(),android.R.drawable.ic_menu_delete));
                 }else{
-                    ib_favorite.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.favoritos));
+                    ib_favorite.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.favoritos));
                 }
             }
             @Override
@@ -291,7 +269,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
                     if (ownIngredientFB.storage.equals("1")){
 
                         lista.add(ownIngredientFB.id);
-                        Log.d("PABLO",ownIngredientFB.id);
                     }else if (ownIngredientFB.shoppingcart.equals("1")) {
                         listaShoppingCart.add(ownIngredientFB.id);
                     }else if (ownIngredientFB.storage.equals("0") && ownIngredientFB.shoppingcart.equals("0")) {
@@ -323,12 +300,9 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         storageRef.child(String.valueOf(item.id)).setValue(ownIngredientFB);
         Firebase refIngredient = new Firebase(getResources().getString(R.string.ingredients));
         refIngredient.child(String.valueOf(item.id)).setValue(item);
-        //view.setVisibility(View.GONE);
         adapter.notifyItemChanged(position);
         adapter.notifyDataSetChanged();
-       // view.setBackgroundColor(Color.YELLOW);
         Snackbar.make(getView(), R.string.ingredient_in_cart, Snackbar.LENGTH_LONG).show();
-        Log.d("PABLO",""+ item);
     }
     public static class IngredientType{
         public enum typeEnum {
@@ -361,13 +335,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         public static IngredientType convert(Ingredient i){
             IngredientType ingredientType = new IngredientType(i.id,i.name,i.frozen,i.category,i.baseType,typeEnum.historical);
             return ingredientType;
-        }
-        public static List<IngredientType> convertIngredient(List<Ingredient> lista){
-            List<IngredientType> listaFinal = new ArrayList<>();
-            for (Ingredient i:lista){
-                listaFinal.add(convert(i));
-            }
-            return listaFinal;
         }
     }
 }

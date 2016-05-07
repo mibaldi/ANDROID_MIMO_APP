@@ -47,7 +47,6 @@ public class RecipeActivity extends AppCompatActivity {
         recipe= intent.getParcelableExtra("recipe");
         imageView= new ImageView(this);
         Picasso.with(this).load(recipe.photo).into(imageView);
-        Log.d("RecipeActivity",recipe.author);
         RecipeFragment recipesFragment = RecipeFragment.newInstance(recipe);
         getSupportFragmentManager().beginTransaction().replace(R.id.flRecipe,recipesFragment).commit();
     }
@@ -90,7 +89,6 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     public Uri getLocalBitmapUri(ImageView imageView) {
-        // Extract Bitmap from ImageView drawable
         Drawable drawable = imageView.getDrawable();
         Bitmap bmp = null;
         if (drawable instanceof BitmapDrawable){
@@ -98,11 +96,8 @@ public class RecipeActivity extends AppCompatActivity {
         } else {
             return null;
         }
-        // Store image to default external storage directory
         Uri bmpUri = null;
         try {
-            // Use methods on Context to access package-specific directories on external storage.
-            // This way, you don't need to request external read/write permission.
             File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
