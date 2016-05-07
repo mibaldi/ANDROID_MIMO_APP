@@ -5,17 +5,17 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/dim_height_weight"
         android:layout_weight="1"
         android:id="@+id/taskPhoto"
         android:src="@drawable/default_recipe"
         />
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/dim_height_weight"
         android:layout_weight="1"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_marginBottom="@dimen/margin_default">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,8 +23,8 @@
             android:text="Large Text"
             android:id="@+id/taskDescription"
             android:textSize="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginRight="@dimen/margin_default"
+            android:layout_marginLeft="@dimen/margin_default"/>
     </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:text="start"
             android:textColor="@color/white"
             android:background="@drawable/buy_button"
-            android:layout_margin="10dp"/>
+            android:layout_margin="@dimen/margin_default"/>
     </LinearLayout>
 
 </LinearLayout>

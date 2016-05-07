@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp">
+    android:layout_margin="@dimen/item_ingredient_margin">
 
     <TextView
         android:layout_gravity="left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ingredientName"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/margin_default"
         android:layout_centerVertical="true"/>
 
     <Button
@@ -22,7 +22,7 @@
         android:layout_toLeftOf="@+id/btEliminarIngrediente"
         android:layout_toStartOf="@+id/btEliminarIngrediente"
         android:textColor="@color/white"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="@dimen/item_button_margin"
         android:background="@drawable/buy_button"/>
 
     <Button

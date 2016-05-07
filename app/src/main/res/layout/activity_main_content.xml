@@ -25,7 +25,7 @@
                 <ImageView
                     android:id="@+id/main_title"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
+                    android:layout_height="@dimen/title_height"
                     android:src="@drawable/titulo_app"/>
             </android.support.v7.widget.Toolbar>
 
@@ -44,9 +44,9 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
+        android:paddingRight="@dimen/padding_floating_action_button"
+        android:paddingBottom="@dimen/padding_floating_action_button"
+        android:paddingLeft="@dimen/padding_floating_action_button"
         android:visibility="gone"
         fab:menu_labels_ellipsize="end"
         fab:menu_labels_singleLine="true"

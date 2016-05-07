@@ -30,7 +30,7 @@ public class RecipeTaskViewPageActivity extends BaseActivity {
     @Bind(R.id.pager_tab_strip)
     PagerTabStrip pagerTabStrip;
     public static RecipeTaskViewPageAdapter adapter;
-    private Recipe recipe;
+    public static Recipe recipe;
     public static boolean clicked = false;
     public static long task = 0;
     //public static NotificationManagerCompat manager;

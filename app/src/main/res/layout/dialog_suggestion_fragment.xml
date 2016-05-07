@@ -6,7 +6,7 @@
         android:id="@+id/suggestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin_default"
         android:hint="@string/placeholder_suggestion" />
 
 </LinearLayout>

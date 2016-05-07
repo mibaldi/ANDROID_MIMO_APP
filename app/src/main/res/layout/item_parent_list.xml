@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@drawable/parent_item"
-    android:layout_height="70dp"
-    android:layout_marginBottom="2dp">
+    android:layout_height="@dimen/item_child_list_height"
+    android:layout_marginBottom="@dimen/item_parent_list_margin_bottom">
 
     <TextView
         android:id="@+id/parent_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="@dimen/item_parent_list_padding"
         android:textStyle="bold"
         android:layout_centerInParent="true"
         android:layout_alignParentStart="true"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/item_parent_list_image_margin"
         android:layout_centerInParent="true"
         android:src="@android:drawable/arrow_down_float" />
 

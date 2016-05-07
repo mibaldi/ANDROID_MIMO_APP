@@ -11,12 +11,12 @@
         android:fadeScrollbars="true"/>
     <TextView
         android:id="@+id/not_exist_ingredients"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/text_view_ingredient_server_margin"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/no_ingredients"
-        android:textSize="20dp"
+        android:textSize="@dimen/text_view_size_ingredients_server"
         android:visibility="gone"/>
 
 </LinearLayout>

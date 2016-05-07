@@ -201,6 +201,7 @@ public class RecipeTaskViewPageFragment extends Fragment implements View.OnClick
         Intent intent = new Intent(getContext(), AlarmReceiver.class);
         intent.putExtra("taskName", task.name);
         intent.putExtra("taskId", (int)task.id);
+        intent.putExtra("recipe",RecipeTaskViewPageActivity.recipe.name);
 
         pendingIntent = PendingIntent.getBroadcast(getContext(), (int) task.id, intent, PendingIntent.FLAG_ONE_SHOT);
         if (v.getId() == R.id.btTimer){

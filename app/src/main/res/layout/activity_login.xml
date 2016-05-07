@@ -11,15 +11,15 @@
     android:background="@drawable/background_main">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/image_height"
         android:id="@+id/logo"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="97dp" />
+        android:layout_marginTop="@dimen/image_margin_top" />
     <com.google.android.gms.common.SignInButton
         android:id="@+id/login_with_google"
-        android:layout_width="200dp"
+        android:layout_width="@dimen/sign_google_button_width"
         android:layout_height="wrap_content"
         android:text="@string/login_with_google"
         android:layout_below="@+id/logo"

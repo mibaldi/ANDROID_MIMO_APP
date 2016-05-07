@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/mainImage"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/dim_height_weight"
         android:layout_weight="0.5"
         android:cropToPadding="true">
     </ImageView>
@@ -28,7 +28,7 @@
             android:text="@string/random"
             android:textColor="@android:color/black"
             android:background="@drawable/round_button"
-            android:layout_margin="3dp"
+            android:layout_margin="@dimen/button_layout_margin"
             android:visibility="gone"
             />
     </LinearLayout>
@@ -36,7 +36,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/dim_height_weight"
         android:layout_weight="0.5"
         android:id="@+id/mainLinearLayout"
         android:background="@drawable/divider">
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:id="@+id/mainRecipeName"
-            android:textSize="30sp"
+            android:textSize="@dimen/main_fragment_text"
             android:textAlignment="center"
             android:textColor="@color/white"/>
         <TextView
