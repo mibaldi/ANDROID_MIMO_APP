@@ -1,6 +1,5 @@
 package com.android.mikelpablo.otakucook.Utils;
 
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 

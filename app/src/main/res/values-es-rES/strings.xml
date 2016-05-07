@@ -7,7 +7,6 @@
     <string name="historical">Histórico de Ingredientes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="_00_00_00">00:00:00</string>
     <string name="comprar">Comprar</string>
     <string name="eliminar">Eliminar</string>
@@ -57,7 +56,6 @@
     <string name="random">Aleatorio</string>
     <string name="no_connectivity">No tienes conexión</string>
     <string name="ingredient_in_cart">Ingrediente en el carrito</string>
-    <string name="test_alarm_receiver">La tarea ha finalizado</string>
     <string name="toast_add_shopping_cart">Ingrediente añadido al carrito de la compra</string>
     <string name="toast_buy_ingredient">Ingrediente comprado</string>
     <string name="toast_add_ingredient">Ingrediente añadido</string>

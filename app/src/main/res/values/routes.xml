@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="url" translatable="false">https://otakucook.firebaseio.com/</string>
     <string name="users" translatable="false">https://otakucook.firebaseio.com/Users</string>
     <string name="ingredients" translatable="false">https://otakucook.firebaseio.com/ingredients</string>
     <string name="recipes" translatable="false">https://otakucook.firebaseio.com/recipes</string>
-    <string name="measures" translatable="false">https://otakucook.firebaseio.com/measures</string>
-    <string name="tasks" translatable="false">https://otakucook.firebaseio.com/tasks</string>
 </resources>

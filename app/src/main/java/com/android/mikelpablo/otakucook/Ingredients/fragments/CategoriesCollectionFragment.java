@@ -23,9 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CategoriesCollectionFragment extends Fragment implements View.OnClickListener {
-
-    private static final String TAG = CategoriesCollectionFragment.class.getName();
+public class CategoriesCollectionFragment extends Fragment{
 
     @Bind(R.id.categories_collection)
     RecyclerView categoriesCollection;
@@ -66,8 +64,4 @@ public class CategoriesCollectionFragment extends Fragment implements View.OnCli
         categoriesCollection.setLayoutManager(new GridLayoutManager(getActivity(),3));
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 }

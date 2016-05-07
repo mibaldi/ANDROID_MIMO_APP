@@ -6,15 +6,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -49,29 +44,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IngredientsExpandableFragment extends Fragment  implements SearchView.OnQueryTextListener ,IngredientsExpandableAdapter.OnItemClickListener {
-
-    private static final String TAG = IngredientsExpandableFragment.class.getName();
+public class IngredientsExpandableFragment extends Fragment  implements IngredientsExpandableAdapter.OnItemClickListener {
 
     public  ArrayList<Ingredient> items = new ArrayList<>();
-    public  ArrayList<Ingredient> items2 = new ArrayList<>();
     public  ArrayList<String> ingredientsId = new ArrayList<>();
     private ProgressDialog mProgressDialog;
     private String category;
     private Firebase refRoot;
     public Context context;
+
+    private IngredientsExpandableAdapter adapter;
+    private ArrayList<BaseIngredient> baseIngredients = new ArrayList<>();
+    private Query mRefStorage;
+
     @Bind(R.id.ingredientsServer)
     RecyclerView recyclerView;
 
     @Bind(R.id.not_exist_ingredients)
     TextView not_exist_ingredients;
-
-    private SearchView searchView;
-    private MenuItem myActionMenuItem;
-    private IngredientsExpandableAdapter adapter;
-    private ArrayList<BaseIngredient> baseIngredients = new ArrayList<>();
-    private Firebase refHistorico;
-    private Query mRefStorage;
 
     public IngredientsExpandableFragment(){
 
@@ -132,16 +122,10 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
             mProgressDialog.dismiss();
         }
 
-        //adapter = new IngredientListAdapter(items,IngredientsExpandableFragment.this);
-        //recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),R.drawable.divider));
 
-        //
         generateBaseIngredients();
-
-        //adapter = new IngredientsExpandableAdapter(generateBaseIngredientMap(),getActivity(),IngredientsExpandableFragment.this);
-        //recyclerView.setAdapter(adapter);
     }
 
     private void getIngredientsIdStorage(Firebase refRoot) {
@@ -171,7 +155,6 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
         if (!ingredientsId.isEmpty()) {
             ingredientsIdString  = android.text.TextUtils.join(",", ingredientsId);
         }
-        Log.d(TAG,ingredientsIdString);
         Call<List<Ingredient>> ingredients = service.getCategoryIngredients(category,ingredientsIdString);
         LoadIngredientsServer(ingredients);
     }
@@ -199,30 +182,6 @@ public class IngredientsExpandableFragment extends Fragment  implements SearchVi
                     mProgressDialog.dismiss();
             }
         });
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        final List<Ingredient> filteredModelList = filter(items, newText);
-        //adapter.setFilter(filteredModelList);
-        return false;
-    }
-
-    private List<Ingredient> filter(List<Ingredient> ingredients, String query){
-        query = query.toLowerCase();
-        final List<Ingredient> filteredIngredients = new ArrayList<>();
-        for(Ingredient ingredient: ingredients){
-            final String name = ingredient.name.toLowerCase();
-            if(name.contains(query)){
-                filteredIngredients.add(ingredient);
-            }
-        }
-        return filteredIngredients;
     }
 
     @Override

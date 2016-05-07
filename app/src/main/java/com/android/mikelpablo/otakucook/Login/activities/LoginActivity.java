@@ -47,7 +47,6 @@ public class LoginActivity  extends AppCompatActivity implements
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-
     //GOOGLE
     public static final int RC_GOOGLE_LOGIN = 1;
 
@@ -101,19 +100,6 @@ public class LoginActivity  extends AppCompatActivity implements
         initGoogleApiClient();
         initFirebaseConnection();
 
-
-        /*mGoogleLoginClicked = true;
-        if (!mGoogleApiClient.isConnecting()) {
-            if (mGoogleConnectionResult != null) {
-                resolveSignInError();
-            } else if (mGoogleApiClient.isConnected()) {
-                getGoogleOAuthTokenAndLogin();
-            } else {
-                    /* connect API now
-                Log.d(TAG, "Trying to connect to Google API");
-                mGoogleApiClient.connect();
-            }
-        }*/
     }
 
     @Override

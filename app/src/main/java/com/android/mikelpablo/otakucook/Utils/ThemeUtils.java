@@ -31,33 +31,13 @@ public class ThemeUtils {
         }
     }
     public static void applyThemeIntoNavigationView(Context context, ThemeType theme, NavigationView navigationView){
-        int color = ColorUtils.ColorFromTheme(context, theme);
         if (theme ==ThemeType.BLUE){
             navigationView.setItemBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item));
-
-            //navigationView.setItemBackground(R.drawable.drawer_item);
-            //navigationView.setBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item));
-
         }else{
             navigationView.setItemBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item_black));
-
-            //navigationView.setBackground(ContextCompat.getDrawable(context,R.drawable.drawer_item_black));
         }
 
     }
-
-   /* public static void applyThemeIntoRefreshLayout(Context context, ThemeType theme, SwipeRefreshLayout swipeRefreshLayout) {
-        int color = ColorUtils.ColorFromTheme(context, theme);
-        swipeRefreshLayout.setColorSchemeColors(color);
-    }
-
-    public static void applyThemeIntoProgressBar(Context context, ThemeType theme, ProgressBar progressBar) {
-        if(theme == ThemeType.GREEN) {
-            progressBar.setIndeterminateDrawable(ContextCompat.getDrawable(context, R.color.accent));
-        } else if(theme == ThemeType.BLACK) {
-            progressBar.setIndeterminateDrawable(ContextCompat.getDrawable(context, R.color.primary));
-        }
-    }*/
 
     public static void applyThemeIntoFloatingActionMenu(Context context, ThemeType theme, FloatingActionMenu floatingActionMenu){
         int color = ColorUtils.ColorFromTheme(context, theme);
@@ -91,11 +71,5 @@ public class ThemeUtils {
         int color = ColorUtils.ColorFromThemeReset(context, theme);
         relativeLayout.setBackgroundColor(color);
     }
-
-/*
-    public static void applyThemeIntoPagerTabStrip(Context context, ThemeType theme, PagerTabStrip pagerTabStrip) {
-        int color = ColorUtils.ColorFromTheme(context, theme);
-        pagerTabStrip.setTabIndicatorColor(color);
-    }*/
 
 }

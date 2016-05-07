@@ -20,12 +20,8 @@ public interface MyAPI {
         Call<List<Recipe>> recipes();
         @GET("recipes/{id}")
         Call<Recipe> getRecipe(@Path("id") long id);
-        @POST("/ingredients")
-        Call<Ingredient> createIngredient(@Body Ingredient ingredient);
         @GET("/ingredients")
         Call<List<Ingredient>> ingredients();
-        @GET("/ingredients/{id}")
-        Call<Ingredient> getIngredient(@Path("id") long id);
         @GET("/recipesIngredients")
         Call<List<Recipe>> getPossiblesRecipes(@Query("ingredientes") String ingredientes);
         @GET("/ingredients/category/{category}")

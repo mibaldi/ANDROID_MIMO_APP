@@ -18,14 +18,4 @@ public class FirebaseUtils {
         }
         return recipeIngredientStorage;
     }
-    public static List<Ingredient> getIngredientsNonAvailablesRecipe(List<String> ids, List<Ingredient>ingredientList){
-        List<Ingredient> recipeIngredientStorage = new ArrayList<>();
-        for ( Ingredient ingredient: ingredientList){
-            if (!ids.contains(String.valueOf(ingredient.id))){
-                recipeIngredientStorage.add(ingredient);
-            }
-        }
-        return recipeIngredientStorage;
-    }
-
 }

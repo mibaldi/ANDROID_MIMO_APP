@@ -32,13 +32,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="AppTheme.TransparentStatus"/>
-    <style name="NavigationDrawerItem">
-        <item name="android:clickable">true</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:drawablePadding">16dp</item>
-        <item name="android:gravity">left|center_vertical</item>
-        <item name="android:background">?android:selectableItemBackground</item>
-    </style>
 
 
 </resources>

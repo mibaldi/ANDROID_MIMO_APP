@@ -18,9 +18,7 @@ import com.squareup.picasso.Picasso;
  */
 public class CategoriesCollectionHolder  extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    //@Bind(R.id.category_icon)
     public ImageView category_icon;
-    //@Bind(R.id.category_name)
     public TextView category_name;
 
     public CategoriesCollectionHolder(View itemView) {
@@ -28,13 +26,11 @@ public class CategoriesCollectionHolder  extends RecyclerView.ViewHolder impleme
         category_icon = (ImageView) itemView.findViewById(R.id.category_icon);
         category_name = (TextView) itemView.findViewById(R.id.category_name);
         itemView.setOnClickListener(this);
-        //ButterKnife.bind(this, itemView);
     }
 
     public void bindCategory(Category category){
         category_name.setText(category.name);
         category_icon.setImageDrawable(category.icon_id);
-        //Picasso.with(itemView.getContext()).load(R.mipmap.ic_launcher).into(category_icon);
     }
 
     @Override

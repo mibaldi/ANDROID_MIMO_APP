@@ -8,7 +8,6 @@
     <string name="historical">Histórico de Ingredientes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="_00_00_00">00:00:00</string>
     <string name="comprar">Buy</string>
     <string name="eliminar">Delete</string>
@@ -57,7 +56,6 @@
     <string name="toast_delete_favorite">Recipe removed from favorites</string>
     <string name="toast_final" translatable="false">Final</string>
     <string name="toast_save_favorite">Recipe saved in favorites</string>
-    <string name="test_alarm_receiver">Task has finished</string>
     <string name="suggestion">Suggestions</string>
     <string name="dialog_suggestion_question">Do you want to send us any suggestion?</string>
     <string name="placeholder_suggestion">Suggestion</string>
