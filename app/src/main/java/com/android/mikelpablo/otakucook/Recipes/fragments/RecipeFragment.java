@@ -162,7 +162,6 @@ public class RecipeFragment extends Fragment implements View.OnClickListener, Re
         getActivity().setTitle("");
         recipeName.setText(recipe.name);
         Picasso.with(getContext()).load(recipe.photo).into(recipePhoto);
-        Log.d(TAG,String.valueOf(recipe.score));
         ratingBar.setRating(recipe.score);
         items = recipe.ingredients;
         for (Measure measure:recipe.measureIngredients){

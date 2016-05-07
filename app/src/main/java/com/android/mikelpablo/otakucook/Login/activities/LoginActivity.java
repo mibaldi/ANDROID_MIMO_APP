@@ -303,7 +303,6 @@ public class LoginActivity  extends AppCompatActivity implements
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (!dataSnapshot.exists()) {
-                            Log.d(TAG, "No existe");
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("provider", authData.getProvider());
                             map.put("name", finalName);

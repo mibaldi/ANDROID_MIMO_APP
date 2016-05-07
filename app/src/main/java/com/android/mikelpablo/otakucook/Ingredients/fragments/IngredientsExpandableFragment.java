@@ -218,8 +218,6 @@ public class IngredientsExpandableFragment extends Fragment  implements Ingredie
 
         baseIngredients.clear();
         Map<String,Integer> basetypesMap = new HashMap<>();
-        Log.d("IngredientsServer","cantidad de elementos: "+baseIngredients.size());
-        Log.d("IngredientsServer","cantidad de items: "+items.size());
         for (Ingredient ingredient : items) {
             if(basetypesMap.containsKey(ingredient.baseType)){
                 BaseIngredient baseIngredient = baseIngredients.get(basetypesMap.get(ingredient.baseType));
@@ -234,9 +232,6 @@ public class IngredientsExpandableFragment extends Fragment  implements Ingredie
             }
 
         }
-
-        Log.d("IngredientsServer",String.valueOf(baseIngredients.size()));
-        Log.d("IngredientsServer","cantidad de items: "+items.size());
         adapter = new IngredientsExpandableAdapter(baseIngredients, context,IngredientsExpandableFragment.this);
         recyclerView.setAdapter(adapter);
     }

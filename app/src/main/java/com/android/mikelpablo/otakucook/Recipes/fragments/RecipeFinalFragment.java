@@ -103,7 +103,6 @@ public class RecipeFinalFragment extends Fragment implements View.OnClickListene
                 ingredientsId.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     OwnIngredientFB ownIngredientFB = postSnapshot.getValue(OwnIngredientFB.class);
-                    Log.d("FB",ownIngredientFB.id+"+"+ownIngredientFB.storage);
                     if (ownIngredientFB.storage.equals("1")){
                         ingredientsId.add(ownIngredientFB.id);
                     }
