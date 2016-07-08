@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="OneSignal-2.4.3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.onesignal/OneSignal/2.4.3/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.onesignal/OneSignal/2.4.3/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.onesignal/OneSignal/2.4.3/169f33ffa5fd41670493c13e23c87ca3b37ccfbc/OneSignal-2.4.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
